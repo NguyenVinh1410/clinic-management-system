@@ -1,32 +1,14 @@
-from datetime import datetime, date
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from pyasn1.type import char
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from app.models.enums import UserRole, UserStatus
 
-from app.models.enums import UserRole, UserStatus, PatientGender
-
-class LoginRequest(BaseModel):
-    username: str = Field(
-        min_length=1,
-        max_length=50,
-    )
-    password: str = Field(
-        min_length=1,
-        max_length=255,
-    )
-
-class RegisterRequest(BaseModel):
+class UserCreate(BaseModel):
     username: str = Field(
         min_length=6,
         max_length=50,
     )
 
     password: str = Field(
-        min_length=6,
-        max_length=255,
-    )
-
-    confirm_password: bool = Field(
         min_length=6,
         max_length=255,
     )
@@ -36,7 +18,7 @@ class RegisterRequest(BaseModel):
         max_length=100,
     )
 
-    email: str = Field(
+    email: str | None = Field(
         default=None,
         max_length=100,
     )
@@ -47,9 +29,26 @@ class RegisterRequest(BaseModel):
         max_length=20,
     )
 
-    dob: str | None = None
+    role: UserRole
 
-    gender: PatientGender | None = None
+    #Doctor
+    specialty_id: int | None = Field(
+        default=None,
+        gt=0,
+    )
+
+    qualification: str | None = Field(
+        default=None,
+        max_length=255,
+    )
+
+    bio: str | None = Field(
+        default=None,
+        max_length=5000,
+    )
+
+    #patient
+    dob: str | None = None
 
     address: str | None = Field(
         default=None,
@@ -61,11 +60,18 @@ class RegisterRequest(BaseModel):
     def validate_username(cls, value: str) -> str:
         value = value.strip()
 
+        if len(value) < 6:
+            raise ValueError(
+                "Username phai co it nhat 6 ky tu"
+            )
+
         if not any(
-            char.isalpha()
-            for char in value
+                char.isalpha()
+                for char in value
         ):
-            raise ValueError("Username phai co it nhat 1 chu cai")
+            raise ValueError(
+                "Username phai co it nhat 1 chu cai"
+            )
 
         if not any(
                 char.isdigit()
@@ -88,6 +94,11 @@ class RegisterRequest(BaseModel):
     @field_validator("password")
     @classmethod
     def validate_password(cls, value: str) -> str:
+
+        if len(value) < 6:
+            raise ValueError(
+                "Password phai co it nhat 6 ky tu"
+            )
 
         if not any(
                 char.isdigit()
@@ -129,29 +140,14 @@ class RegisterRequest(BaseModel):
 
         if not value.isdigit():
             raise ValueError(
-                "SĐT chi duoc chua chu so"
+                "SĐT chi duoc chua so"
             )
 
         return value
 
-    @model_validator(mode="after")
-    def validate_confirm_password(self):
-
-        if self.password != self.confirm_password:
-            raise ValueError(
-                "Password xac nhan khong khop"
-            )
-
-        return self
-
-
-class TokenResponse(BaseModel):
-    access_token: str
-    token_type: str = 'bearer'
-
 class UserResponse(BaseModel):
     model_config = ConfigDict(
-        from_attributes=True,
+        from_attributes=True
     )
 
     user_id: int
@@ -159,6 +155,7 @@ class UserResponse(BaseModel):
     full_name: str
     email: str | None
     phone: str | None
+
     role: UserRole
     status: UserStatus
-    created_at: datetime
+
