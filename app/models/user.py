@@ -4,7 +4,7 @@ from sqlalchemy import DateTime, Date, Enum as SQLEnum, String, func, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import  Base
-from app.models.enums import UserRole, UserStatus, PatientGender
+from app.models.enums import UserRole, UserStatus, Gender
 
 
 class User(Base):
@@ -41,6 +41,14 @@ class User(Base):
     phone: Mapped[str | None] = mapped_column(
         String(20),
         unique=True,
+        nullable=True,
+    )
+
+    gender: Mapped[Gender | None] = mapped_column(
+        SQLEnum(
+            Gender,
+            name="user_gender",
+        ),
         nullable=True,
     )
 
@@ -149,14 +157,6 @@ class Patient(User):
 
     dob: Mapped[date | None] = mapped_column(
         Date,
-        nullable=True,
-    )
-
-    gender: Mapped[PatientGender | None] = mapped_column(
-        SQLEnum(
-            PatientGender,
-            name="patient_gender",
-        ),
         nullable=True,
     )
 

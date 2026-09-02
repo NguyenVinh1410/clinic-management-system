@@ -4,6 +4,12 @@ from app.schemas.patient import PatientResponse, PatientUpdate
 
 from app.schemas.user import UserCreate
 
+from app.schemas.specialty import SpecialtyResponse, SpecialtyUpdate, SpecialtyCreate
+
+from app.schemas.doctor import DoctorResponse, DoctorUpdate
+
+from app.schemas.working_schedule import WorkingScheduleResponse, WorkingScheduleUpdate, WorkingScheduleCreate
+
 __all__ = ["LoginRequest",
            "TokenResponse",
            "UserResponse",
@@ -13,4 +19,15 @@ __all__ = ["LoginRequest",
            "PatientUpdate",
 
            "UserCreate",
+
+           "SpecialtyResponse",
+           "SpecialtyUpdate",
+           "SpecialtyCreate",
+
+           "DoctorResponse",
+           "DoctorUpdate",
+
+           "WorkingScheduleResponse",
+           "WorkingScheduleUpdate",
+           "WorkingScheduleCreate",
            ]

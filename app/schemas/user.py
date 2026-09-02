@@ -1,15 +1,17 @@
+from datetime import date
+
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.models.enums import UserRole, UserStatus
+from app.models.enums import UserRole, UserStatus, Gender
 
 class UserCreate(BaseModel):
     username: str = Field(
-        min_length=6,
+        min_length=1,
         max_length=50,
     )
 
     password: str = Field(
-        min_length=6,
+        min_length=1,
         max_length=255,
     )
 
@@ -28,6 +30,8 @@ class UserCreate(BaseModel):
         min_length=9,
         max_length=20,
     )
+
+    gender: Gender | None = None
 
     role: UserRole
 
@@ -48,7 +52,7 @@ class UserCreate(BaseModel):
     )
 
     #patient
-    dob: str | None = None
+    dob: date | None = None
 
     address: str | None = Field(
         default=None,
@@ -155,6 +159,7 @@ class UserResponse(BaseModel):
     full_name: str
     email: str | None
     phone: str | None
+    gender: Gender | None
 
     role: UserRole
     status: UserStatus

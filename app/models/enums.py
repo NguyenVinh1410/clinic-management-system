@@ -42,6 +42,6 @@ class ChatSenderType(str, Enum):
     PATIENT = "Patient"
     AI = "AI"
 
-class PatientGender(str, Enum):
+class Gender(str, Enum):
     MALE = "Male"
     FEMALE = "Female"

@@ -2,9 +2,8 @@ from sqlalchemy import select
 
 from app.core.security import hash_password
 from app.database.connection import SessionLocal
-from app.models.enums import UserRole, UserStatus, PatientGender
+from app.models.enums import UserRole, UserStatus, Gender
 from app.models.user import User, Admin, Patient
-
 
 def seed_admin(db) -> None:
     stmt = (
@@ -59,7 +58,6 @@ def seed_patient(db) -> None:
         status=UserStatus.ACTIVE,
         type="patient",
         dob=None,
-        gender=PatientGender.MALE,
         address="HCM city",
     )
 

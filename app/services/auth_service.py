@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.core.exceptions import UnauthorizedException, ConflictException
 from app.core.security import create_access_token, verify_password, hash_password
-from app.models.enums import UserStatus, UserRole
+from app.models.enums import UserStatus, UserRole, Gender
 from app.models.user import User, Patient
 from app.schemas.auth import RegisterRequest
 
@@ -104,13 +104,13 @@ class AuthService:
             full_name=data.full_name,
             email=data.email,
             phone=data.phone,
+            gender=data.gender,
 
             role=UserRole.PATIENT,
             status=UserStatus.ACTIVE,
             type="patient",
 
             dob=data.dob,
-            gender=data.gender,
             address=data.address,
         )
 
@@ -124,5 +124,4 @@ class AuthService:
 
         except IntegrityError as exc:
             db.rollback()
-            raise ConflictException(
-                "Du lieu bi trung") from exc
+            raise ConflictException("Du lieu bi trung") from exc

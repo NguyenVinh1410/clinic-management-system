@@ -1,10 +1,11 @@
 from typing import Annotated
+
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
-from app.schemas.auth import LoginRequest, TokenResponse, UserResponse, RegisterRequest
+from app.schemas.auth import TokenResponse, UserResponse, RegisterRequest
 from app.models.user import User
 from app.services.auth_service import AuthService
 from app.schemas.patient import PatientResponse
@@ -16,7 +17,7 @@ router = APIRouter(
 
 @router.post(
     "/register",
-    response_model=TokenResponse,
+    response_model=PatientResponse,
     status_code=status.HTTP_201_CREATED,
 )
 

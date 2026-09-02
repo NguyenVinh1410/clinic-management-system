@@ -1,7 +1,10 @@
-from app.routers import auth, patient, user
+from app.routers import auth, patient, user, specialty, doctor, working_schedule
 
 __all__= [
     "auth",
     "patient",
-    "user"
+    "user",
+    "specialty",
+    "doctor",
+    "working_schedule",
 ]

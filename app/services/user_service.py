@@ -4,11 +4,12 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.core.exceptions import BusinessException, ConflictException
+from app.core.exceptions import ConflictException, NotFoundException, BusinessException
 from app.core.security import hash_password
-from app.models.enums import UserRole, UserStatus
+from app.models.enums import UserRole, UserStatus, Gender
 from app.models.user import User, Doctor, Patient, Receptionist, Admin
 from app.schemas.user import UserCreate
+from app.models.specialty import Specialty
 
 
 class UserService:
@@ -69,9 +70,15 @@ class UserService:
         if data.role == UserRole.DOCTOR:
 
             if data.specialty_id is None:
-                raise BusinessException(
-                    "Doctor phai co specialty_id"
-                )
+                raise BusinessException("Doctor phai co specialty_id")
+
+            specialty = db.get(
+                Specialty,
+                data.specialty_id,
+            )
+
+            if specialty is None:
+                raise NotFoundException("Khong tim thay chuyen khoa")
 
             user = Doctor(
                 username=data.username,
@@ -79,6 +86,7 @@ class UserService:
                 full_name=data.full_name,
                 email=data.email,
                 phone=data.phone,
+                gender=data.gender,
 
                 role=UserRole.DOCTOR,
                 status=UserStatus.ACTIVE,
@@ -97,6 +105,7 @@ class UserService:
                 full_name=data.full_name,
                 email=data.email,
                 phone=data.phone,
+                gender=data.gender,
 
                 role=UserRole.RECEPTIONIST,
                 status=UserStatus.ACTIVE,
@@ -109,9 +118,7 @@ class UserService:
 
             if data.dob:
                 try:
-                    patient_dob = date.fromisoformat(
-                        data.dob
-                    )
+                    patient_dob = date.fromisoformat(data.dob)
                 except ValueError as exc:
                     raise BusinessException(
                         "Ngay sinh khong hop le"
@@ -123,13 +130,13 @@ class UserService:
                 full_name=data.full_name,
                 email=data.email,
                 phone=data.phone,
+                gender=data.gender,
 
                 role=UserRole.PATIENT,
                 status=UserStatus.ACTIVE,
                 type="patient",
 
                 dob=patient_dob,
-                gender=data.gender,
                 address=data.address,
             )
 
@@ -140,8 +147,9 @@ class UserService:
                 full_name=data.full_name,
                 email=data.email,
                 phone=data.phone,
+                gender=data.gender,
 
-                role=UserRole.RECEPTIONIST,
+                role=UserRole.ADMIN,
                 status=UserStatus.ACTIVE,
                 type="admin",
             )

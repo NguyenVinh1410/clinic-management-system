@@ -1,9 +1,8 @@
 from datetime import datetime, date
 
-from pyasn1.type import char
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.models.enums import UserRole, UserStatus, PatientGender
+from app.models.enums import UserRole, UserStatus, Gender
 
 class LoginRequest(BaseModel):
     username: str = Field(
@@ -26,7 +25,7 @@ class RegisterRequest(BaseModel):
         max_length=255,
     )
 
-    confirm_password: bool = Field(
+    confirm_password: str = Field(
         min_length=6,
         max_length=255,
     )
@@ -36,7 +35,7 @@ class RegisterRequest(BaseModel):
         max_length=100,
     )
 
-    email: str = Field(
+    email: str | None = Field(
         default=None,
         max_length=100,
     )
@@ -47,9 +46,9 @@ class RegisterRequest(BaseModel):
         max_length=20,
     )
 
-    dob: str | None = None
+    dob: date | None = None
 
-    gender: PatientGender | None = None
+    gender: Gender | None = None
 
     address: str | None = Field(
         default=None,
@@ -143,7 +142,6 @@ class RegisterRequest(BaseModel):
             )
 
         return self
-
 
 class TokenResponse(BaseModel):
     access_token: str

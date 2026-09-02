@@ -14,31 +14,6 @@ router = APIRouter(
     tags=["Patients"],
 )
 
-
-# @router.post(
-#     "",
-#     response_model=PatientResponse,
-#     status_code=status.HTTP_201_CREATED,
-# )
-# def create_patient(
-#         data: PatientCreate,
-#         _: Annotated[
-#             User,
-#             Depends(requires_role(
-#                 UserRole.ADMIN,
-#                 UserRole.RECEPTIONIST)),
-#         ],
-#         db: Annotated[
-#             Session,
-#             Depends(get_db),
-#         ],
-# ):
-#     return PatientService.create_patient(
-#         db=db,
-#         data=data,
-#     )
-
-
 @router.get(
     "/me",
     response_model=PatientResponse,
