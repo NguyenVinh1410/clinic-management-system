@@ -10,6 +10,8 @@ from app.schemas.doctor import DoctorResponse, DoctorUpdate
 
 from app.schemas.working_schedule import WorkingScheduleResponse, WorkingScheduleUpdate, WorkingScheduleCreate
 
+from app.schemas.appointment import AppointmentResponse, AppointmentUpdate, AppointmentCreate, AppointmentStatusUpdate
+
 __all__ = ["LoginRequest",
            "TokenResponse",
            "UserResponse",
@@ -30,4 +32,9 @@ __all__ = ["LoginRequest",
            "WorkingScheduleResponse",
            "WorkingScheduleUpdate",
            "WorkingScheduleCreate",
+
+           "AppointmentResponse",
+           "AppointmentUpdate",
+           "AppointmentCreate",
+           "AppointmentStatusUpdate",
            ]

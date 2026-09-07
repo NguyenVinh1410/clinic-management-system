@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.config.settings import settings
-from app.routers import auth, patient, user, specialty, doctor, working_schedule
+from app.routers import auth, patient, user, specialty, doctor, working_schedule, appointment
 
 app = FastAPI(title=settings.app_name, debug=settings.debug)
 
@@ -19,3 +19,4 @@ app.include_router(user.router)
 app.include_router(specialty.router)
 app.include_router(doctor.router)
 app.include_router(working_schedule.router)
+app.include_router(appointment.router)
