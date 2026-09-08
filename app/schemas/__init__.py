@@ -12,6 +12,14 @@ from app.schemas.working_schedule import WorkingScheduleResponse, WorkingSchedul
 
 from app.schemas.appointment import AppointmentResponse, AppointmentUpdate, AppointmentCreate, AppointmentStatusUpdate
 
+from app.schemas.medical_record import MedicalRecordResponse, MedicalRecordUpdate, MedicalRecordCreate
+
+from app.schemas.medicine import MedicineResponse, MedicineUpdate, MedicineCreate
+
+from app.schemas.prescription import PrescriptionResponse, PrescriptionDetailResponse, PrescriptionDetailCreate, PrescriptionCreate
+
+from app.schemas.invoice import InvoiceResponse, InvoiceCreate, InvoicePaymentRequest
+
 __all__ = ["LoginRequest",
            "TokenResponse",
            "UserResponse",
@@ -37,4 +45,21 @@ __all__ = ["LoginRequest",
            "AppointmentUpdate",
            "AppointmentCreate",
            "AppointmentStatusUpdate",
+
+           "MedicalRecordResponse",
+           "MedicalRecordUpdate",
+           "MedicalRecordCreate",
+
+           "MedicineResponse",
+           "MedicineUpdate",
+           "MedicineCreate",
+
+           "PrescriptionResponse",
+           "PrescriptionDetailResponse",
+           "PrescriptionDetailCreate",
+           "PrescriptionCreate",
+
+           "InvoiceResponse",
+           "InvoiceCreate",
+           "InvoicePaymentRequest",
            ]

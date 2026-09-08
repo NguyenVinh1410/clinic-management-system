@@ -212,11 +212,6 @@ def update_appointment_status(
 
             raise ForbiddenException("Bac si chi duoc chuyen lich sang Completed")
 
-        # doctor_appointment = AppointmentService.get_appointments_by_doctor(
-        #     db=db,
-        #     doctor_id=current_user.user_id
-        # )
-
         if not AppointmentService.belong_to_doctor(
             db=db,
             appointment=appointment,

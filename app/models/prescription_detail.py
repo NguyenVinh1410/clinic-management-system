@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy import ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.database.base import Base
@@ -52,4 +52,12 @@ class PrescriptionDetail(Base):
     medicine = relationship(
         "Medicine",
         back_populates="prescription_details",
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "prescription_id",
+            "medicine_id",
+            name="uq_prescription_medicine",
+        ),
     )

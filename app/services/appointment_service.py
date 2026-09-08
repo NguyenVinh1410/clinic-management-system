@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -10,7 +10,10 @@ from app.models.working_schedule import WorkingSchedule
 from app.models.appointment import Appointment
 from app.schemas.appointment import AppointmentCreate, AppointmentUpdate
 
+
 class AppointmentService:
+    APPOINTMENT_DURATION_MINUTES = 30
+
     @staticmethod
     def get_appointment_by_id(
             db: Session,
@@ -126,20 +129,43 @@ class AppointmentService:
         if appointment_time.date() != schedule.work_date:
             raise BusinessException("Thoi gian kham khong thuoc ngay cua ca lam viec")
 
-        appointment_time_only = (appointment_time.time())
+        appointment_time_only = appointment_time.time()
 
-        if not (
-            schedule.start_time <= appointment_time_only <= schedule.end_time
-        ):
+        appointment_end = appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES)
+
+        if appointment_time_only < schedule.start_time:
             raise BusinessException("Thoi gian kham phai nam trong ca lam viec cua bac si")
+
+        schedule_end = datetime.combine(
+            schedule.work_date,
+            schedule.end_time
+        )
+
+        if appointment_end > schedule_end:
+            raise BusinessException("Luot kham 30p vuot qua thoi gian ca lam viec")
+
+        schedule_start = datetime.combine(
+            schedule.work_date,
+            schedule.start_time
+        )
+
+        elapsed_seconds = (appointment_time - schedule_start).total_seconds()
+
+        slot_seconds = AppointmentService.APPOINTMENT_DURATION_MINUTES * 60
+
+        if elapsed_seconds % slot_seconds != 0:
+            raise BusinessException("Thoi gian kham phai theo khung 30p")
 
     @staticmethod
     def check_duplicate_appointment(
             db: Session,
             schedule: WorkingSchedule,
             appointment_time: datetime,
-            patient_id: int
+            patient_id: int,
+            exclude_appointment_id: int | None = None
     ) -> None:
+
+        appointment_end = appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES)
 
         doctor_stmt = (
             select(Appointment)
@@ -149,15 +175,22 @@ class AppointmentService:
             )
             .where(
                 WorkingSchedule.doctor_id == schedule.doctor_id,
-                Appointment.appointment_time == appointment_time,
                 Appointment.status.in_(
                     [
                         AppointmentStatus.PENDING,
                         AppointmentStatus.CONFIRMED
                     ]
                 ),
+                Appointment.appointment_time < appointment_end,
+                (
+                    Appointment.appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES)
+                )
+                > appointment_time,
             )
         )
+
+        if exclude_appointment_id is not None:
+            doctor_stmt = doctor_stmt.where(Appointment.appointment_id != exclude_appointment_id)
 
         existing_doctor_appointment = db.execute(doctor_stmt).scalar_one_or_none()
 
@@ -174,9 +207,13 @@ class AppointmentService:
                         AppointmentStatus.PENDING,
                         AppointmentStatus.CONFIRMED
                     ]
-                )
+                ),
+                Appointment.appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES) > appointment_time,
             )
         )
+
+        if exclude_appointment_id is not None:
+            patient_stmt = patient_stmt.where(Appointment.appointment_id != exclude_appointment_id)
 
         existing_patient_appointment = db.execute(patient_stmt).scalar_one_or_none()
 
@@ -208,10 +245,10 @@ class AppointmentService:
 
         AppointmentService.validate_patient(db=db, patient_id=patient_id)
 
-        schedule = (AppointmentService.validate_schedule(
+        schedule = AppointmentService.validate_schedule(
             db=db,
-            schedule_id=data.patient_id,
-        ))
+            schedule_id=data.schedule_id,
+        )
 
         doctor = db.get(
             Doctor,
@@ -255,8 +292,8 @@ class AppointmentService:
             data: AppointmentUpdate
     ) -> Appointment:
         if appointment.status in (
-            AppointmentStatus.COMPLETED,
-            AppointmentStatus.CANCELLED,
+                AppointmentStatus.COMPLETED,
+                AppointmentStatus.CANCELLED,
         ):
             raise BusinessException("Khong the cap nhat lich hen da hoan tat hoac da huy")
 
@@ -267,7 +304,7 @@ class AppointmentService:
             appointment.appointment_time,
         )
 
-        if(new_appointment_time != appointment.appointment_time):
+        if (new_appointment_time != appointment.appointment_time):
             schedule = (
                 AppointmentService.validate_schedule(
                     db=db,
@@ -284,24 +321,25 @@ class AppointmentService:
                 db=db,
                 schedule=schedule,
                 appointment_time=new_appointment_time,
-                patient_id=appointment.appointment_id,
+                patient_id=appointment.patient_id,
+                exclude_appointment_id=appointment.appointment_id
             )
 
-            allowed_fields = {
-                'appointment_time',
-                'note'
-            }
+        allowed_fields = {
+            'appointment_time',
+            'note'
+        }
 
-            for field, value in update_data.items():
-                if field not in allowed_fields:
-                    continue
+        for field, value in update_data.items():
+            if field not in allowed_fields:
+                continue
 
-                setattr(appointment, field, value)
+            setattr(appointment, field, value)
 
-            db.commit()
-            db.refresh(appointment)
+        db.commit()
+        db.refresh(appointment)
 
-            return appointment
+        return appointment
 
     @staticmethod
     def update_status(
@@ -317,27 +355,30 @@ class AppointmentService:
 
         if current_status == AppointmentStatus.PENDING:
             if new_status not in (
-                AppointmentStatus.CONFIRMED,
-                AppointmentStatus.CANCELLED,
+                    AppointmentStatus.CONFIRMED,
+                    AppointmentStatus.CANCELLED,
             ):
                 raise BusinessException("Pending chi co the chuyen qua Confirmed hoac Cancelled")
 
-            elif current_status == AppointmentStatus.CONFIRMED:
-                if new_status not in (
+        elif current_status == AppointmentStatus.CONFIRMED:
+            if new_status not in (
                     AppointmentStatus.COMPLETED,
                     AppointmentStatus.CANCELLED,
-                ):
-                    raise BusinessException("Confirmed chi co the chuyen sang Completed hoac Cancelled")
+            ):
+                raise BusinessException("Confirmed chi co the chuyen sang Completed hoac Cancelled")
 
-            elif current_status == AppointmentStatus.COMPLETED:
-                raise BusinessException("Lich da huy, khong the khoi phuc")
+        elif current_status == AppointmentStatus.COMPLETED:
+            raise BusinessException("Lich da hoan tat, khong the thay doi trang thai")
 
-            appointment.status = new_status
+        elif current_status == AppointmentStatus.CANCELLED:
+            raise BusinessException("Lich da huy, khong the khoi phuc")
 
-            db.commit()
-            db.refresh(appointment)
+        appointment.status = new_status
 
-            return appointment
+        db.commit()
+        db.refresh(appointment)
+
+        return appointment
 
     @staticmethod
     def cancel_appointment(

@@ -22,6 +22,7 @@ class Invoice(Base):
         ),
         nullable=False,
         unique=True,
+        index=True,
     )
 
     total_amount: Mapped[Decimal] = mapped_column(

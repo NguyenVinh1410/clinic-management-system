@@ -45,7 +45,7 @@ class AppointmentResponse(BaseModel):
 
     appointment_time: datetime
 
-    status: AppointmentStatusUpdate
+    status: AppointmentStatus
 
     created_by: AppointmentCreatedBy
 
