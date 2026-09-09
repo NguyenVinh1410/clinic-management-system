@@ -20,6 +20,8 @@ from app.schemas.prescription import PrescriptionResponse, PrescriptionDetailRes
 
 from app.schemas.invoice import InvoiceResponse, InvoiceCreate, InvoicePaymentRequest
 
+from app.schemas.dashboard import DashboardResponse, DashboardSummary, DoctorStatistic, MonthlyStatistic, MonthlyAppointmentStatistic, AppointmentStatusStatistic, SpecialtyStatistic
+
 __all__ = ["LoginRequest",
            "TokenResponse",
            "UserResponse",
@@ -62,4 +64,13 @@ __all__ = ["LoginRequest",
            "InvoiceResponse",
            "InvoiceCreate",
            "InvoicePaymentRequest",
+
+           "DashboardResponse",
+           "DashboardSummary",
+           "DoctorStatistic",
+           "MonthlyStatistic",
+           "MonthlyAppointmentStatistic",
+           "AppointmentStatusStatistic",
+           "SpecialtyStatistic",
+
            ]

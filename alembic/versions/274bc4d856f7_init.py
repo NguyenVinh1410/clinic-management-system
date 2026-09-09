@@ -1,8 +1,8 @@
-"""create initial clinic schema
+"""init
 
-Revision ID: 9d1169be8f8d
+Revision ID: 274bc4d856f7
 Revises: 
-Create Date: 2026-08-31 01:32:24.585947
+Create Date: 2026-09-10 00:22:34.988083
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '9d1169be8f8d'
+revision: str = '274bc4d856f7'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -44,6 +44,7 @@ def upgrade() -> None:
     sa.Column('full_name', sa.String(length=100), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=True),
     sa.Column('phone', sa.String(length=20), nullable=True),
+    sa.Column('gender', sa.Enum('MALE', 'FEMALE', name='user_gender'), nullable=True),
     sa.Column('role', sa.Enum('ADMIN', 'RECEPTIONIST', 'DOCTOR', 'PATIENT', name='user_role'), nullable=False),
     sa.Column('status', sa.Enum('ACTIVE', 'LOCKED', name='user_status'), server_default='Active', nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
@@ -70,7 +71,6 @@ def upgrade() -> None:
     op.create_table('patient',
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('dob', sa.Date(), nullable=True),
-    sa.Column('gender', sa.Enum('MALE', 'FEMALE', name='patient_gender'), nullable=True),
     sa.Column('address', sa.String(length=255), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.user_id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('user_id')
@@ -136,9 +136,9 @@ def upgrade() -> None:
     sa.Column('payment_method', sa.Enum('CASH', 'ONLINE', name='payment_method'), nullable=True),
     sa.Column('paid_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['appointment_id'], ['appointment.appointment_id'], ondelete='RESTRICT'),
-    sa.PrimaryKeyConstraint('invoice_id'),
-    sa.UniqueConstraint('appointment_id')
+    sa.PrimaryKeyConstraint('invoice_id')
     )
+    op.create_index(op.f('ix_invoice_appointment_id'), 'invoice', ['appointment_id'], unique=True)
     op.create_table('medical_record',
     sa.Column('record_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('appointment_id', sa.Integer(), nullable=False),
@@ -167,7 +167,8 @@ def upgrade() -> None:
     sa.Column('usage_note', sa.String(length=500), nullable=True),
     sa.ForeignKeyConstraint(['medicine_id'], ['medicine.medicine_id'], ondelete='RESTRICT'),
     sa.ForeignKeyConstraint(['prescription_id'], ['prescription.prescription_id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('prescription_id', 'medicine_id', name='uq_prescription_medicine')
     )
     op.create_index(op.f('ix_prescription_detail_medicine_id'), 'prescription_detail', ['medicine_id'], unique=False)
     op.create_index(op.f('ix_prescription_detail_prescription_id'), 'prescription_detail', ['prescription_id'], unique=False)
@@ -182,6 +183,7 @@ def downgrade() -> None:
     op.drop_table('prescription_detail')
     op.drop_table('prescription')
     op.drop_table('medical_record')
+    op.drop_index(op.f('ix_invoice_appointment_id'), table_name='invoice')
     op.drop_table('invoice')
     op.drop_index(op.f('ix_chat_message_session_id'), table_name='chat_message')
     op.drop_table('chat_message')

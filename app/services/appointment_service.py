@@ -201,14 +201,15 @@ class AppointmentService:
             select(Appointment)
             .where(
                 Appointment.patient_id == patient_id,
-                Appointment.appointment_time == appointment_time,
                 Appointment.status.in_(
                     [
                         AppointmentStatus.PENDING,
                         AppointmentStatus.CONFIRMED
                     ]
                 ),
-                Appointment.appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES) > appointment_time,
+                Appointment.appointment_time < appointment_end,
+                Appointment.appointment_time >= (appointment_time - timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES))
+                #Appointment.appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES) > appointment_time,
             )
         )
 

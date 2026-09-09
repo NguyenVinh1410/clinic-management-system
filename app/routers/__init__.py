@@ -9,7 +9,9 @@ from app.routers import (
     medical_record,
     medicine,
     prescription,
-    invoice
+    invoice,
+    medical_history,
+    dashboard
 )
 
 __all__ = [
@@ -23,5 +25,7 @@ __all__ = [
     "medical_record",
     "medicine",
     "prescription",
-    "invoice"
+    "invoice",
+    "medical_history",
+    "dashboard",
 ]

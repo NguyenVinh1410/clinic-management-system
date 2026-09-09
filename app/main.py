@@ -13,6 +13,8 @@ from app.routers import (
     medicine,
     prescription,
     invoice,
+    medical_history,
+    dashboard,
 )
 
 app = FastAPI(title=settings.app_name, debug=settings.debug)
@@ -38,3 +40,5 @@ app.include_router(medical_record.router)
 app.include_router(medicine.router)
 app.include_router(prescription.router)
 app.include_router(invoice.router)
+app.include_router(medical_history.router)
+app.include_router(dashboard.router)
