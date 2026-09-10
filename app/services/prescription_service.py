@@ -92,6 +92,23 @@ class PrescriptionService:
             raise NotFoundException("Bac si khong phu trach ho so nay")
 
     @staticmethod
+    def check_prescription_doctor_ownership(
+            db: Session,
+            prescription: Prescription,
+            doctor_id: int,
+    ) -> None:
+        record = PrescriptionService.get_record(
+            db=db,
+            record_id=prescription.record_id,
+        )
+
+        PrescriptionService.check_doctor_ownership(
+            db=db,
+            record=record,
+            doctor_id=doctor_id,
+        )
+
+    @staticmethod
     def create_prescription(
             db: Session,
             data: PrescriptionCreate,

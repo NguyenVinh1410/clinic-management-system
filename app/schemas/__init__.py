@@ -22,6 +22,8 @@ from app.schemas.invoice import InvoiceResponse, InvoiceCreate, InvoicePaymentRe
 
 from app.schemas.dashboard import DashboardResponse, DashboardSummary, DoctorStatistic, MonthlyStatistic, MonthlyAppointmentStatistic, AppointmentStatusStatistic, SpecialtyStatistic
 
+from app.schemas.medical_history import MedicalHistoryResponse, MedicalHistoryPrescriptionResponse, MedicalHistoryMedicineResponse, MedicalHistoryItemResponse
+
 __all__ = ["LoginRequest",
            "TokenResponse",
            "UserResponse",
@@ -73,4 +75,8 @@ __all__ = ["LoginRequest",
            "AppointmentStatusStatistic",
            "SpecialtyStatistic",
 
+           "MedicalHistoryResponse",
+           "MedicalHistoryMedicineResponse",
+           "MedicalHistoryItemResponse",
+           "MedicalHistoryPrescriptionResponse",
            ]

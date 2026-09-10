@@ -41,4 +41,6 @@ app.include_router(medicine.router)
 app.include_router(prescription.router)
 app.include_router(invoice.router)
 app.include_router(medical_history.router)
+app.include_router(medical_history.doctor_router)
 app.include_router(dashboard.router)
+

@@ -3,7 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from app.dependencies import get_db, requires_role
+from app.core.exceptions import ForbiddenException
+from app.dependencies import get_db, requires_role, get_current_user
 from app.models.enums import UserRole
 from app.models.user import User
 from app.schemas.prescription import PrescriptionCreate, PrescriptionResponse, PrescriptionUpdate
@@ -42,19 +43,35 @@ def create_prescription(
 )
 def get_prescription_by_record(
         record_id: int,
-        _: Annotated[
+
+        current_user: Annotated[
             User,
-            Depends(requires_role(
-                UserRole.ADMIN,
-                UserRole.DOCTOR,
-                UserRole.RECEPTIONIST
-            ))
+            Depends(get_current_user)
         ],
+
         db: Annotated[
             Session,
             Depends(get_db),
         ]
 ):
+    record = PrescriptionService.get_record(
+        db=db,
+        record_id=record_id,
+    )
+
+    if current_user.role == UserRole.ADMIN:
+        pass
+
+    elif current_user.role == UserRole.DOCTOR:
+        PrescriptionService.check_doctor_ownership(
+            db=db,
+            record=record,
+            doctor_id=current_user.user_id,
+        )
+
+    else:
+        raise ForbiddenException("Ban khong co quyen xem don thuoc")
+
     return PrescriptionService.get_by_record(
         db=db,
         record_id=record_id,
@@ -66,24 +83,35 @@ def get_prescription_by_record(
 )
 def get_prescription(
         prescription_id: int,
-        _: Annotated[
+
+        current_user: Annotated[
             User,
-            Depends(requires_role(
-                UserRole.ADMIN,
-                UserRole.DOCTOR,
-                UserRole.RECEPTIONIST
-            ))
+            Depends(get_current_user)
         ],
+
         db: Annotated[
             Session,
             Depends(get_db),
         ]
 ):
-    return PrescriptionService.get_prescription_by_id(
+    prescription = PrescriptionService.get_prescription_by_id(
         db=db,
         prescription_id=prescription_id,
     )
 
+    if current_user.role == UserRole.ADMIN:
+        return prescription
+
+    if current_user.role == UserRole.DOCTOR:
+        PrescriptionService.check_prescription_doctor_ownership(
+            db=db,
+            prescription=prescription,
+            doctor_id=current_user.user_id,
+        )
+
+        return prescription
+
+    raise ForbiddenException("Ban khong co quyen xem don thuoc")
 
 @router.patch(
     "/{prescription_id}",
