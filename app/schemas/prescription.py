@@ -23,6 +23,9 @@ class PrescriptionCreate(BaseModel):
 
     details: list[PrescriptionDetailCreate] = Field(min_length=1)
 
+class PrescriptionUpdate(BaseModel):
+    details: list[PrescriptionDetailCreate] = Field(min_length=1)
+
 class PrescriptionDetailResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

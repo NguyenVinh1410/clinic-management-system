@@ -2,10 +2,13 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 
 from app.dependencies import get_db, requires_role
+from app.models import Appointment
 from app.models.enums import UserRole
 from app.models.user import User
+from app.models.invoice import Invoice
 from app.schemas.invoice import InvoiceCreate, InvoicePaymentRequest, InvoiceResponse
 from app.services.invoice_service import InvoiceService
 
@@ -39,16 +42,45 @@ def create_invoice(
     )
 
 @router.get(
+    "/my",
+    response_model=list[InvoiceResponse],
+    status_code=status.HTTP_200_OK,
+)
+def get_my_invoices(
+        current_user: Annotated[
+            User,
+            Depends(requires_role(UserRole.PATIENT))
+        ],
+        db: Annotated[
+            Session,
+            Depends(get_db),
+        ]
+):
+    stmt = (
+        select(Invoice)
+        .join(
+            Appointment,
+            Invoice.appointment_id == Appointment.appointment_id
+        )
+        .where(Appointment.patient_id == current_user.user_id)
+        .order_by(Invoice.invoice_id.desc())
+    )
+
+    return list(db.execute(stmt).scalars().all())
+
+@router.get(
     "/{invoice_id}",
     response_model=InvoiceResponse,
+    status_code=status.HTTP_200_OK,
 )
 def get_invoice(
         invoice_id: int,
-        _: Annotated[
+        current_user: Annotated[
             User,
             Depends(requires_role(
                 UserRole.ADMIN,
-                UserRole.RECEPTIONIST
+                UserRole.RECEPTIONIST,
+                UserRole.PATIENT
             ))
         ],
         db: Annotated[
@@ -56,22 +88,31 @@ def get_invoice(
             Depends(get_db),
         ]
 ):
-    return InvoiceService.get_invoice_by_id(
+    invoice = InvoiceService.get_invoice_by_id(
         db=db,
         invoice_id=invoice_id,
     )
 
+    InvoiceService.validate_patient_access(
+        invoice=invoice,
+        current_user=current_user,
+    )
+
+    return invoice
+
 @router.get(
     "/appointment/{appointment_id}",
     response_model=InvoiceResponse,
+    status_code=status.HTTP_200_OK,
 )
 def get_invoice_by_appointment(
         appointment_id: int,
-        _: Annotated[
+        current_user: Annotated[
             User,
             Depends(requires_role(
                 UserRole.ADMIN,
-                UserRole.RECEPTIONIST
+                UserRole.RECEPTIONIST,
+                UserRole.PATIENT
             ))
         ],
         db: Annotated[
@@ -79,23 +120,33 @@ def get_invoice_by_appointment(
             Depends(get_db),
         ]
 ):
-    return InvoiceService.get_invoice_by_appointment(
+
+    invoice = InvoiceService.get_invoice_by_appointment(
         db=db,
         appointment_id=appointment_id,
     )
 
+    InvoiceService.validate_patient_access(
+        invoice=invoice,
+        current_user=current_user,
+    )
+
+    return invoice
+
 @router.patch(
     "/{invoice_id}/pay",
     response_model=InvoiceResponse,
+    status_code=status.HTTP_200_OK,
 )
 def pay_invoice(
         invoice_id: int,
         data: InvoicePaymentRequest,
-        _: Annotated[
+        current_user: Annotated[
             User,
             Depends(requires_role(
                 UserRole.ADMIN,
-                UserRole.RECEPTIONIST
+                UserRole.RECEPTIONIST,
+                UserRole.PATIENT
             ))
         ],
         db: Annotated[
@@ -112,4 +163,5 @@ def pay_invoice(
         db=db,
         invoice=invoice,
         data=data,
+        current_user=current_user,
     )

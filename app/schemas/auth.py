@@ -135,7 +135,6 @@ class RegisterRequest(BaseModel):
 
     @model_validator(mode="after")
     def validate_confirm_password(self):
-
         if self.password != self.confirm_password:
             raise ValueError(
                 "Password xac nhan khong khop"

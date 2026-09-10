@@ -148,6 +148,15 @@ def get_appointment(
 
             raise ForbiddenException("Ban chi duoc xem lich hen cua chinh minh")
 
+    elif current_user.role == UserRole.DOCTOR:
+        if not AppointmentService.belong_to_doctor(
+            db=db,
+            appointment=appointment,
+            doctor_id=current_user.user_id
+        ):
+            from app.core.exceptions import ForbiddenException
+            raise ForbiddenException("Bac si chi duoc xem lich hen cua minh")
+
     return appointment
 
 
@@ -213,9 +222,9 @@ def update_appointment_status(
             raise ForbiddenException("Bac si chi duoc chuyen lich sang Completed")
 
         if not AppointmentService.belong_to_doctor(
-            db=db,
-            appointment=appointment,
-            doctor_id=current_user.user_id,
+                db=db,
+                appointment=appointment,
+                doctor_id=current_user.user_id,
         ):
             from app.core.exceptions import ForbiddenException
 

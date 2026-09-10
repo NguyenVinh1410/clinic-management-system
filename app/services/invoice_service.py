@@ -2,15 +2,14 @@ from datetime import datetime
 from decimal import Decimal
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 
-from app.core.exceptions import BusinessException, ConflictException, NotFoundException
+from app.core.exceptions import BusinessException, ConflictException, NotFoundException, ForbiddenException
 from app.models.appointment import Appointment
-from app.models.enums import AppointmentStatus, InvoiceStatus, PaymentMethod
+from app.models.enums import AppointmentStatus, InvoiceStatus, PaymentMethod, UserRole
 from app.models.invoice import Invoice
-from app.models.prescription import Prescription
-from app.models.prescription_detail import PrescriptionDetail
 from app.models.medicine import Medicine
+from app.models.user import User
 from app.schemas.invoice import InvoiceCreate, InvoicePaymentRequest
 
 class InvoiceService:
@@ -146,10 +145,44 @@ class InvoiceService:
         return invoice
 
     @staticmethod
+    def validate_patient_access(
+            invoice: Invoice,
+            current_user: User,
+    ) -> None:
+        if current_user.role != UserRole.PATIENT:
+            return
+
+        if invoice.appointment.patient_id != current_user.user_id:
+            raise ForbiddenException("Ban chi duoc xem hoa don cua chinh minh")
+
+    @staticmethod
+    def recalculate_invoice_total(
+            db: Session,
+            invoice: Invoice,
+    ) -> Invoice:
+        if invoice.status == InvoiceStatus.PAID:
+            raise BusinessException("Khong the cap nha tong tien hoa don da thanh toan")
+
+        appointment = InvoiceService.get_appointment(
+            db=db,
+            appointment_id=invoice.appointment_id,
+        )
+
+        invoice.total_amount = (
+            InvoiceService.calculate_total_amount(
+                db=db,
+                appointment=appointment,
+            )
+        )
+
+        return invoice
+
+    @staticmethod
     def pay_invoice(
             db: Session,
             invoice: Invoice,
             data: InvoicePaymentRequest,
+            current_user: User
     ) -> Invoice:
 
         if invoice.status == InvoiceStatus.PAID:
@@ -159,6 +192,16 @@ class InvoiceService:
             db=db,
             appointment_id=invoice.appointment_id,
         )
+
+        if current_user.role == UserRole.PATIENT:
+            if appointment.patient_id != current_user.user_id:
+                raise ForbiddenException("Ban chi duoc thanh toan hoa don cua chinh minh")
+
+            if data.payment_method != PaymentMethod.ONLINE:
+                raise BusinessException("Benh nhan chi duoc thanh toan Online")
+
+        elif current_user.role == UserRole.DOCTOR:
+            raise ForbiddenException("Bac si khong co quyen thanh toan hoa don")
 
         if appointment.status != AppointmentStatus.COMPLETED:
             raise BusinessException("Lich hen chua hoan tat")

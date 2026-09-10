@@ -1,18 +1,19 @@
-from datetime import datetime
+#from datetime import datetime
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
-from app.core.exceptions import BusinessException, ConflictException, ForbiddenException, NotFoundException
+from app.core.exceptions import BusinessException, ConflictException, NotFoundException, ForbiddenException
 from app.models.appointment import Appointment
-from app.models.enums import AppointmentStatus, MedicineStatus
+from app.models.enums import AppointmentStatus, MedicineStatus, InvoiceStatus
 from app.models.medicine import Medicine
 from app.models.medical_record import MedicalRecord
 from app.models.prescription import Prescription
 from app.models.prescription_detail import PrescriptionDetail
-from  app.models.user import Doctor
+#from  app.models.user import Doctor
 from app.models.working_schedule import WorkingSchedule
-from app.schemas.prescription import PrescriptionCreate
+from app.schemas.prescription import PrescriptionCreate, PrescriptionUpdate
+from app.services.invoice_service import InvoiceService
 
 class PrescriptionService:
     @staticmethod
@@ -27,7 +28,7 @@ class PrescriptionService:
             .where(Prescription.prescription_id == prescription_id)
         )
 
-        prescription = db.execute(stmt).scalar_one_or_none()
+        prescription = db.execute(stmt).unique().scalar_one_or_none()
 
         if prescription is None:
             raise NotFoundException("Khong tim thay don thuoc")
@@ -46,10 +47,10 @@ class PrescriptionService:
             .where(Prescription.record_id == record_id)
         )
 
-        prescription = db.execute(stmt).scalar_one_or_none()
+        prescription = db.execute(stmt).unique().scalar_one_or_none()
 
         if prescription is None:
-            raise NotFoundException("MedicalRecrod chua co don thuoc")
+            raise NotFoundException("MedicalRecord chua co don thuoc")
 
         return prescription
 
@@ -176,4 +177,95 @@ class PrescriptionService:
             prescription_id=prescription.prescription_id,
         )
 
+    @staticmethod
+    def update_prescription(
+            db: Session,
+            prescription: Prescription,
+            data: PrescriptionUpdate,
+            doctor_id: int,
+    ) -> Prescription:
+
+        record = PrescriptionService.get_record(
+            db=db,
+            record_id=prescription.record_id
+        )
+
+        PrescriptionService.check_doctor_ownership(
+            db=db,
+            record=record,
+            doctor_id=doctor_id,
+        )
+
+        appointment = db.get(Appointment, record.appointment_id)
+
+        if appointment is None:
+            raise NotFoundException("Khong tim thay lich hen")
+
+        if appointment.status != AppointmentStatus.COMPLETED:
+            raise BusinessException("Chi co the sua don thuoc cua lich hen da hoan thanh")
+
+        invoice = appointment.invoice
+
+        if invoice is not None:
+            if invoice.status == InvoiceStatus.PAID:
+                raise BusinessException("Khong the sua don thuoc khi hoa don da thanh toan")
+
+        medicine_ids = [
+            detail.medicine_id
+            for detail in data.details
+        ]
+
+        if len(medicine_ids) != len(set(medicine_ids)):
+            raise ConflictException("Khong duoc ke cung 1 thuoc nhieu lan trong 1 don")
+
+        medicines: dict[int, Medicine] = {}
+
+        for medicine_id in medicine_ids:
+            medicine = db.get(Medicine, medicine_id)
+
+            if medicine is None:
+                raise NotFoundException(f"Khong tim thay thuoc ID={medicine_id}")
+
+            if medicine.status != MedicineStatus.ACTIVE:
+                raise BusinessException(f"thuoc '{medicine.name}' da ngung su dung")
+
+            medicines[medicine_id] = medicine
+
+        for detail in data.details:
+
+            medicine = medicines[detail.medicine_id]
+
+            if detail.quantity > medicine.stock_qty:
+                raise BusinessException(f"Thuoc '{medicine.name}' khong du ton kho")
+
+        prescription.details.clear()
+
+        for detail in data.details:
+
+            prescription.details.append(
+                PrescriptionDetail(
+                    medicine_id=detail.medicine_id,
+                    quantity=detail.quantity,
+                    dosage=detail.dosage,
+                    usage_note=detail.usage_note,
+                )
+            )
+
+        db.flush()
+
+        if invoice is not None:
+            invoice.total_amount = (
+                InvoiceService.calculate_total_amount(
+                    db=db,
+                    appointment=appointment,
+                )
+            )
+
+        db.commit()
+        db.refresh(prescription)
+
+        return PrescriptionService.get_prescription_by_id(
+            db=db,
+            prescription_id=prescription.prescription_id,
+        )
 
