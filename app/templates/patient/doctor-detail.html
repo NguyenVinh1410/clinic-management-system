@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}
+Thông tin bác sĩ | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "patient/partials/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "patient/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <a
+                href="/patient/doctors"
+                class="btn btn-sm btn-light mb-3">
+
+                <i class="bi bi-arrow-left me-1"></i>
+
+                Quay lại danh sách
+
+            </a>
+
+
+            <div
+                id="doctorDetail"
+                class="row g-3">
+
+                <div class="col-12">
+
+                    <div class="content-card text-center py-5">
+
+                        <div
+                            class="spinner-border text-primary">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="doctorSchedule"
+                class="content-card mt-3 d-none">
+
+                <div class="card-header-simple">
+
+                    <h5 class="fw-bold mb-1">
+                        Lịch làm việc
+                    </h5>
+
+                    <p class="text-secondary small mb-0">
+                        Các ca làm việc của bác sĩ.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="scheduleList"
+                    class="p-3">
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+    const doctorId =
+        {{ doctor_id }};
+</script>
+
+
+<script
+    src="{{ url_for('static', path='js/patient-doctor-detail.js') }}">
+</script>
+
+{% endblock %}

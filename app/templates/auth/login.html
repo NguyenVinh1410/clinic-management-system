@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}
+Đăng nhập | ClinicCare
+{% endblock %}
+
+{% block body %}
+
+<div class="auth-page">
+
+    <div class="container py-4">
+
+        <div class="row min-vh-100 align-items-center justify-content-center">
+
+            <div class="col-12 col-md-10 col-lg-9 col-xl-8">
+
+                <div class="card auth-card border-0 shadow-lg overflow-hidden">
+
+                    <div class="row g-0">
+
+                        <div class="col-lg-5 auth-brand d-none d-lg-flex">
+
+                            <div class="p-5 d-flex flex-column justify-content-between w-100">
+
+                                <div>
+                                    <div class="brand-mark mb-4">
+                                        <i class="bi bi-heart-pulse-fill"></i>
+                                    </div>
+
+                                    <p class="text-uppercase small fw-semibold opacity-75 mb-2">
+                                        Clinic Management System
+                                    </p>
+
+                                    <h1 class="display-6 fw-bold mb-3">
+                                        Quản lý phòng khám đa khoa
+                                    </h1>
+
+                                    <p class="opacity-75 mb-0">
+                                        Quản lý bệnh nhân, lịch khám,
+                                        hồ sơ bệnh án, đơn thuốc
+                                        và thanh toán trên một hệ thống.
+                                    </p>
+                                </div>
+
+                                <div class="small opacity-75">
+                                    <i class="bi bi-shield-check me-2"></i>
+
+                                    Phân quyền theo vai trò
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-7 bg-white">
+
+                            <div class="p-4 p-md-5">
+
+                                <div class="mb-4">
+
+                                    <div class="d-flex align-items-center gap-2 mb-3">
+                                        <span class="brand-dot">
+                                            <i class="bi bi-heart-pulse-fill"></i>
+                                        </span>
+
+                                        <span class="fw-bold">
+                                            ClinicCare
+                                        </span>
+                                    </div>
+
+                                    <h2 class="fw-bold mb-1">
+                                        Chào mừng trở lại
+                                    </h2>
+
+                                    <p class="text-secondary md-0">
+                                        Đăng nhập để tiếp tục làm việc.
+                                    </p>
+
+                                </div>
+
+                                <div
+                                    id="loginAlert"
+                                    class="alert d-none"
+                                    role="alert">
+                                </div>
+
+                                <form
+                                    id="loginForm"
+                                    novalidate>
+
+                                    <div class="mb-3">
+                                        <label
+                                            for="username"
+                                            class="form-label fw-semibold">
+
+                                            Tên đăng nhập
+                                        </label>
+
+                                        <div class="input-group input-group-lg">
+                                            <span class="input-group-text bg-light border-end-0">
+                                                <i class="bi bi-person"></i>
+                                            </span>
+
+                                            <input
+                                                type="text"
+                                                id="username"
+                                                name="username"
+                                                class="form-control bg-light border-start-0"
+                                                maxlength="50"
+                                                autocomplete="username"
+                                                placeholder="Nhập tên đăng nhập"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label
+                                            for="password"
+                                            class="form-label fw-semibold">
+
+                                            Mật khẩu
+
+                                        </label>
+
+                                        <div class="input-group input-group-lg">
+                                            <span class="input-group-text bg-light border-end-0">
+                                                <i class="bi bi-lock"></i>
+                                            </span>
+
+                                            <input
+                                                type="password"
+                                                id="password"
+                                                name="password"
+                                                class="form-control bg-light border-start-0 border-end-0"
+                                                autocomplete="current-password"
+                                                placeholder="Nhập mật khẩu"
+                                                required
+                                            >
+
+                                            <button
+                                                type="button"
+                                                id="togglePassword"
+                                                class="btn btn-light border border-start-0">
+
+                                                <i class="bi bi-eye"></i>
+
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        id="loginButton"
+                                        class="btn btn-primary btn-lg w-100">
+
+                                        <span id="loginButtonText">
+                                            <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                                            Đăng nhập
+
+                                        </span>
+
+                                        <span
+                                            id="loginSpinner"
+                                            class="spinner-border spinner-border-sm d-none">
+                                        </span>
+
+                                    </button>
+                                </form>
+
+                                <div class="text-center mt-4">
+                                    <span class="text-secondary">
+
+                                        Chưa có tài khoản?
+
+                                    </span>
+
+                                    <span class="fw-semibold text-primary">
+                                        Liên hệ lễ tân để được hỗ trợ.
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-center text-secondary small mt-3">
+                    © 2026 ClinicCare · Clinic Management System
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+<script src="{{ url_for('static', path='js/login.js') }}"></script>
+
+{% endblock %}

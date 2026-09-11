@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from app.config.settings import settings
 from app.routers import (
@@ -15,9 +16,16 @@ from app.routers import (
     invoice,
     medical_history,
     dashboard,
+    web,
 )
 
 app = FastAPI(title=settings.app_name, debug=settings.debug)
+
+app.mount(
+    "/static",
+    StaticFiles(directory=settings.static_dir),
+    name="static",
+)
 
 
 @app.get("/health", tags=["System"])
@@ -43,4 +51,6 @@ app.include_router(invoice.router)
 app.include_router(medical_history.router)
 app.include_router(medical_history.doctor_router)
 app.include_router(dashboard.router)
+
+app.include_router(web.router)
 

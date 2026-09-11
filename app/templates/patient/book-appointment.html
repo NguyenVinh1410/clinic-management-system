@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}
+Đặt lịch khám | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "patient/partials/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "patient/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <h2 class="fw-bold mb-1">
+                    Đặt lịch khám
+                </h2>
+
+                <p class="text-secondary">
+                    Chọn bác sĩ, ca làm việc và thời gian khám.
+                </p>
+
+            </div>
+
+
+            <div
+                id="bookingAlert"
+                class="alert d-none">
+            </div>
+
+
+            <div class="row g-3">
+
+                <div class="col-12 col-xl-8">
+
+                    <div class="content-card">
+
+                        <div class="p-4">
+
+                            <div class="booking-step mb-4">
+
+                                <span class="booking-step-number">
+                                    1
+                                </span>
+
+                                <div>
+
+                                    <div class="fw-bold">
+                                        Chọn bác sĩ
+                                    </div>
+
+                                    <div class="small text-secondary">
+                                        Chọn bác sĩ bạn muốn khám.
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <select
+                                id="doctorSelect"
+                                class="form-select mb-4">
+
+                                <option value="">
+                                    -- Chọn bác sĩ --
+                                </option>
+
+                            </select>
+
+
+                            <div class="booking-step mb-4">
+
+                                <span class="booking-step-number">
+                                    2
+                                </span>
+
+                                <div>
+
+                                    <div class="fw-bold">
+                                        Chọn ca làm việc
+                                    </div>
+
+                                    <div class="small text-secondary">
+                                        Chọn ngày khám.
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <select
+                                id="scheduleSelect"
+                                class="form-select mb-4"
+                                disabled>
+
+                                <option value="">
+                                    -- Chọn ca làm việc --
+                                </option>
+
+                            </select>
+
+
+                            <div class="booking-step mb-4">
+
+                                <span class="booking-step-number">
+                                    3
+                                </span>
+
+                                <div>
+
+                                    <div class="fw-bold">
+                                        Chọn thời gian
+                                    </div>
+
+                                    <div class="small text-secondary">
+                                        Mỗi lượt khám kéo dài 30 phút.
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                id="slotGrid"
+                                class="slot-grid mb-4">
+
+                                <div class="text-secondary small">
+                                    Vui lòng chọn ca làm việc trước.
+                                </div>
+
+                            </div>
+
+
+                            <div class="booking-step mb-4">
+
+                                <span class="booking-step-number">
+                                    4
+                                </span>
+
+                                <div>
+
+                                    <div class="fw-bold">
+                                        Ghi chú
+                                    </div>
+
+                                    <div class="small text-secondary">
+                                        Thông tin bổ sung cho buổi khám.
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <textarea
+                                id="appointmentNote"
+                                rows="4"
+                                maxlength="1000"
+                                class="form-control"
+                                placeholder="Nhập ghi chú nếu cần...">
+                            </textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-xl-4">
+
+                    <div
+                        class="content-card sticky-xl-top"
+                        style="top: 95px;">
+
+                        <div class="p-4">
+
+                            <h5 class="fw-bold mb-3">
+
+                                Xác nhận lịch khám
+
+                            </h5>
+
+
+                            <div class="mb-3">
+
+                                <div class="text-secondary small">
+                                    Bác sĩ
+                                </div>
+
+                                <div
+                                    id="summaryDoctor"
+                                    class="fw-semibold">
+                                    Chưa chọn
+                                </div>
+
+                            </div>
+
+
+                            <div class="mb-3">
+
+                                <div class="text-secondary small">
+                                    Ngày
+                                </div>
+
+                                <div
+                                    id="summaryDate"
+                                    class="fw-semibold">
+                                    Chưa chọn
+                                </div>
+
+                            </div>
+
+
+                            <div class="mb-4">
+
+                                <div class="text-secondary small">
+                                    Thời gian
+                                </div>
+
+                                <div
+                                    id="summaryTime"
+                                    class="fw-semibold">
+                                    Chưa chọn
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                id="confirmBookingButton"
+                                type="button"
+                                class="btn btn-primary w-100"
+                                disabled>
+
+                                <i class="bi bi-calendar-check me-2"></i>
+
+                                Xác nhận đặt lịch
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+    const initialDoctorId =
+        new URLSearchParams(
+            window.location.search
+        ).get("doctor_id");
+
+
+    const initialScheduleId =
+        new URLSearchParams(
+            window.location.search
+        ).get("schedule_id");
+</script>
+
+
+<script
+    src="{{ url_for('static', path='js/patient-booking.js') }}">
+</script>
+
+{% endblock %}

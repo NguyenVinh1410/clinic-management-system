@@ -97,3 +97,23 @@ class Appointment(Base):
         back_populates="appointment",
         uselist=False,
     )
+
+    @property
+    def doctor_id(self) -> int:
+        return self.schedule.doctor.user_id
+
+    @property
+    def doctor_name(self) -> str:
+        return self.schedule.doctor.full_name
+
+    @property
+    def specialty_id(self) -> int:
+        return self.schedule.doctor.specialty_id
+
+    @property
+    def specialty_name(self) -> str:
+        return (
+            self.schedule.doctor.specialty.name
+            if self.schedule.doctor.specialty is not None
+            else ""
+        )

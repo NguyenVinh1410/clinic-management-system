@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Lịch khám | Receptionist | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "receptionist/partials/sidebar.html" %}
+
+
+    <main class="main-content">
+
+        {% include "receptionist/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Quản lý
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Lịch khám
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Theo dõi và quản lý lịch khám của bệnh nhân.
+                </p>
+
+            </div>
+
+
+            <div
+                id="appointmentAlert"
+                class="alert d-none">
+            </div>
+
+
+            <div class="content-card">
+
+                <div class="p-4 border-bottom">
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-4">
+
+                            <label
+                                class="form-label small fw-semibold">
+
+                                Ngày
+
+                            </label>
+
+                            <input
+                                type="date"
+                                id="appointmentDate"
+                                class="form-control">
+
+                        </div>
+
+
+                        <div class="col-12 col-md-4">
+
+                            <label
+                                class="form-label small fw-semibold">
+
+                                Trạng thái
+
+                            </label>
+
+                            <select
+                                id="appointmentStatus"
+                                class="form-select">
+
+                                <option value="">
+                                    Tất cả
+                                </option>
+
+                                <option value="Pending">
+                                    Chờ xác nhận
+                                </option>
+
+                                <option value="Confirmed">
+                                    Đã xác nhận
+                                </option>
+
+                                <option value="Completed">
+                                    Đã hoàn thành
+                                </option>
+
+                                <option value="Cancelled">
+                                    Đã hủy
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-4">
+
+                            <label
+                                class="form-label small fw-semibold">
+
+                                Tìm kiếm
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="appointmentSearch"
+                                class="form-control"
+                                placeholder="Tên bác sĩ hoặc bệnh nhân...">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Thời gian
+                                </th>
+
+                                <th>
+                                    Bệnh nhân
+                                </th>
+
+                                <th>
+                                    Bác sĩ
+                                </th>
+
+                                <th>
+                                    Chuyên khoa
+                                </th>
+
+                                <th>
+                                    Trạng thái
+                                </th>
+
+                                <th class="text-end">
+                                    Thao tác
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="appointmentList">
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="text-center py-5 text-secondary">
+
+                                    Đang tải...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/receptionist-appointments.js'
+    ) }}">
+</script>
+
+{% endblock %}

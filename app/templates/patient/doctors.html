@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}
+Bác sĩ | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "patient/partials/sidebar.html" %}
+
+
+    <main class="main-content">
+
+        {% include "patient/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small mb-1">
+                    Thông tin khám bệnh
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Tìm bác sĩ
+                </h2>
+
+                <p class="text-secondary">
+                    Xem thông tin bác sĩ và lịch làm việc.
+                </p>
+
+            </div>
+
+
+            <div class="content-card mb-4">
+
+                <div class="p-3">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-8">
+
+                            <label class="form-label">
+                                Tìm kiếm
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="doctorSearch"
+                                    class="form-control"
+                                    placeholder="Nhập tên bác sĩ..."
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                Chuyên khoa
+                            </label>
+
+                            <select
+                                id="specialtyFilter"
+                                class="form-select">
+
+                                <option value="">
+                                    Tất cả chuyên khoa
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="doctorList"
+                class="row g-3">
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for('static', path='js/patient-doctors.js') }}">
+</script>
+
+{% endblock %}

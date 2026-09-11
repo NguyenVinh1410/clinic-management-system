@@ -50,3 +50,11 @@ class AppointmentResponse(BaseModel):
     created_by: AppointmentCreatedBy
 
     note: str | None
+
+    doctor_id: int
+
+    doctor_name: str
+
+    specialty_id: int
+
+    specialty_name: str

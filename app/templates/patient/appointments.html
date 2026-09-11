@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}
+Lịch khám | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "patient/partials/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "patient/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+
+                <div>
+
+                    <div class="text-secondary small">
+                        Quản lý lịch
+                    </div>
+
+                    <h2 class="fw-bold mb-1">
+                        Lịch khám của tôi
+                    </h2>
+
+                </div>
+
+
+                <a
+                    href="/patient/book-appointment"
+                    class="btn btn-primary">
+
+                    <i class="bi bi-calendar-plus me-2"></i>
+
+                    Đặt lịch mới
+
+                </a>
+
+            </div>
+
+
+            <div
+                id="appointmentAlert"
+                class="alert d-none">
+            </div>
+
+
+            <div class="content-card">
+
+                <div class="p-3 border-bottom">
+
+                    <div
+                        class="btn-group"
+                        role="group">
+
+                        <button
+                            class="btn btn-sm btn-primary appointment-filter active"
+                            data-filter="all">
+
+                            Tất cả
+
+                        </button>
+
+
+                        <button
+                            class="btn btn-sm btn-outline-primary appointment-filter"
+                            data-filter="upcoming">
+
+                            Sắp tới
+
+                        </button>
+
+
+                        <button
+                            class="btn btn-sm btn-outline-primary appointment-filter"
+                            data-filter="Completed">
+
+                            Đã hoàn thành
+
+                        </button>
+
+
+                        <button
+                            class="btn btn-sm btn-outline-primary appointment-filter"
+                            data-filter="Cancelled">
+
+                            Đã hủy
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="appointmentList"
+                    class="p-3">
+
+                    Đang tải...
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for('static', path='js/patient-appointments.js') }}">
+</script>
+
+{% endblock %}

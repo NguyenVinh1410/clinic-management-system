@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.core.exceptions import BusinessException, ConflictException, NotFoundException
 from app.models.enums import AppointmentStatus, AppointmentCreatedBy, UserRole, UserStatus, WorkingScheduleStatus
 from app.models.user import User, Doctor, Patient
 from app.models.working_schedule import WorkingSchedule
 from app.models.appointment import Appointment
+from app.routers import appointment
 from app.schemas.appointment import AppointmentCreate, AppointmentUpdate
 
 
@@ -22,6 +23,11 @@ class AppointmentService:
 
         stmt = (
             select(Appointment)
+            .options(
+                joinedload(Appointment.schedule)
+                .joinedload(WorkingSchedule.doctor)
+                .joinedload(Doctor.specialty)
+            )
             .where(Appointment.appointment_id == appointment_id)
         )
 
@@ -35,20 +41,30 @@ class AppointmentService:
     @staticmethod
     def get_all_appointments(
             db: Session,
-    ) -> list[Appointment]:
+    ) -> list[dict]:
 
         stmt = (
             select(Appointment)
+            .options(
+                joinedload(Appointment.schedule)
+                .joinedload(WorkingSchedule.doctor)
+                .joinedload(Doctor.specialty)
+            )
             .order_by(Appointment.appointment_time)
         )
 
-        return list(db.execute(stmt).scalars().all())
+        appointments = db.execute(stmt).scalars().all()
+
+        return [
+            AppointmentService._appointment_to_response(appointment)
+            for appointment in appointments
+        ]
 
     @staticmethod
     def get_appointments_by_patient(
             db: Session,
             patient_id: int
-    ) -> list[Appointment]:
+    ) -> list[dict]:
 
         patient = db.get(Patient, patient_id)
 
@@ -57,17 +73,27 @@ class AppointmentService:
 
         stmt = (
             select(Appointment)
+            .options(
+                joinedload(Appointment.schedule)
+                .joinedload(WorkingSchedule.doctor)
+                .joinedload(Doctor.specialty)
+            )
             .where(Appointment.patient_id == patient_id)
             .order_by(Appointment.appointment_time.desc())
         )
 
-        return list(db.execute(stmt).scalars().all())
+        appointments = db.execute(stmt).scalars().all()
+
+        return [
+            AppointmentService._appointment_to_response(appointment)
+            for appointment in appointments
+        ]
 
     @staticmethod
     def get_appointments_by_doctor(
             db: Session,
             doctor_id: int
-    ) -> list[Appointment]:
+    ) -> list[dict]:
 
         doctor = db.get(Doctor, doctor_id)
 
@@ -80,10 +106,21 @@ class AppointmentService:
                 WorkingSchedule,
                 Appointment.schedule_id == WorkingSchedule.schedule_id
             )
+            .options(
+                joinedload(Appointment.schedule)
+                .joinedload(WorkingSchedule.doctor)
+                .joinedload(Doctor.specialty)
+            )
             .where(WorkingSchedule.doctor_id == doctor_id)
             .order_by(Appointment.appointment_time)
         )
-        return list(db.execute(stmt).scalars().all())
+
+        appointments = db.execute(stmt).scalars().all()
+
+        return [
+            AppointmentService._appointment_to_response(appointment)
+            for appointment in appointments
+        ]
 
     @staticmethod
     def validate_patient(
@@ -420,3 +457,41 @@ class AppointmentService:
         )
 
         return db.execute(stmt).scalar_one_or_none() is not None
+
+    @staticmethod
+    def _appointment_to_response(
+            appointment: Appointment,
+    ) -> dict:
+
+        schedule = appointment.schedule
+        doctor = schedule.doctor
+
+        return {
+            "appointment_id": appointment.appointment_id,
+
+            "schedule_id": appointment.schedule_id,
+
+            "patient_id": appointment.patient_id,
+
+            "chat_session_id": appointment.chat_session_id,
+
+            "appointment_time": appointment.appointment_time,
+
+            "status": appointment.status,
+
+            "created_by": appointment.created_by,
+
+            "note": appointment.note,
+
+            "doctor_id": doctor.user_id,
+
+            "doctor_name": doctor.full_name,
+
+            "specialty_id": doctor.specialty_id,
+
+            "specialty_name": (
+                doctor.specialty.name
+                if doctor.specialty.name is not None
+                else ""
+            ),
+        }

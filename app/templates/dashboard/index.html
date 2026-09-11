@@ -1,0 +1,876 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+
+    <aside
+        class="sidebar"
+        id="sidebar">
+
+        <div class="sidebar-header">
+
+            <div class="d-flex align-items-center gap-2">
+
+                <span class="brand-dot brand-dot-lg">
+
+                    <i class="bi bi-heart-pulse-fill"></i>
+
+                </span>
+
+
+                <div>
+
+                    <div class="fw-bold text-white">
+                        ClinicCare
+                    </div>
+
+                    <div class="sidebar-subtitle">
+                        Management System
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav px-3 py-3">
+
+            <div class="nav-section-title">
+                TỔNG QUAN
+            </div>
+
+
+            <a
+                class="sidebar-link active"
+                href="/dashboard">
+
+                <i class="bi bi-grid-1x2-fill"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title mt-4">
+                QUẢN LÝ
+            </div>
+
+
+            <a
+                class="sidebar-link role-link role-admin role-receptionist"
+                href="#">
+
+                <i class="bi bi-people"></i>
+
+                <span>
+                    Bệnh nhân
+                </span>
+
+            </a>
+
+
+            <a
+                class="sidebar-link role-link role-admin"
+                href="#">
+
+                <i class="bi bi-person-badge"></i>
+
+                <span>
+                    Bác sĩ
+                </span>
+
+            </a>
+
+
+            <a
+                class="sidebar-link role-link role-admin role-receptionist role-doctor role-patient"
+                href="#">
+
+                <i class="bi bi-calendar2-week"></i>
+
+                <span>
+                    Lịch khám
+                </span>
+
+            </a>
+
+
+            <a
+                class="sidebar-link role-link role-doctor"
+                href="#">
+
+                <i class="bi bi-file-medical"></i>
+
+                <span>
+                    Hồ sơ bệnh án
+                </span>
+
+            </a>
+
+
+            <a
+                class="sidebar-link role-link role-doctor role-admin role-receptionist"
+                href="#">
+
+                <i class="bi bi-capsule"></i>
+
+                <span>
+                    Thuốc
+                </span>
+
+            </a>
+
+
+            <a
+                class="sidebar-link role-link role-admin role-receptionist role-patient"
+                href="#">
+
+                <i class="bi bi-receipt"></i>
+
+                <span>
+                    Hóa đơn
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title mt-4">
+                HỆ THỐNG
+            </div>
+
+
+            <a
+                class="sidebar-link role-link role-admin"
+                href="#">
+
+                <i class="bi bi-bar-chart"></i>
+
+                <span>
+                    Báo cáo
+                </span>
+
+            </a>
+
+
+            <a
+                class="sidebar-link"
+                href="#"
+                id="logoutLink">
+
+                <i class="bi bi-box-arrow-right"></i>
+
+                <span>
+                    Đăng xuất
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="small text-white-50">
+                Phiên đăng nhập
+            </div>
+
+
+            <div
+                class="small text-white fw-semibold"
+                id="sidebarUserName">
+
+                ...
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="d-flex align-items-center gap-3">
+
+                <button
+                    class="btn btn-light d-lg-none"
+                    id="sidebarToggle"
+                    type="button">
+
+                    <i class="bi bi-list fs-5"></i>
+
+                </button>
+
+
+                <div>
+
+                    <div
+                        class="text-secondary small">
+                        Hôm nay
+                    </div>
+
+
+                    <h1
+                        class="h4 fw-bold mb-0">
+                        Dashboard
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <div class="d-flex align-items-center gap-3">
+
+                <button
+                    class="btn btn-light position-relative">
+
+                    <i class="bi bi-bell"></i>
+
+                    <span class="notification-dot"></span>
+
+                </button>
+
+
+                <div class="dropdown">
+
+                    <button
+                        class="btn p-0 border-0 d-flex align-items-center gap-2"
+                        data-bs-toggle="dropdown">
+
+                        <div
+                            class="avatar"
+                            id="userAvatar">
+                            U
+                        </div>
+
+
+                        <div
+                            class="text-start d-none d-sm-block">
+
+                            <div
+                                class="fw-semibold small"
+                                id="topUserName">
+                                ...
+                            </div>
+
+
+                            <div
+                                class="text-secondary small"
+                                id="topUserRole">
+                                ...
+                            </div>
+
+                        </div>
+
+
+                        <i
+                            class="bi bi-chevron-down small text-secondary">
+                        </i>
+
+                    </button>
+
+
+                    <ul
+                        class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+
+                        <li>
+
+                            <a
+                                class="dropdown-item"
+                                href="#">
+
+                                <i class="bi bi-person me-2"></i>
+
+                                Thông tin tài khoản
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <hr
+                                class="dropdown-divider">
+
+                        </li>
+
+
+                        <li>
+
+                            <button
+                                class="dropdown-item text-danger"
+                                id="dropdownLogout"
+                                type="button">
+
+                                <i class="bi bi-box-arrow-right me-2"></i>
+
+                                Đăng xuất
+
+                            </button>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <section class="content-area">
+
+            <div
+                id="dashboardAlert"
+                class="alert d-none">
+            </div>
+
+
+            <div class="mb-4">
+
+                <div class="text-secondary">
+                    Xin chào,
+                </div>
+
+
+                <div
+                    class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2">
+
+                    <div>
+
+                        <h2
+                            class="fw-bold mb-1"
+                            id="welcomeName">
+
+                            ...
+
+                        </h2>
+
+
+                        <p
+                            class="text-secondary mb-0"
+                            id="welcomeMessage">
+
+                            Đang tải dữ liệu...
+
+                        </p>
+
+                    </div>
+
+
+                    <div class="date-chip">
+
+                        <i class="bi bi-calendar3 me-2"></i>
+
+                        <span id="todayText">
+                            ...
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN -->
+
+            <div
+                id="adminDashboard"
+                class="d-none">
+
+
+                <div class="row g-3 mb-4">
+
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon icon-primary">
+
+                                <i
+                                    class="bi bi-people-fill">
+                                </i>
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Tổng bệnh nhân
+                                </div>
+
+
+                                <div
+                                    class="stat-value"
+                                    id="totalPatients">
+
+                                    0
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon icon-success">
+
+                                <i
+                                    class="bi bi-calendar-check-fill">
+                                </i>
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Lịch khám hôm nay
+                                </div>
+
+
+                                <div
+                                    class="stat-value"
+                                    id="todayAppointments">
+
+                                    0
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon icon-warning">
+
+                                <i
+                                    class="bi bi-cash-stack">
+                                </i>
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Doanh thu tháng
+                                </div>
+
+
+                                <div
+                                    class="stat-value"
+                                    id="monthlyRevenue">
+
+                                    0 ₫
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon icon-danger">
+
+                                <i
+                                    class="bi bi-hourglass-split">
+                                </i>
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Lịch đang chờ
+                                </div>
+
+
+                                <div
+                                    class="stat-value"
+                                    id="pendingAppointments">
+
+                                    0
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row g-3">
+
+
+                    <div class="col-12 col-xl-8">
+
+                        <div class="content-card h-100">
+
+                            <div class="card-header-simple">
+
+                                <h5 class="fw-bold mb-1">
+                                    Lượt khám theo tháng
+                                </h5>
+
+                                <p class="text-secondary small mb-0">
+                                    Tổng số appointment
+                                </p>
+
+                            </div>
+
+
+                            <div class="chart-wrap">
+
+                                <canvas
+                                    id="appointmentsChart">
+                                </canvas>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-xl-4">
+
+                        <div class="content-card h-100">
+
+                            <div class="card-header-simple">
+
+                                <h5 class="fw-bold mb-1">
+                                    Trạng thái lịch khám
+                                </h5>
+
+                                <p class="text-secondary small mb-0">
+                                    Phân bố appointment
+                                </p>
+
+                            </div>
+
+
+                            <div class="chart-wrap">
+
+                                <canvas
+                                    id="appointmentStatusChart">
+                                </canvas>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-xl-6">
+
+                        <div class="content-card h-100">
+
+                            <div class="card-header-simple">
+
+                                <h5 class="fw-bold mb-1">
+                                    Doanh thu theo tháng
+                                </h5>
+
+                                <p class="text-secondary small mb-0">
+                                    Hóa đơn đã thanh toán
+                                </p>
+
+                            </div>
+
+
+                            <div class="chart-wrap">
+
+                                <canvas
+                                    id="revenueChart">
+                                </canvas>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-xl-6">
+
+                        <div class="content-card h-100">
+
+                            <div class="card-header-simple">
+
+                                <h5 class="fw-bold mb-1">
+                                    Lượt khám theo chuyên khoa
+                                </h5>
+
+                            </div>
+
+
+                            <div class="chart-wrap">
+
+                                <canvas
+                                    id="specialtyChart">
+                                </canvas>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <div class="content-card">
+
+                            <div class="card-header-simple">
+
+                                <h5 class="fw-bold">
+                                    Top bác sĩ
+                                </h5>
+
+                            </div>
+
+
+                            <div class="table-responsive">
+
+                                <table class="table align-middle mb-0">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>
+                                                #
+                                            </th>
+
+                                            <th>
+                                                Bác sĩ
+                                            </th>
+
+                                            <th class="text-end">
+                                                Lượt khám
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody
+                                        id="topDoctorsBody">
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- OTHER ROLE -->
+
+            <div
+                id="roleDashboard"
+                class="d-none">
+
+                <div class="row g-3">
+
+                    <div class="col-12 col-xl-8">
+
+                        <div
+                            class="content-card h-100">
+
+                            <div class="d-flex gap-3">
+
+                                <div
+                                    class="stat-icon icon-primary">
+
+                                    <i
+                                        class="bi bi-info-circle-fill">
+                                    </i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h5
+                                        id="roleDashboardTitle"
+                                        class="fw-bold">
+
+                                        Khu vực làm việc
+
+                                    </h5>
+
+
+                                    <p
+                                        id="roleDashboardText"
+                                        class="text-secondary">
+                                    </p>
+
+
+                                    <div
+                                        id="quickActions"
+                                        class="d-flex flex-wrap gap-2">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-xl-4">
+
+                        <div
+                            class="content-card h-100">
+
+                            <h6
+                                class="fw-bold mb-3">
+
+                                Thông tin tài khoản
+
+                            </h6>
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    Họ tên
+                                </span>
+
+                                <strong
+                                    id="profileName">
+                                    ...
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    Tài khoản
+                                </span>
+
+                                <strong
+                                    id="profileUsername">
+                                    ...
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    Email
+                                </span>
+
+                                <strong
+                                    id="profileEmail">
+                                    ...
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    Vai trò
+                                </span>
+
+                                <strong
+                                    id="profileRole">
+                                    ...
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js">
+</script>
+
+<script
+    src="{{ url_for('static', path='js/dashboard.js') }}">
+</script>
+
+{% endblock %}

@@ -1,0 +1,591 @@
+{% extends "base.html" %}
+
+{% block title %}
+Trang chủ bệnh nhân | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    <aside
+        class="sidebar"
+        id="sidebar">
+
+        <div class="sidebar-header">
+
+            <div class="d-flex align-items-center gap-2">
+
+                <span class="brand-dot brand-dot-lg">
+
+                    <i class="bi bi-heart-pulse-fill"></i>
+
+                </span>
+
+                <div>
+
+                    <div class="fw-bold text-white">
+                        ClinicCare
+                    </div>
+
+                    <div class="sidebar-subtitle">
+                        Patient Portal
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav px-3 py-3">
+
+            <div class="nav-section-title">
+                KHÁM BỆNH
+            </div>
+
+
+            <a
+                href="/patient/dashboard"
+                class="sidebar-link active">
+
+                <i class="bi bi-grid-1x2-fill"></i>
+
+                <span>
+                    Trang chủ
+                </span>
+
+            </a>
+
+
+            <a
+                href="/patient/book-appointment"
+                class="sidebar-link">
+
+                <i class="bi bi-calendar-plus"></i>
+
+                <span>
+                    Đặt lịch khám
+                </span>
+
+            </a>
+
+
+            <a
+                href="/patient/appointments"
+                class="sidebar-link">
+
+                <i class="bi bi-calendar2-week"></i>
+
+                <span>
+                    Lịch khám của tôi
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title mt-4">
+                THÔNG TIN
+            </div>
+
+
+            <a
+                href="/patient/doctors"
+                class="sidebar-link">
+
+                <i class="bi bi-person-badge"></i>
+
+                <span>
+                    Bác sĩ
+                </span>
+
+            </a>
+
+
+            <a
+                href="/patient/invoices"
+                class="sidebar-link">
+
+                <i class="bi bi-receipt"></i>
+
+                <span>
+                    Hóa đơn
+                </span>
+
+            </a>
+
+
+            <a
+                href="/patient/profile"
+                class="sidebar-link">
+
+                <i class="bi bi-person-circle"></i>
+
+                <span>
+                    Hồ sơ cá nhân
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title mt-4">
+                HỆ THỐNG
+            </div>
+
+
+            <a
+                href="#"
+                class="sidebar-link"
+                id="logoutLink">
+
+                <i class="bi bi-box-arrow-right"></i>
+
+                <span>
+                    Đăng xuất
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="small text-white-50">
+                Đang đăng nhập
+            </div>
+
+
+            <div
+                class="small text-white fw-semibold"
+                id="sidebarUserName">
+                ...
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+
+                <div
+                    class="text-secondary small">
+
+                    Khu vực bệnh nhân
+
+                </div>
+
+
+                <h1 class="h4 fw-bold mb-0">
+
+                    Trang chủ
+
+                </h1>
+
+            </div>
+
+
+            <div class="d-flex align-items-center gap-3">
+
+                <div class="dropdown">
+
+                    <button
+                        class="btn p-0 border-0 d-flex align-items-center gap-2"
+                        data-bs-toggle="dropdown">
+
+                        <div
+                            class="avatar"
+                            id="userAvatar">
+
+                            U
+
+                        </div>
+
+
+                        <div class="text-start d-none d-sm-block">
+
+                            <div
+                                class="fw-semibold small"
+                                id="topUserName">
+
+                                ...
+
+                            </div>
+
+
+                            <div
+                                class="text-secondary small">
+
+                                Bệnh nhân
+
+                            </div>
+
+                        </div>
+
+                    </button>
+
+
+                    <ul
+                        class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+
+                        <li>
+
+                            <a
+                                href="/patient/profile"
+                                class="dropdown-item">
+
+                                <i class="bi bi-person me-2"></i>
+
+                                Hồ sơ cá nhân
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <hr
+                                class="dropdown-divider">
+
+                        </li>
+
+
+                        <li>
+
+                            <button
+                                type="button"
+                                class="dropdown-item text-danger"
+                                id="dropdownLogout">
+
+                                <i class="bi bi-box-arrow-right me-2"></i>
+
+                                Đăng xuất
+
+                            </button>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary">
+                    Xin chào,
+                </div>
+
+
+                <h2
+                    class="fw-bold mb-1"
+                    id="patientWelcome">
+
+                    ...
+
+                </h2>
+
+
+                <p class="text-secondary">
+
+                    Quản lý lịch khám và thông tin sức khỏe
+                    của bạn tại một nơi.
+
+                </p>
+
+            </div>
+
+
+            <div
+                id="patientAlert"
+                class="alert d-none">
+            </div>
+
+
+            <!-- QUICK ACTION -->
+
+            <div class="row g-3 mb-4">
+
+                <div class="col-12 col-md-4">
+
+                    <a
+                        href="/patient/book-appointment"
+                        class="quick-card">
+
+                        <div class="quick-icon bg-primary-subtle text-primary">
+
+                            <i class="bi bi-calendar-plus"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1">
+
+                                Đặt lịch khám
+
+                            </h6>
+
+
+                            <p class="small text-secondary mb-0">
+
+                                Chọn bác sĩ và thời gian khám phù hợp.
+
+                            </p>
+
+                        </div>
+
+
+                        <i class="bi bi-arrow-right ms-auto"></i>
+
+                    </a>
+
+                </div>
+
+
+                <div class="col-12 col-md-4">
+
+                    <a
+                        href="/patient/appointments"
+                        class="quick-card">
+
+                        <div class="quick-icon bg-success-subtle text-success">
+
+                            <i class="bi bi-calendar-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1">
+
+                                Lịch khám
+
+                            </h6>
+
+
+                            <p class="small text-secondary mb-0">
+
+                                Xem và quản lý lịch khám của bạn.
+
+                            </p>
+
+                        </div>
+
+
+                        <i class="bi bi-arrow-right ms-auto"></i>
+
+                    </a>
+
+                </div>
+
+
+                <div class="col-12 col-md-4">
+
+                    <a
+                        href="/patient/invoices"
+                        class="quick-card">
+
+                        <div class="quick-icon bg-warning-subtle text-warning">
+
+                            <i class="bi bi-receipt"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1">
+
+                                Hóa đơn
+
+                            </h6>
+
+
+                            <p class="small text-secondary mb-0">
+
+                                Xem hóa đơn và thanh toán online.
+
+                            </p>
+
+                        </div>
+
+
+                        <i class="bi bi-arrow-right ms-auto"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- UPCOMING -->
+
+            <div class="content-card mb-4">
+
+                <div class="card-header-simple d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+
+                            Lịch khám sắp tới
+
+                        </h5>
+
+
+                        <p class="text-secondary small mb-0">
+
+                            Các lịch khám chưa hoàn thành
+
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="/patient/appointments"
+                        class="btn btn-sm btn-outline-primary">
+
+                        Xem tất cả
+
+                    </a>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Thời gian
+                                </th>
+
+                                <th>
+                                    Bác sĩ
+                                </th>
+
+                                <th>
+                                    Trạng thái
+                                </th>
+
+                                <th class="text-end">
+                                    #
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="upcomingAppointments">
+
+                            <tr>
+
+                                <td
+                                    colspan="4"
+                                    class="text-center py-5 text-secondary">
+
+                                    Đang tải...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- INVOICES -->
+
+            <div class="content-card">
+
+                <div class="card-header-simple d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+
+                            Hóa đơn gần đây
+
+                        </h5>
+
+
+                        <p class="text-secondary small mb-0">
+
+                            Theo dõi trạng thái thanh toán
+
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="/patient/invoices"
+                        class="btn btn-sm btn-outline-primary">
+
+                        Xem tất cả
+
+                    </a>
+
+                </div>
+
+
+                <div
+                    id="recentInvoices"
+                    class="p-3">
+
+                    <div class="text-center py-4 text-secondary">
+
+                        Đang tải...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for('static', path='js/patient.js') }}">
+</script>
+
+{% endblock %}

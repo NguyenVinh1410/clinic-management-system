@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}
+Hồ sơ cá nhân | ClinicCare
+{% endblock %}
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "patient/partials/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "patient/partials/topbar.html" %}
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Tài khoản
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Hồ sơ cá nhân
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Quản lý thông tin cá nhân của bạn.
+                </p>
+
+            </div>
+
+
+            <div
+                id="profileAlert"
+                class="alert d-none">
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-12 col-xl-4">
+
+                    <div class="content-card">
+
+                        <div class="patient-profile-cover">
+
+                            <div
+                                id="profileAvatar"
+                                class="patient-profile-avatar">
+
+                                U
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="p-4 text-center">
+
+                            <h4
+                                id="profileName"
+                                class="fw-bold mb-1">
+
+                                ...
+
+                            </h4>
+
+
+                            <div
+                                id="profileUsername"
+                                class="text-secondary mb-3">
+
+                                ...
+
+                            </div>
+
+
+                            <span class="badge text-bg-primary">
+
+                                Bệnh nhân
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-xl-8">
+
+                    <div class="content-card">
+
+                        <div class="p-4">
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                                <div>
+
+                                    <h5 class="fw-bold mb-1">
+                                        Thông tin cá nhân
+                                    </h5>
+
+                                    <p class="small text-secondary mb-0">
+                                        Cập nhật thông tin liên hệ.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <form id="profileForm">
+
+                                <div class="row g-3">
+
+                                    <div class="col-12">
+
+                                        <label class="form-label">
+                                            Họ và tên
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            id="fullName"
+                                            class="form-control"
+                                            maxlength="100"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <div class="col-md-6">
+
+                                        <label class="form-label">
+                                            Email
+                                        </label>
+
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            class="form-control"
+                                        >
+
+                                    </div>
+
+
+                                    <div class="col-md-6">
+
+                                        <label class="form-label">
+                                            Số điện thoại
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            id="phone"
+                                            class="form-control"
+                                            maxlength="20"
+                                        >
+
+                                    </div>
+
+
+                                    <div class="col-md-6">
+
+                                        <label class="form-label">
+                                            Ngày sinh
+                                        </label>
+
+                                        <input
+                                            type="date"
+                                            id="dob"
+                                            class="form-control"
+                                        >
+
+                                    </div>
+
+
+                                    <div class="col-md-6">
+
+                                        <label class="form-label">
+                                            Giới tính
+                                        </label>
+
+                                        <select
+                                            id="gender"
+                                            class="form-select">
+
+                                            <option value="">
+                                                -- Chọn giới tính --
+                                            </option>
+
+                                            <option value="Male">
+                                                Nam
+                                            </option>
+
+                                            <option value="Female">
+                                                Nữ
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+
+                                    <div class="col-12">
+
+                                        <label class="form-label">
+                                            Địa chỉ
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            id="address"
+                                            class="form-control"
+                                            maxlength="255"
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="d-flex justify-content-end mt-4">
+
+                                    <button
+                                        type="submit"
+                                        id="saveProfileButton"
+                                        class="btn btn-primary">
+
+                                        <i class="bi bi-check2-circle me-2"></i>
+
+                                        Lưu thay đổi
+
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for('static', path='js/patient-profile.js') }}">
+</script>
+
+{% endblock %}
