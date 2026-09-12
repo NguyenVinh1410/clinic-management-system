@@ -1,10 +1,477 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+
+{% block title %}
+Hóa đơn | Receptionist | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "receptionist/partials/sidebar.html" %}
+
+
+    <main class="main-content">
+
+        {% include "receptionist/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Thanh toán
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Hóa đơn
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Quản lý hóa đơn và tình trạng thanh toán của bệnh nhân.
+                </p>
+
+            </div>
+
+
+            <div
+                id="invoiceAlert"
+                class="alert d-none">
+            </div>
+
+            <div
+                id="invoiceDetail"
+                class="content-card mb-4 d-none">
+
+                <div class="p-4">
+
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+
+                        <div>
+
+                            <div class="text-secondary small">
+                                Chi tiết hóa đơn
+                            </div>
+
+                            <h4
+                                id="detailInvoiceTitle"
+                                class="fw-bold mb-0">
+
+                                Hóa đơn #—
+
+                            </h4>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-light"
+                            onclick="closeInvoiceDetail()">
+
+                            <i class="bi bi-x-lg"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-secondary small">
+                                Mã lịch khám
+                            </div>
+
+                            <div
+                                id="detailAppointmentId"
+                                class="fw-semibold">
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-secondary small">
+                                Trạng thái
+                            </div>
+
+                            <div id="detailStatus">
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-secondary small">
+                                Phương thức
+                            </div>
+
+                            <div
+                                id="detailPaymentMethod"
+                                class="fw-semibold">
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <hr>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-6">
+
+                            <div class="text-secondary small">
+                                Tổng tiền
+                            </div>
+
+                            <div
+                                id="detailTotal"
+                                class="fs-3 fw-bold text-primary">
+
+                                0 đ
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-6">
+
+                            <div class="text-secondary small">
+                                Thanh toán lúc
+                            </div>
+
+                            <div
+                                id="detailPaidAt"
+                                class="fw-semibold">
+
+                                —
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 text-end">
+
+                            <button
+                                type="button"
+                                id="detailPayButton"
+                                class="btn btn-success">
+
+                                <i class="bi bi-cash-stack me-2"></i>
+
+                                Thu tiền mặt
+
+                            </button>
+
+                        </div>
+
+                        <div class="col-12">
+                            <hr>
+                        </div>
+
+                        <div class="col-12">
+
+                            <h5 class="fw-bold mb-3">
+                                <i class="bi bi-person-vcard me-2"></i>
+                                Thông tin khám
+                            </h5>
+
+                        </div>
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-secondary small">
+                                Bệnh nhân
+                            </div>
+
+                            <div
+                                id="detailPatientName"
+                                class="fw-semibold">
+                                —
+                            </div>
+
+                            <div
+                                id="detailPatientPhone"
+                                class="text-secondary small">
+                                —
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-secondary small">
+                                Bác sĩ
+                            </div>
+
+                            <div
+                                id="detailDoctorName"
+                                class="fw-semibold">
+                                —
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-secondary small">
+                                Chuyên khoa
+                            </div>
+
+                            <div
+                                id="detailSpecialtyName"
+                                class="fw-semibold">
+                                —
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <div class="text-secondary small">
+                                Thời gian khám
+                            </div>
+
+                            <div
+                                id="detailAppointmentTime"
+                                class="fw-semibold">
+                                —
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+                            <hr>
+                        </div>
+
+                        <div class="col-12">
+
+                            <h5 class="fw-bold mb-3">
+                                <i class="bi bi-capsule me-2"></i>
+                                Chi tiết thuốc
+                            </h5>
+
+                            <div
+                                id="detailMedicines">
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+                            <hr>
+                        </div>
+
+                        <div class="col-12 col-md-6 ms-auto">
+
+                            <div class="d-flex justify-content-between mb-2">
+
+                                <span class="text-secondary">
+                                    Tiền khám
+                                </span>
+
+                                <strong id="detailConsultationFee">
+                                    0 đ
+                                </strong>
+
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+
+                                <span class="text-secondary">
+                                    Tiền thuốc
+                                </span>
+
+                                <strong id="detailMedicineTotal">
+                                    0 đ
+                                </strong>
+
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+
+                                <span class="fw-bold">
+                                    Tổng cộng
+                                </span>
+
+                                <strong
+                                    id="detailTotalBottom"
+                                    class="fs-4 text-primary">
+                                    0 đ
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="content-card">
+
+                <div class="p-4 border-bottom">
+
+                    <div class="row g-3 align-items-center">
+
+                        <div class="col-12 col-md-6">
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="bi bi-search"></i>
+
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="invoiceSearch"
+                                    class="form-control"
+                                    placeholder="Tìm theo mã hóa đơn hoặc mã lịch khám..."
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-4">
+
+                            <select
+                                id="invoiceStatus"
+                                class="form-select">
+
+                                <option value="">
+                                    Tất cả trạng thái
+                                </option>
+
+                                <option value="Unpaid">
+                                    Chưa thanh toán
+                                </option>
+
+                                <option value="Paid">
+                                    Đã thanh toán
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-2 text-md-end">
+
+                            <span
+                                id="invoiceCount"
+                                class="text-secondary small">
+
+                                0 hóa đơn
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Mã hóa đơn
+                                </th>
+
+                                <th>
+                                    Mã lịch khám
+                                </th>
+
+                                <th>
+                                    Tổng tiền
+                                </th>
+
+                                <th>
+                                    Trạng thái
+                                </th>
+
+                                <th>
+                                    Phương thức
+                                </th>
+
+                                <th>
+                                    Ngày thanh toán
+                                </th>
+
+                                <th class="text-end">
+                                    Thao tác
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="invoiceList">
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="text-center py-5 text-secondary">
+
+                                    Đang tải...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/receptionist-invoices.js'
+    ) }}">
+</script>
+
+{% endblock %}

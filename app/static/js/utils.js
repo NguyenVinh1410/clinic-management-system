@@ -178,3 +178,17 @@ async function loadCurrentUser() {
     return data;
 
 }
+
+function formatCurrency(
+    value
+) {
+
+    const amount =
+        Number(value || 0);
+
+
+    return amount.toLocaleString(
+        "vi-VN"
+    ) + " đ";
+
+}

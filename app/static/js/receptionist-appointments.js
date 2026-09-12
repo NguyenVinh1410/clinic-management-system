@@ -184,6 +184,26 @@ function renderAppointments(
                         <td class="text-end">
 
                             ${
+                                appointment.status === "Completed"
+                                    ? `
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-outline-primary me-1"
+                                            onclick="createInvoice(
+                                                ${appointment.appointment_id}
+                                            )">
+
+                                            <i class="bi bi-receipt me-1"></i>
+
+                                            Tạo hóa đơn
+
+                                        </button>
+                                    `
+                                    : ""
+                            }
+
+
+                            ${
                                 appointment.status === "Pending"
                                     ? `
                                         <button
@@ -204,23 +224,22 @@ function renderAppointments(
                             ${
                                 appointment.status === "Pending" ||
                                 appointment.status === "Confirmed"
-                                ? `
-                                    <button
-                                        type="button"
-                                        class="btn btn-sm btn-outline-danger"
-                                        onclick="cancelAppointment(
-                                        ${appointment.appointment_id}
-                                        )">
+                                    ? `
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="cancelAppointment(
+                                                ${appointment.appointment_id}
+                                            )">
 
-                                        <i class="bi bi-x-lg"></i>
+                                            <i class="bi bi-x-lg"></i>
 
-                                    </button>
-                                `
-                                : ""
+                                        </button>
+                                    `
+                                    : ""
                             }
 
                         </td>
-
                     </tr>
                     `
             )
@@ -523,6 +542,95 @@ async function cancelAppointment(
         showAppointmentAlert(
             error.message ||
             "Hủy lịch khám thất bại.",
+            "danger"
+        );
+
+    }
+
+}
+
+async function createInvoice(
+    appointmentId
+) {
+
+    const confirmed =
+        confirm(
+            "Bạn có chắc muốn tạo hóa đơn cho lịch khám này?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await apiFetch(
+                "/api/invoice",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                    },
+
+                    body: JSON.stringify({
+
+                        appointment_id:
+                            appointmentId,
+
+                    }),
+
+                }
+            );
+
+
+        const data =
+            await parseApiResponse(
+                response
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "Không thể tạo hóa đơn."
+            );
+
+        }
+
+
+        showAppointmentAlert(
+            `Đã tạo hóa đơn #${data.invoice_id}.`,
+            "success"
+        );
+
+
+        setTimeout(
+            () => {
+
+                window.location.href =
+                    `/receptionist/invoices?invoice_id=${data.invoice_id}`;
+
+            },
+            500
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        showAppointmentAlert(
+            error.message ||
+            "Tạo hóa đơn thất bại.",
             "danger"
         );
 

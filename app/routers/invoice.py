@@ -42,6 +42,27 @@ def create_invoice(
     )
 
 @router.get(
+    "",
+    response_model=list[InvoiceResponse],
+    status_code=status.HTTP_200_OK,
+)
+def get_invoices(
+        _: Annotated[
+            User,
+            Depends(
+                requires_role(
+                    UserRole.ADMIN,
+                    UserRole.RECEPTIONIST,
+                ))
+        ],
+        db: Annotated[
+            Session,
+            Depends(get_db),
+        ],
+):
+    return InvoiceService.get_all_invoices(db=db)
+
+@router.get(
     "/my",
     response_model=list[InvoiceResponse],
     status_code=status.HTTP_200_OK,
@@ -56,17 +77,11 @@ def get_my_invoices(
             Depends(get_db),
         ]
 ):
-    stmt = (
-        select(Invoice)
-        .join(
-            Appointment,
-            Invoice.appointment_id == Appointment.appointment_id
-        )
-        .where(Appointment.patient_id == current_user.user_id)
-        .order_by(Invoice.invoice_id.desc())
-    )
 
-    return list(db.execute(stmt).scalars().all())
+    return InvoiceService.get_patient_invoices(
+        db=db,
+        patient_id=current_user.user_id
+    )
 
 @router.get(
     "/{invoice_id}",
