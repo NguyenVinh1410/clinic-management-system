@@ -239,6 +239,31 @@ def update_appointment_status(
     from app.core.exceptions import ForbiddenException
     raise ForbiddenException("Ban khong co quyen thay doi trang thai lich hen")
 
+@router.post(
+    "/{appointment_id}/checkin",
+    response_model=AppointmentResponse,
+    status_code=status.HTTP_200_OK,
+)
+def check_in_appointment(
+        appointment_id: int,
+        current_user: Annotated[
+            User,
+            Depends(requires_role(
+                UserRole.ADMIN,
+                UserRole.RECEPTIONIST
+            ))
+        ],
+        db: Annotated[Session, Depends(get_db)],
+):
+    appointment = AppointmentService.get_appointment_by_id(
+        db=db,
+        appointment_id=appointment_id,
+    )
+
+    return AppointmentService.check_in_appointment(
+        db=db,
+        appointment=appointment,
+    )
 
 @router.post(
     "/{appointment_id}/cancel",

@@ -459,6 +459,36 @@ class AppointmentService:
         return db.execute(stmt).scalar_one_or_none() is not None
 
     @staticmethod
+    def check_in_appointment(
+            db: Session,
+            appointment: Appointment,
+    ) -> Appointment:
+
+        today = datetime.now().date()
+
+        if appointment.appointment_time.date() != today:
+            raise BusinessException("Chi co the tiep nhan benh nhan co lich trong hom nay")
+
+        if appointment.status != AppointmentStatus.PENDING:
+            if appointment.status == AppointmentStatus.CONFIRMED:
+                raise ConflictException("Lich hen nay da duoc tiep nhan")
+
+            if appointment.status == AppointmentStatus.COMPLETED:
+                raise BusinessException("Lich hen da hoan thanh")
+
+            if appointment.status == AppointmentStatus.CANCELLED:
+                raise BusinessException("Lich hen da bi huy")
+
+            raise BusinessException("Khong the tiep nhan lich hen nay")
+
+        appointment.status = AppointmentStatus.CONFIRMED
+
+        db.commit()
+        db.refresh(appointment)
+
+        return appointment
+
+    @staticmethod
     def _appointment_to_response(
             appointment: Appointment,
     ) -> dict:
@@ -472,6 +502,10 @@ class AppointmentService:
             "schedule_id": appointment.schedule_id,
 
             "patient_id": appointment.patient_id,
+
+            "patient_name": appointment.patient.full_name,
+
+            "patient_phone": appointment.patient.phone,
 
             "chat_session_id": appointment.chat_session_id,
 

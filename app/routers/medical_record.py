@@ -99,6 +99,25 @@ def get_record_by_appointment(
     return record
 
 @router.get(
+    "/my",
+    response_model=list[MedicalRecordResponse],
+)
+def get_my_medical_records(
+        current_user: Annotated[
+            User,
+            Depends(requires_role(UserRole.PATIENT))
+        ],
+        db: Annotated[
+            Session,
+            Depends(get_db),
+        ]
+):
+    return MedicalRecordService.get_patient_records(
+        db=db,
+        patient_id=current_user.user_id
+    )
+
+@router.get(
     "/{record_id}",
     response_model=MedicalRecordResponse,
 )

@@ -1,0 +1,517 @@
+{% extends "base.html" %}
+
+{% block title %}
+Đăng ký | ClinicCare
+{% endblock %}
+
+{% block body %}
+
+<div class="auth-page">
+
+    <div class="container py-4">
+
+        <div
+            class="row
+                   min-vh-100
+                   align-items-center
+                   justify-content-center"
+        >
+
+            <div class="col-12 col-md-10 col-lg-10 col-xl-9">
+
+                <div
+                    class="card
+                           auth-card
+                           border-0
+                           shadow-lg
+                           overflow-hidden"
+                >
+
+                    <div class="row g-0">
+
+                        <!-- LEFT -->
+
+                        <div
+                            class="col-lg-5
+                                   auth-brand
+                                   d-none
+                                   d-lg-flex"
+                        >
+
+                            <div
+                                class="p-5
+                                       d-flex
+                                       flex-column
+                                       justify-content-between
+                                       w-100"
+                            >
+
+                                <div>
+
+                                    <div class="brand-mark mb-4">
+
+                                        <i
+                                            class="bi bi-heart-pulse-fill"
+                                        ></i>
+
+                                    </div>
+
+                                    <p
+                                        class="text-uppercase
+                                               small
+                                               fw-semibold
+                                               opacity-75
+                                               mb-2"
+                                    >
+                                        Clinic Management System
+                                    </p>
+
+                                    <h1 class="display-6 fw-bold mb-3">
+
+                                        Tạo tài khoản Patient
+
+                                    </h1>
+
+                                    <p class="opacity-75 mb-0">
+
+                                        Đăng ký để đặt lịch,
+                                        theo dõi lịch khám,
+                                        hồ sơ bệnh án và hóa đơn.
+
+                                    </p>
+
+                                </div>
+
+
+                                <div class="small opacity-75">
+
+                                    <i
+                                        class="bi bi-shield-check me-2"
+                                    ></i>
+
+                                    Tài khoản được tạo với vai trò Patient
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- RIGHT -->
+
+                        <div class="col-lg-7 bg-white">
+
+                            <div class="p-4 p-md-5">
+
+                                <div class="mb-4">
+
+                                    <div
+                                        class="d-flex
+                                               align-items-center
+                                               gap-2
+                                               mb-3"
+                                    >
+
+                                        <span class="brand-dot">
+
+                                            <i
+                                                class="bi
+                                                       bi-heart-pulse-fill"
+                                            ></i>
+
+                                        </span>
+
+                                        <span class="fw-bold">
+                                            ClinicCare
+                                        </span>
+
+                                    </div>
+
+
+                                    <h2 class="fw-bold mb-1">
+                                        Đăng ký tài khoản
+                                    </h2>
+
+                                    <p class="text-secondary mb-0">
+                                        Tạo tài khoản Patient để bắt đầu.
+                                    </p>
+
+                                </div>
+
+
+                                <div
+                                    id="registerAlert"
+                                    class="alert d-none"
+                                    role="alert"
+                                >
+                                </div>
+
+
+                                <form
+                                    id="registerForm"
+                                    novalidate
+                                >
+
+                                    <div class="row g-3">
+
+                                        <!-- FULL NAME -->
+
+                                        <div class="col-12">
+
+                                            <label
+                                                for="fullName"
+                                                class="form-label fw-semibold"
+                                            >
+                                                Họ và tên
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                id="fullName"
+                                                name="full_name"
+                                                class="form-control"
+                                                maxlength="100"
+                                                required
+                                                placeholder="Nguyễn Văn A"
+                                            >
+
+                                        </div>
+
+
+                                        <!-- USERNAME -->
+
+                                        <div class="col-12 col-md-6">
+
+                                            <label
+                                                for="username"
+                                                class="form-label fw-semibold"
+                                            >
+                                                Tên đăng nhập
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                id="username"
+                                                name="username"
+                                                class="form-control"
+                                                maxlength="50"
+                                                autocomplete="username"
+                                                required
+                                                placeholder="nguyenvana01"
+                                            >
+
+                                            <div
+                                                class="form-text"
+                                            >
+                                                Ít nhất 6 ký tự,
+                                                có chữ và số.
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- PHONE -->
+
+                                        <div class="col-12 col-md-6">
+
+                                            <label
+                                                for="phone"
+                                                class="form-label fw-semibold"
+                                            >
+                                                Số điện thoại
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                id="phone"
+                                                name="phone"
+                                                class="form-control"
+                                                maxlength="20"
+                                                inputmode="numeric"
+                                                placeholder="0912345678"
+                                            >
+
+                                        </div>
+
+
+                                        <!-- EMAIL -->
+
+                                        <div class="col-12">
+
+                                            <label
+                                                for="email"
+                                                class="form-label fw-semibold"
+                                            >
+                                                Email
+                                            </label>
+
+                                            <input
+                                                type="email"
+                                                id="email"
+                                                name="email"
+                                                class="form-control"
+                                                maxlength="100"
+                                                autocomplete="email"
+                                                placeholder="example@gmail.com"
+                                            >
+
+                                        </div>
+
+
+                                        <!-- DOB -->
+
+                                        <div class="col-12 col-md-6">
+
+                                            <label
+                                                for="dob"
+                                                class="form-label fw-semibold"
+                                            >
+                                                Ngày sinh
+                                            </label>
+
+                                            <input
+                                                type="date"
+                                                id="dob"
+                                                name="dob"
+                                                class="form-control"
+                                            >
+
+                                        </div>
+
+
+                                        <!-- GENDER -->
+
+                                        <div class="col-12 col-md-6">
+
+                                            <label
+                                                for="gender"
+                                                class="form-label fw-semibold"
+                                            >
+                                                Giới tính
+                                            </label>
+
+                                            <select
+                                                id="gender"
+                                                name="gender"
+                                                class="form-select"
+                                            >
+
+                                                <option value="">
+                                                    Chọn giới tính
+                                                </option>
+
+                                                <option value="Male">
+                                                    Nam
+                                                </option>
+
+                                                <option value="Female">
+                                                    Nữ
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+
+
+                                        <!-- ADDRESS -->
+
+                                        <div class="col-12">
+
+                                            <label
+                                                for="address"
+                                                class="form-label fw-semibold"
+                                            >
+                                                Địa chỉ
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                id="address"
+                                                name="address"
+                                                class="form-control"
+                                                maxlength="255"
+                                                placeholder="Địa chỉ hiện tại"
+                                            >
+
+                                        </div>
+
+
+                                        <!-- PASSWORD -->
+
+                                        <div class="col-12 col-md-6">
+
+                                            <label
+                                                for="password"
+                                                class="form-label fw-semibold"
+                                            >
+                                                Mật khẩu
+                                            </label>
+
+                                            <div class="input-group">
+
+                                                <input
+                                                    type="password"
+                                                    id="password"
+                                                    name="password"
+                                                    class="form-control"
+                                                    maxlength="255"
+                                                    autocomplete="new-password"
+                                                    required
+                                                    placeholder="Mật khẩu"
+                                                >
+
+                                                <button
+                                                    type="button"
+                                                    id="togglePassword"
+                                                    class="btn btn-outline-secondary"
+                                                >
+                                                    <i
+                                                        class="bi bi-eye"
+                                                    ></i>
+                                                </button>
+
+                                            </div>
+
+                                            <div class="form-text">
+                                                Ít nhất 6 ký tự và có số.
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- CONFIRM PASSWORD -->
+
+                                        <div class="col-12 col-md-6">
+
+                                            <label
+                                                for="confirmPassword"
+                                                class="form-label fw-semibold"
+                                            >
+                                                Xác nhận mật khẩu
+                                            </label>
+
+                                            <div class="input-group">
+
+                                                <input
+                                                    type="password"
+                                                    id="confirmPassword"
+                                                    name="confirm_password"
+                                                    class="form-control"
+                                                    maxlength="255"
+                                                    autocomplete="new-password"
+                                                    required
+                                                    placeholder="Nhập lại mật khẩu"
+                                                >
+
+                                                <button
+                                                    type="button"
+                                                    id="toggleConfirmPassword"
+                                                    class="btn btn-outline-secondary"
+                                                >
+                                                    <i
+                                                        class="bi bi-eye"
+                                                    ></i>
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <button
+                                        type="submit"
+                                        id="registerButton"
+                                        class="btn btn-primary btn-lg w-100 mt-4"
+                                    >
+
+                                        <span id="registerButtonText">
+
+                                            <i
+                                                class="bi bi-person-plus me-2"
+                                            ></i>
+
+                                            Tạo tài khoản
+
+                                        </span>
+
+
+                                        <span
+                                            id="registerSpinner"
+                                            class="spinner-border
+                                                   spinner-border-sm
+                                                   d-none"
+                                        >
+                                        </span>
+
+                                    </button>
+
+                                </form>
+
+
+                                <div class="text-center mt-4">
+
+                                    <span class="text-secondary">
+                                        Đã có tài khoản?
+                                    </span>
+
+                                    <a
+                                        href="/login"
+                                        class="fw-semibold text-primary
+                                               text-decoration-none"
+                                    >
+                                        Đăng nhập
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="text-center mt-3">
+
+                    <a
+                        href="/"
+                        class="small text-secondary
+                               text-decoration-none"
+                    >
+
+                        <i
+                            class="bi bi-arrow-left me-1"
+                        ></i>
+
+                        Về trang chủ
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/register.js'
+    ) }}"
+></script>
+
+{% endblock %}

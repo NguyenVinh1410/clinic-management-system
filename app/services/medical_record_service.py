@@ -2,14 +2,16 @@ from datetime import datetime
 
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.exceptions import BusinessException, ConflictException, ForbiddenException, NotFoundException
+from app.models.user import Doctor
 from app.models.appointment import Appointment
 from app.models.enums import AppointmentStatus
 from app.models.medical_record import MedicalRecord
 from app.models.working_schedule import WorkingSchedule
-from app.schemas.medical_record import MedicalRecordCreate, MedicalRecordUpdate
+from app.schemas.medical_record import MedicalRecordCreate, MedicalRecordUpdate, MedicalRecordResponse
+
 
 class MedicalRecordService:
 
@@ -106,6 +108,35 @@ class MedicalRecordService:
         return db.execute(stmt).scalar_one_or_none()
 
     @staticmethod
+    def get_patient_records(
+            db:Session,
+            patient_id: int
+    ) -> list[MedicalRecordResponse]:
+
+        stmt = (
+            select(MedicalRecord)
+            .join(
+                Appointment,
+                MedicalRecord.appointment_id == Appointment.appointment_id
+            )
+            .options(
+                selectinload(MedicalRecord.appointment)
+                .selectinload(Appointment.schedule)
+                .selectinload(WorkingSchedule.doctor)
+                .selectinload(Doctor.specialty)
+            )
+            .where(Appointment.patient_id == patient_id)
+            .order_by(MedicalRecord.examined_at.desc())
+        )
+
+        records = db.execute(stmt).scalars().all()
+
+        return [
+            MedicalRecordService.build_record_response(record)
+            for record in records
+        ]
+
+    @staticmethod
     def create_record(
             db: Session,
             data: MedicalRecordCreate,
@@ -126,8 +157,8 @@ class MedicalRecordService:
         if(appointment.status == AppointmentStatus.CANCELLED):
             raise BusinessException("Khong the tao ho so cho lich hen da huy")
 
-        if (appointment.status != AppointmentStatus.COMPLETED):
-            raise BusinessException("Chi co the tao ho so sau khi kham xong")
+        if (appointment.status != AppointmentStatus.CONFIRMED):
+            raise BusinessException("Chi co the tao ho so sau khi lich hen duoc tiep nhan")
 
         existing_record = MedicalRecordService.get_record_existing(
             db=db,
@@ -179,8 +210,11 @@ class MedicalRecordService:
             doctor_id=doctor_id
         )
 
-        if (appointment.status == AppointmentStatus.CANCELLED):
-            raise BusinessException("Khong the sua ho so cua lich hen da huy")
+        if appointment.status not in (
+            AppointmentStatus.CONFIRMED,
+            AppointmentStatus.COMPLETED,
+        ):
+            raise BusinessException("Khong the sua ho so o trang thai hien tai")
 
         update_data = data.model_dump(exclude_unset=True)
 
@@ -191,3 +225,33 @@ class MedicalRecordService:
         db.refresh(record)
 
         return record
+
+    @staticmethod
+    def build_record_response(record: MedicalRecord) -> MedicalRecordResponse:
+        appointment = record.appointment
+
+        doctor = appointment.schedule.doctor
+
+        return MedicalRecordResponse(
+            record_id=record.record_id,
+            appointment_id=record.appointment_id,
+
+            appointment_time=appointment.appointment_time,
+
+            doctor_id=doctor.user_id,
+
+            doctor_name=doctor.full_name,
+
+            specialty_id=doctor.specialty_id,
+
+            specialty_name=(
+                doctor.specialty.name
+                if doctor.specialty
+                else None
+            ),
+
+            symptoms=record.symptoms,
+            diagnosis=record.diagnosis,
+            note=record.note,
+            examined_at=record.examined_at,
+        )

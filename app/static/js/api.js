@@ -58,9 +58,12 @@ async function apiFetch(url, options = {}){
     if (response.status === 401){
         clearAccessToken();
 
-        if (window.location.pathname !== "/login"){
+        const pathname = window.location.pathname;
+
+        if (pathname !== "/login" && pathname !== "/register"){
             window.location.href = "/login";
         }
+
     }
     return response;
 }

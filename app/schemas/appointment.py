@@ -41,6 +41,10 @@ class AppointmentResponse(BaseModel):
 
     patient_id: int
 
+    patient_name: str
+
+    patient_phone: str | None
+
     chat_session_id: int | None
 
     appointment_time: datetime

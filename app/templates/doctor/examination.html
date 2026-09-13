@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Khám bệnh | Doctor | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "doctor/partials/sidebar.html" %}
+
+
+    <main class="main-content">
+
+        {% include "doctor/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <a
+                    href="/doctor/dashboard"
+                    class="text-decoration-none small">
+
+                    <i class="bi bi-arrow-left me-1"></i>
+
+                    Quay lại lịch khám
+
+                </a>
+
+
+                <h2 class="fw-bold mt-3 mb-1">
+                    Khám bệnh
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Ghi nhận thông tin khám và kê đơn cho bệnh nhân.
+                </p>
+
+            </div>
+
+
+            <div
+                id="examinationAlert"
+                class="alert d-none mb-4">
+            </div>
+
+
+            <div class="content-card mb-4">
+
+                <div class="p-4">
+
+                    <div class="row g-4">
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-secondary small">
+                                Bệnh nhân
+                            </div>
+
+                            <div
+                                id="patientName"
+                                class="fw-bold fs-5">
+                                --
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-secondary small">
+                                Mã bệnh nhân
+                            </div>
+
+                            <div
+                                id="patientId"
+                                class="fw-semibold">
+                                --
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-secondary small">
+                                Thời gian khám
+                            </div>
+
+                            <div
+                                id="appointmentTime"
+                                class="fw-semibold">
+                                --
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-6">
+
+                            <div class="text-secondary small">
+                                Số điện thoại
+                            </div>
+
+                            <div
+                                id="patientPhone"
+                                class="fw-semibold">
+                                --
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-6">
+
+                            <div class="text-secondary small">
+                                Trạng thái
+                            </div>
+
+                            <div
+                                id="appointmentStatus">
+                                --
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-12 col-xl-8">
+
+                    <div class="content-card">
+
+                        <div class="p-4 border-bottom">
+
+                            <h5 class="fw-bold mb-1">
+                                Hồ sơ khám
+                            </h5>
+
+                            <p class="text-secondary small mb-0">
+                                Ghi nhận triệu chứng, chẩn đoán và ghi chú.
+                            </p>
+
+                        </div>
+
+
+                        <div class="p-4">
+
+                            <form id="medicalRecordForm">
+
+                                <div class="mb-3">
+
+                                    <label
+                                        class="form-label fw-semibold">
+
+                                        Triệu chứng
+
+                                    </label>
+
+                                    <textarea
+                                        id="symptoms"
+                                        class="form-control"
+                                        rows="4"
+                                        maxlength="5000"
+                                        placeholder="Mô tả triệu chứng...">
+                                    </textarea>
+
+                                </div>
+
+
+                                <div class="mb-3">
+
+                                    <label
+                                        class="form-label fw-semibold">
+
+                                        Chẩn đoán
+
+                                    </label>
+
+                                    <textarea
+                                        id="diagnosis"
+                                        class="form-control"
+                                        rows="4"
+                                        maxlength="5000"
+                                        required
+                                        placeholder="Nhập chẩn đoán...">
+                                    </textarea>
+
+                                </div>
+
+
+                                <div class="mb-3">
+
+                                    <label
+                                        class="form-label fw-semibold">
+
+                                        Ghi chú
+
+                                    </label>
+
+                                    <textarea
+                                        id="medicalNote"
+                                        class="form-control"
+                                        rows="3"
+                                        maxlength="5000"
+                                        placeholder="Ghi chú thêm...">
+                                    </textarea>
+
+                                </div>
+
+
+                                <div class="mb-4">
+
+                                    <label
+                                        class="form-label fw-semibold">
+
+                                        Thời gian khám
+
+                                    </label>
+
+                                    <input
+                                        type="datetime-local"
+                                        id="examinedAt"
+                                        class="form-control"
+                                        required>
+
+                                </div>
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary">
+
+                                    <i class="bi bi-file-medical me-1"></i>
+
+                                    Lưu hồ sơ khám
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="prescriptionSection"
+                        class="content-card mt-4">
+
+                        <div class="p-4 border-bottom">
+
+                            <h5 class="fw-bold mb-1">
+                                Đơn thuốc
+                            </h5>
+
+                            <p class="text-secondary small mb-0">
+                                Kê thuốc sau khi đã có hồ sơ khám.
+                            </p>
+
+                        </div>
+
+
+                        <div class="p-4">
+
+                            <div
+                                id="prescriptionRows">
+                            </div>
+
+
+                            <button
+                                type="button"
+                                id="addMedicineButton"
+                                class="btn btn-outline-primary btn-sm mb-4">
+
+                                <i class="bi bi-plus-lg me-1"></i>
+
+                                Thêm thuốc
+
+                            </button>
+
+
+                            <div>
+
+                                <button
+                                    type="button"
+                                    id="savePrescriptionButton"
+                                    class="btn btn-success">
+
+                                    <i class="bi bi-capsule me-1"></i>
+
+                                    Lưu đơn thuốc
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-xl-4">
+
+                    <div class="content-card">
+
+                        <div class="p-4 border-bottom">
+
+                            <h5 class="fw-bold mb-1">
+                                Lịch sử khám
+                            </h5>
+
+                            <p class="text-secondary small mb-0">
+                                Các lần khám trước của bệnh nhân.
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            id="medicalHistory"
+                            class="p-4">
+
+                            Đang tải...
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="completeSection"
+                        class="content-card mt-4">
+
+                        <div class="p-4">
+
+                            <h5 class="fw-bold">
+                                Hoàn tất khám
+                            </h5>
+
+                            <p class="text-secondary small">
+
+                                Sau khi đã hoàn thành hồ sơ và đơn thuốc,
+                                bác sĩ có thể kết thúc lượt khám.
+
+                            </p>
+
+
+                            <button
+                                type="button"
+                                id="completeAppointmentButton"
+                                class="btn btn-dark w-100">
+
+                                <i class="bi bi-check2-circle me-1"></i>
+
+                                Hoàn tất lượt khám
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+    window.DOCTOR_APPOINTMENT_ID =
+        {{ appointment_id }};
+</script>
+
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/doctor-examination.js'
+    ) }}">
+</script>
+
+{% endblock %}

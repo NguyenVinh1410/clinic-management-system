@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+
+{% block title %}
+ClinicCare | Quản lý phòng khám đa khoa
+{% endblock %}
+
+{% block body %}
+
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+
+    <div class="container py-2">
+
+        <a
+            href="/"
+            class="navbar-brand fw-bold d-flex align-items-center gap-2"
+        >
+
+            <span class="brand-dot">
+                <i class="bi bi-heart-pulse-fill"></i>
+            </span>
+
+            <span>
+                ClinicCare
+            </span>
+
+        </a>
+
+
+        <div class="d-flex align-items-center gap-2">
+
+            <a
+                href="/login"
+                class="btn btn-outline-primary"
+            >
+                Đăng nhập
+            </a>
+
+            <a
+                href="/register"
+                class="btn btn-primary"
+            >
+                Đăng ký
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<main>
+
+    <section class="py-5">
+
+        <div class="container">
+
+            <div class="row align-items-center g-5 py-lg-5">
+
+                <div class="col-12 col-lg-7">
+
+                    <div
+                        class="badge text-bg-primary-subtle text-primary mb-3 px-3 py-2"
+                    >
+                        Clinic Management System
+                    </div>
+
+
+                    <h1 class="display-4 fw-bold mb-3">
+
+                        Quản lý khám bệnh
+                        <br>
+                        đơn giản và thuận tiện
+
+                    </h1>
+
+
+                    <p
+                        class="lead text-secondary mb-4"
+                        style="max-width: 680px;"
+                    >
+                        ClinicCare hỗ trợ quản lý bệnh nhân,
+                        lịch khám, hồ sơ bệnh án, đơn thuốc
+                        và thanh toán trên một hệ thống.
+                    </p>
+
+
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <a
+                            href="/register"
+                            class="btn btn-primary btn-lg"
+                        >
+                            <i
+                                class="bi bi-person-plus me-2"
+                            ></i>
+
+                            Đăng ký ngay
+                        </a>
+
+
+                        <a
+                            href="/login"
+                            class="btn btn-outline-secondary btn-lg"
+                        >
+                            <i
+                                class="bi bi-box-arrow-in-right me-2"
+                            ></i>
+
+                            Đăng nhập
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-lg-5">
+
+                    <div
+                        class="content-card p-4 p-lg-5 shadow-sm"
+                    >
+
+                        <div class="mb-4">
+
+                            <div
+                                class="brand-dot mb-3"
+                                style="
+                                    width: 52px;
+                                    height: 52px;
+                                    font-size: 1.25rem;
+                                "
+                            >
+
+                                <i
+                                    class="bi bi-heart-pulse-fill"
+                                ></i>
+
+                            </div>
+
+
+                            <h4 class="fw-bold">
+                                Dịch vụ chính
+                            </h4>
+
+                            <p class="text-secondary mb-0">
+                                Quản lý quy trình khám bệnh
+                                một cách rõ ràng và thống nhất.
+                            </p>
+
+                        </div>
+
+
+                        <div class="d-flex gap-3 mb-3">
+
+                            <div
+                                class="text-primary fs-4"
+                            >
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+
+                            <div>
+                                <div class="fw-semibold">
+                                    Đặt lịch khám
+                                </div>
+
+                                <div class="small text-secondary">
+                                    Tra cứu bác sĩ và đặt lịch.
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="d-flex gap-3 mb-3">
+
+                            <div
+                                class="text-primary fs-4"
+                            >
+                                <i class="bi bi-file-medical"></i>
+                            </div>
+
+                            <div>
+                                <div class="fw-semibold">
+                                    Hồ sơ khám
+                                </div>
+
+                                <div class="small text-secondary">
+                                    Theo dõi lịch sử khám và kết quả.
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="d-flex gap-3">
+
+                            <div
+                                class="text-primary fs-4"
+                            >
+                                <i class="bi bi-receipt"></i>
+                            </div>
+
+                            <div>
+                                <div class="fw-semibold">
+                                    Hóa đơn
+                                </div>
+
+                                <div class="small text-secondary">
+                                    Xem hóa đơn và thanh toán.
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="py-5 bg-light">
+
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <div class="text-primary fw-semibold small">
+                    QUY TRÌNH
+                </div>
+
+                <h2 class="fw-bold mt-1">
+                    Sử dụng ClinicCare
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Quy trình đơn giản dành cho bệnh nhân.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-12 col-md-4">
+
+                    <div class="content-card p-4 h-100">
+
+                        <div
+                            class="fs-3 text-primary mb-3"
+                        >
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+
+                        <h5 class="fw-bold">
+                            1. Tạo tài khoản
+                        </h5>
+
+                        <p class="text-secondary mb-0">
+                            Đăng ký tài khoản Patient để
+                            sử dụng các chức năng của hệ thống.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-md-4">
+
+                    <div class="content-card p-4 h-100">
+
+                        <div
+                            class="fs-3 text-primary mb-3"
+                        >
+                            <i class="bi bi-calendar2-check"></i>
+                        </div>
+
+                        <h5 class="fw-bold">
+                            2. Đặt lịch khám
+                        </h5>
+
+                        <p class="text-secondary mb-0">
+                            Chọn bác sĩ, chuyên khoa và
+                            thời gian phù hợp.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-md-4">
+
+                    <div class="content-card p-4 h-100">
+
+                        <div
+                            class="fs-3 text-primary mb-3"
+                        >
+                            <i class="bi bi-clipboard2-pulse"></i>
+                        </div>
+
+                        <h5 class="fw-bold">
+                            3. Theo dõi kết quả
+                        </h5>
+
+                        <p class="text-secondary mb-0">
+                            Xem lịch sử khám, đơn thuốc
+                            và hóa đơn sau khi khám.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="border-top bg-white">
+
+    <div class="container py-4">
+
+        <div
+            class="d-flex
+                   flex-column
+                   flex-md-row
+                   justify-content-between
+                   align-items-center
+                   gap-2"
+        >
+
+            <div class="small text-secondary">
+                © 2026 ClinicCare
+            </div>
+
+            <div class="small text-secondary">
+                Clinic Management System
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+{% endblock %}

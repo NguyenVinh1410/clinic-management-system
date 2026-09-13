@@ -51,11 +51,13 @@ document.addEventListener(
 
 
         if (isAuthenticated()) {
+            const currentUser = getCurrentUser();
 
-            window.location.href =
-                "/dashboard";
+            if (currentUser){
+                redirectByRole(currentUser.role);
 
-            return;
+                return;
+            }
 
         }
 
@@ -245,10 +247,7 @@ document.addEventListener(
                     }
 
 
-                    sessionStorage.setItem(
-                        "current_user",
-                        JSON.stringify(meData)
-                    );
+                    setCurrentUser(meData);
 
 
                     redirectByRole(

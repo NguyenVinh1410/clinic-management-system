@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Lịch sử khám | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "patient/partials/sidebar.html" %}
+
+
+    <main class="main-content">
+
+        {% include "patient/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Hồ sơ cá nhân
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Lịch sử khám
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Xem các lần khám, chẩn đoán và đơn thuốc của bạn.
+                </p>
+
+            </div>
+
+
+            <div
+                id="historyAlert"
+                class="alert d-none mb-4">
+            </div>
+
+
+            <div
+                id="historyList">
+
+                <div
+                    class="text-center text-secondary py-5">
+
+                    Đang tải lịch sử khám...
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/patient-medical-history.js'
+    ) }}">
+</script>
+
+{% endblock %}

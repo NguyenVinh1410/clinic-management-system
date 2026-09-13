@@ -38,6 +38,25 @@ def create_prescription(
     )
 
 @router.get(
+    "/my",
+    response_model=list[PrescriptionResponse],
+)
+def get_my_prescriptions(
+        current_user: Annotated[
+            User,
+            Depends(requires_role(UserRole.PATIENT))
+        ],
+        db: Annotated[
+            Session,
+            Depends(get_db),
+        ]
+):
+    return PrescriptionService.get_patient_prescriptions(
+        db=db,
+        patient_id=current_user.user_id,
+    )
+
+@router.get(
     "/record/{record_id}",
     response_model=PrescriptionResponse,
 )

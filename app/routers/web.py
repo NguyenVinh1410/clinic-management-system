@@ -91,6 +91,17 @@ def patient_profile(request: Request):
     )
 
 @router.get(
+    "/patient/medical-history",
+    include_in_schema=False,
+)
+def patient_medical_history(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="patient/medical-history.html",
+        context={},
+    )
+
+@router.get(
     "/receptionist/dashboard",
     include_in_schema=False,
 )
@@ -146,13 +157,47 @@ def receptionist_invoices(request: Request):
     )
 
 @router.get(
+    "/doctor/dashboard",
+    include_in_schema=False,
+)
+def doctor_dashboard(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="doctor/dashboard.html",
+        context={},
+    )
+
+@router.get(
+    "/doctor/examination/{appointment_id}",
+    include_in_schema=False,
+)
+def doctor_examination(request: Request, appointment_id: int):
+    return templates.TemplateResponse(
+        request=request,
+        name="doctor/examination.html",
+        context={"appointment_id": appointment_id},
+    )
+
+@router.get(
     "/",
     include_in_schema=False,
 )
-def home():
-    return RedirectResponse(
-        url="/login",
-        status_code=302,
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="home.html",
+        context={},
+    )
+
+@router.get(
+    "/register",
+    include_in_schema=False,
+)
+def register_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="auth/register.html",
+        context={},
     )
 
 @router.get(

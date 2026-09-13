@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Doctor Dashboard | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "doctor/partials/sidebar.html" %}
+
+
+    <main class="main-content">
+
+        {% include "doctor/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Khám bệnh
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Tổng quan lịch khám
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Theo dõi lịch khám và bệnh nhân của bạn.
+                </p>
+
+            </div>
+
+
+            <div
+                id="doctorAlert"
+                class="alert d-none mb-4">
+            </div>
+
+
+            <div class="row g-3 mb-4">
+
+                <div class="col-12 col-md-6 col-xl-3">
+
+                    <div class="content-card p-4">
+
+                        <div class="text-secondary small">
+                            Lịch hôm nay
+                        </div>
+
+                        <div
+                            id="todayTotal"
+                            class="fs-2 fw-bold mt-1">
+
+                            --
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-md-6 col-xl-3">
+
+                    <div class="content-card p-4">
+
+                        <div class="text-secondary small">
+                            Chờ khám
+                        </div>
+
+                        <div
+                            id="confirmedTotal"
+                            class="fs-2 fw-bold mt-1">
+
+                            --
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-md-6 col-xl-3">
+
+                    <div class="content-card p-4">
+
+                        <div class="text-secondary small">
+                            Đã hoàn thành
+                        </div>
+
+                        <div
+                            id="completedTotal"
+                            class="fs-2 fw-bold mt-1">
+
+                            --
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-md-6 col-xl-3">
+
+                    <div class="content-card p-4">
+
+                        <div class="text-secondary small">
+                            Lịch sắp tới
+                        </div>
+
+                        <div
+                            id="upcomingTotal"
+                            class="fs-2 fw-bold mt-1">
+
+                            --
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-12 col-xl-7">
+
+                    <div class="content-card h-100">
+
+                        <div class="p-4 border-bottom">
+
+                            <h5 class="fw-bold mb-1">
+                                Lịch sắp tới
+                            </h5>
+
+                            <p class="text-secondary small mb-0">
+                                Những lượt khám sắp diễn ra.
+                            </p>
+
+                        </div>
+
+                        <div
+                            id="upcomingAppointments"
+                            class="p-4">
+
+                            Đang tải...
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <div class="col-12 col-xl-5">
+
+                <div class="content-card h-100">
+
+                    <div class="p-4 border-bottom">
+
+                        <h5 class="fw-bold mb-1">
+                            Bệnh nhân gần nhất
+                        </h5>
+
+                        <p class="text-secondary small mb-0">
+                            Những bệnh nhân gần đây bác sĩ đã tiếp nhận.
+                        </p>
+
+                    </div>
+
+                    <div
+                        id="recentPatients"
+                        class="p-4">
+
+                        Đang tải...
+
+                    </div>
+
+                </div>
+
+            </div>
+            </div>
+
+            <div class="content-card">
+
+                <div class="p-4 border-bottom">
+
+                    <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+                                Danh sách bệnh nhân
+                            </h5>
+
+                            <p class="text-secondary small mb-0">
+                                Bác sĩ chỉ được xem lịch thuộc mình.
+                            </p>
+
+                        </div>
+
+
+                        <select
+                            id="appointmentFilter"
+                            class="form-select"
+                            style="width: 190px;">
+
+                            <option value="all">
+                                Tất cả
+                            </option>
+
+                            <option value="Confirmed">
+                                Chờ khám
+                            </option>
+
+                            <option value="Completed">
+                                Đã hoàn thành
+                            </option>
+
+                            <option value="Cancelled">
+                                Đã hủy
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Thời gian
+                                </th>
+
+                                <th>
+                                    Bệnh nhân
+                                </th>
+
+                                <th>
+                                    SĐT
+                                </th>
+
+                                <th>
+                                    Chuyên khoa
+                                </th>
+
+                                <th>
+                                    Trạng thái
+                                </th>
+
+                                <th class="text-end">
+                                    Thao tác
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="doctorAppointmentList">
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="text-center py-5 text-secondary">
+
+                                    Đang tải...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/doctor-dashboard.js'
+    ) }}">
+</script>
+
+{% endblock %}

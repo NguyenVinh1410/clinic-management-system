@@ -1,7 +1,7 @@
 #from datetime import datetime
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, selectinload
 
 from app.core.exceptions import BusinessException, ConflictException, NotFoundException, ForbiddenException
 from app.models.appointment import Appointment
@@ -68,6 +68,34 @@ class PrescriptionService:
         return record
 
     @staticmethod
+    def get_patient_prescriptions(
+            db:Session,
+            patient_id: int,
+    ) -> list[Prescription]:
+        stmt = (
+            select(Prescription)
+            .join(
+                MedicalRecord,
+                Prescription.record_id == MedicalRecord.record_id,
+            )
+            .join(
+                Appointment,
+                MedicalRecord.appointment_id == Appointment.appointment_id,
+            )
+            .options(
+                selectinload(Prescription.details)
+                .selectinload(PrescriptionDetail.medicine),
+
+                selectinload(Prescription.record)
+                .selectinload(MedicalRecord.appointment)
+            )
+            .where(Appointment.patient_id == patient_id)
+            .order_by(Prescription.prescription_id.desc())
+        )
+
+        return db.execute(stmt).scalars().all()
+
+    @staticmethod
     def check_doctor_ownership(
             db: Session,
             record: MedicalRecord,
@@ -130,8 +158,8 @@ class PrescriptionService:
         if appointment is None:
             raise NotFoundException("Khong tim thay lich hen")
 
-        if appointment.status != AppointmentStatus.COMPLETED:
-            raise BusinessException("Chi co the tao don thuoc sau khi lich hen da hoan thanh")
+        if appointment.status != AppointmentStatus.CONFIRMED:
+            raise BusinessException("Chi co the tao don thuoc khi lich hen dang duoc kham")
 
         stmt = (
             select(Prescription)
@@ -218,8 +246,11 @@ class PrescriptionService:
         if appointment is None:
             raise NotFoundException("Khong tim thay lich hen")
 
-        if appointment.status != AppointmentStatus.COMPLETED:
-            raise BusinessException("Chi co the sua don thuoc cua lich hen da hoan thanh")
+        if appointment.status not in (
+            AppointmentStatus.CONFIRMED,
+            AppointmentStatus.COMPLETED
+        ):
+            raise BusinessException("Khong the sua don thuoc o trang thai hien tai")
 
         invoice = appointment.invoice
 

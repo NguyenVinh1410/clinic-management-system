@@ -364,6 +364,7 @@ class InvoiceService:
                     medicine = detail.medicine
 
                     line_total = medicine.price * detail.quantity
+                    medicine_total += line_total
 
                     medicines.append(
                         InvoiceMedicineItem(

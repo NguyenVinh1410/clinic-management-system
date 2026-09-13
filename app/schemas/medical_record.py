@@ -46,6 +46,16 @@ class MedicalRecordResponse(BaseModel):
 
     appointment_id: int
 
+    appointment_time: datetime
+
+    doctor_id: int
+
+    doctor_name: str
+
+    specialty_id: int
+
+    specialty_name: str
+
     symptoms: str | None
 
     diagnosis: str
