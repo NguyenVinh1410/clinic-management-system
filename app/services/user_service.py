@@ -114,15 +114,7 @@ class UserService:
 
         elif data.role == UserRole.PATIENT:
 
-            patient_dob = None
-
-            if data.dob:
-                try:
-                    patient_dob = date.fromisoformat(data.dob)
-                except ValueError as exc:
-                    raise BusinessException(
-                        "Ngay sinh khong hop le"
-                    ) from exc
+            patient_dob = data.dob
 
             user = Patient(
                 username=data.username,

@@ -492,52 +492,6 @@ async function cancelAppointment(
 
 }
 
-//
-//function renderStatusBadge(status) {
-//
-//    const config = {
-//
-//        Pending: {
-//            text: "Chờ xác nhận",
-//            className: "status-pending",
-//            icon: "bi-clock"
-//        },
-//
-//        Confirmed: {
-//            text: "Đã xác nhận",
-//            className: "status-confirmed",
-//            icon: "bi-check-circle"
-//        },
-//
-//        Completed: {
-//            text: "Đã hoàn thành",
-//            className: "status-completed",
-//            icon: "bi-check2-all"
-//        },
-//
-//        Cancelled: {
-//            text: "Đã hủy",
-//            className: "status-cancelled",
-//            icon: "bi-x-circle"
-//        }
-//
-//    };
-//
-//    const item =
-//        config[status] || {
-//            text: status,
-//            className: "",
-//            icon: "bi-info-circle"
-//        };
-//
-//    return `
-//        <span class="status-badge ${item.className}">
-//            <i class="bi ${item.icon}"></i>
-//            ${item.text}
-//        </span>
-//    `;
-//}
-
 function showAppointmentAlert(
     message,
     type

@@ -91,6 +91,19 @@ def patient_profile(request: Request):
     )
 
 @router.get(
+    "/patient/prescriptions",
+    include_in_schema=False,
+)
+def patient_prescriptions(
+        request: Request,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="patient/prescriptions.html",
+        context={},
+    )
+
+@router.get(
     "/patient/medical-history",
     include_in_schema=False,
 )
@@ -179,6 +192,113 @@ def doctor_examination(request: Request, appointment_id: int):
     )
 
 @router.get(
+    "/admin/dashboard",
+    include_in_schema=False
+)
+def admin_dashboard(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/dashboard.html",
+        context={}
+    )
+
+@router.get(
+    "/admin/working-schedules",
+    include_in_schema=False,
+)
+def admin_working_schedules(
+        request: Request,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/working-schedules.html",
+        context={},
+    )
+
+@router.get(
+    "/admin/doctors",
+    include_in_schema=False,
+)
+def admin_doctors(
+        request: Request,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/doctors.html",
+        context={},
+    )
+
+
+@router.get(
+    "/admin/specialties",
+    include_in_schema=False,
+)
+def admin_specialties(
+        request: Request,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/specialties.html",
+        context={},
+    )
+
+
+@router.get(
+    "/admin/medicines",
+    include_in_schema=False,
+)
+def admin_medicines(
+        request: Request,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/medicines.html",
+        context={},
+    )
+
+
+@router.get(
+    "/admin/patients",
+    include_in_schema=False,
+)
+def admin_patients(
+        request: Request,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/patients.html",
+        context={},
+    )
+
+
+@router.get(
+    "/admin/appointments",
+    include_in_schema=False,
+)
+def admin_appointments(
+        request: Request,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/appointments.html",
+        context={},
+    )
+
+
+@router.get(
+    "/admin/invoices",
+    include_in_schema=False,
+)
+def admin_invoices(
+        request: Request,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/invoices.html",
+        context={},
+    )
+
+@router.get(
     "/",
     include_in_schema=False,
 )
@@ -208,17 +328,6 @@ def login_page(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="auth/login.html",
-        context={},
-    )
-
-@router.get(
-    "/dashboard",
-    include_in_schema=False,
-)
-def dashboard_page(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="dashboard/index.html",
         context={},
     )
 

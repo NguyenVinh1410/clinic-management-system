@@ -1021,10 +1021,14 @@ function renderMedicalHistory(
         );
 
 
-    if (!items.length) {
+    if (
+        !items ||
+        items.length === 0
+    ) {
 
         container.innerHTML = `
-            <div class="text-secondary small">
+            <div
+                class="text-secondary small">
 
                 Chưa có lần khám trước đó.
 
@@ -1038,53 +1042,239 @@ function renderMedicalHistory(
 
     container.innerHTML =
         items.map(
-            item => `
+            item => {
 
-                <div class="border rounded p-3 mb-3">
-
-                    <div class="small text-secondary mb-1">
-
-                        ${formatDateTime(
-                            item.appointment_time
-                        )}
-
-                    </div>
+                const prescription =
+                    item.prescription;
 
 
-                    <div class="fw-semibold mb-1">
+                let prescriptionHtml = `
+                    <div
+                        class="text-secondary small">
 
-                        ${escapeHtml(
-                            item.doctor_name
-                        )}
+                        Không có đơn thuốc.
 
                     </div>
+                `;
 
 
-                    <div class="small mb-2">
+                if (
+                    prescription &&
+                    prescription.medicines &&
+                    prescription.medicines.length
+                ) {
 
-                        ${escapeHtml(
-                            item.specialty_name ||
-                            ""
-                        )}
+                    prescriptionHtml = `
+                        <div class="mt-3">
+
+                            <div
+                                class="small fw-semibold mb-2">
+
+                                <i
+                                    class="bi bi-capsule me-1">
+                                </i>
+
+                                Đơn thuốc
+
+                            </div>
+
+
+                            <div
+                                class="border rounded">
+
+                                ${prescription.medicines
+                                    .map(
+                                        medicine => `
+                                            <div
+                                                class="p-3 border-bottom">
+
+                                                <div
+                                                    class="fw-semibold">
+
+                                                    ${escapeHtml(
+                                                        medicine.name
+                                                    )}
+
+                                                </div>
+
+
+                                                <div
+                                                    class="small text-secondary">
+
+                                                    Số lượng:
+                                                    ${
+                                                        medicine.quantity
+                                                    }
+                                                    ${
+                                                        medicine.unit
+                                                    }
+
+                                                </div>
+
+
+                                                <div
+                                                    class="small">
+
+                                                    Liều dùng:
+                                                    ${escapeHtml(
+                                                        medicine.dosage
+                                                    )}
+
+                                                </div>
+
+
+                                                ${
+                                                    medicine.usage_note
+                                                        ? `
+                                                            <div
+                                                                class="small">
+
+                                                                Cách dùng:
+                                                                ${escapeHtml(
+                                                                    medicine.usage_note
+                                                                )}
+
+                                                            </div>
+                                                        `
+                                                        : ""
+                                                }
+
+                                            </div>
+                                        `
+                                    )
+                                    .join("")}
+
+                            </div>
+
+                        </div>
+                    `;
+
+                }
+
+
+                return `
+                    <div
+                        class="border rounded p-3 mb-3">
+
+                        <!-- DATE -->
+
+                        <div
+                            class="small text-secondary mb-2">
+
+                            <i
+                                class="bi bi-calendar3 me-1">
+                            </i>
+
+                            ${formatDateTime(
+                                item.appointment_time
+                            )}
+
+                        </div>
+
+
+                        <!-- DOCTOR -->
+
+                        <div
+                            class="fw-semibold">
+
+                            <i
+                                class="bi bi-person-badge me-1">
+                            </i>
+
+                            ${escapeHtml(
+                                item.doctor_name
+                            )}
+
+                        </div>
+
+
+                        <!-- SPECIALTY -->
+
+                        <div
+                            class="small text-secondary mb-3">
+
+                            ${escapeHtml(
+                                item.specialty_name ||
+                                "Chưa có chuyên khoa"
+                            )}
+
+                        </div>
+
+
+                        <!-- SYMPTOMS -->
+
+                        <div
+                            class="small mb-2">
+
+                            <strong>
+                                Triệu chứng:
+                            </strong>
+
+                            <div
+                                class="mt-1 text-secondary">
+
+                                ${escapeHtml(
+                                    item.symptoms ||
+                                    "Không có"
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DIAGNOSIS -->
+
+                        <div
+                            class="small mb-2">
+
+                            <strong>
+                                Chẩn đoán:
+                            </strong>
+
+                            <div
+                                class="mt-1">
+
+                                ${escapeHtml(
+                                    item.diagnosis ||
+                                    "Không có"
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- NOTE -->
+
+                        <div
+                            class="small mb-2">
+
+                            <strong>
+                                Ghi chú:
+                            </strong>
+
+                            <div
+                                class="mt-1 text-secondary">
+
+                                ${escapeHtml(
+                                    item.note ||
+                                    "Không có"
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PRESCRIPTION -->
+
+                        ${prescriptionHtml}
 
                     </div>
+                `;
 
-
-                    <div class="small">
-
-                        <strong>
-                            Chẩn đoán:
-                        </strong>
-
-                        ${escapeHtml(
-                            item.diagnosis ||
-                            "—"
-                        )}
-
-                    </div>
-
-                </div>
-            `
+            }
         ).join("");
 
 }

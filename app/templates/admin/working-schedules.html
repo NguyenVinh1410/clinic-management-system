@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+
+{% block title %}
+Lịch làm việc | Admin | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "admin/partials/sidebar.html" %}
+
+
+    <main class="main-content">
+
+        {% include "admin/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Quản lý nhân sự
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Lịch làm việc bác sĩ
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Admin phân công ca làm việc cho bác sĩ.
+                </p>
+
+            </div>
+
+
+            <div
+                id="scheduleAlert"
+                class="alert d-none mb-4">
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-12 col-xl-4">
+
+                    <div class="content-card">
+
+                        <div class="p-4 border-bottom">
+
+                            <h5 class="fw-bold mb-1">
+                                Thêm ca làm việc
+                            </h5>
+
+                            <p class="text-secondary small mb-0">
+                                Tạo lịch làm việc cho bác sĩ.
+                            </p>
+
+                        </div>
+
+
+                        <div class="p-4">
+
+                            <form
+                                id="scheduleForm">
+
+                                <div class="mb-3">
+
+                                    <label
+                                        for="doctorId"
+                                        class="form-label fw-semibold">
+
+                                        Bác sĩ
+
+                                    </label>
+
+                                    <select
+                                        id="doctorId"
+                                        class="form-select"
+                                        required>
+
+                                        <option value="">
+                                            Đang tải bác sĩ...
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="mb-3">
+
+                                    <label
+                                        for="workDate"
+                                        class="form-label fw-semibold">
+
+                                        Ngày làm việc
+
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="workDate"
+                                        class="form-control"
+                                        required>
+
+                                </div>
+
+
+                                <div class="row g-3">
+
+                                    <div class="col-6">
+
+                                        <label
+                                            for="startTime"
+                                            class="form-label fw-semibold">
+
+                                            Bắt đầu
+
+                                        </label>
+
+                                        <input
+                                            type="time"
+                                            id="startTime"
+                                            class="form-control"
+                                            required>
+
+                                    </div>
+
+
+                                    <div class="col-6">
+
+                                        <label
+                                            for="endTime"
+                                            class="form-label fw-semibold">
+
+                                            Kết thúc
+
+                                        </label>
+
+                                        <input
+                                            type="time"
+                                            id="endTime"
+                                            class="form-control"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="mb-4 mt-3">
+
+                                    <label
+                                        for="scheduleStatus"
+                                        class="form-label fw-semibold">
+
+                                        Trạng thái
+
+                                    </label>
+
+                                    <select
+                                        id="scheduleStatus"
+                                        class="form-select">
+
+                                        <option value="Active">
+                                            Hoạt động
+                                        </option>
+
+                                        <option value="Off">
+                                            Nghỉ
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <button
+                                    type="submit"
+                                    id="saveScheduleButton"
+                                    class="btn btn-primary w-100">
+
+                                    <i class="bi bi-plus-lg me-1"></i>
+
+                                    Thêm lịch
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-xl-8">
+
+                    <div class="content-card">
+
+                        <div
+                            class="p-4 border-bottom
+                                   d-flex
+                                   justify-content-between
+                                   align-items-center
+                                   gap-3
+                                   flex-wrap">
+
+                            <div>
+
+                                <h5 class="fw-bold mb-1">
+                                    Danh sách lịch làm việc
+                                </h5>
+
+                                <p
+                                    class="text-secondary
+                                           small
+                                           mb-0">
+
+                                    Các ca làm việc đã phân công.
+
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                id="refreshSchedules"
+                                class="btn btn-outline-primary btn-sm">
+
+                                <i class="bi bi-arrow-clockwise me-1"></i>
+
+                                Làm mới
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="table-responsive">
+
+                            <table
+                                class="table
+                                       align-middle
+                                       mb-0">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Bác sĩ
+                                        </th>
+
+                                        <th>
+                                            Ngày
+                                        </th>
+
+                                        <th>
+                                            Thời gian
+                                        </th>
+
+                                        <th>
+                                            Trạng thái
+                                        </th>
+
+                                        <th class="text-end">
+                                            #
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody
+                                    id="scheduleList">
+
+                                    <tr>
+
+                                        <td
+                                            colspan="5"
+                                            class="text-center
+                                                   py-5
+                                                   text-secondary">
+
+                                            Đang tải...
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/admin-working-schedules.js'
+    ) }}">
+</script>
+
+{% endblock %}

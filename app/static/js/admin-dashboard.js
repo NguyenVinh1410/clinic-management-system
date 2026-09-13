@@ -35,28 +35,21 @@ document.addEventListener(
 
 
             if (
-                currentUser.role ===
+                currentUser.role !==
                 "Admin"
             ) {
 
-                document
-                    .getElementById(
-                        "adminDashboard"
-                    )
-                    .classList
-                    .remove("d-none");
-
-
-                await loadAdminDashboard();
+                redirectByRole(currentUser.role);
+                return;
 
             }
-            else {
 
-                setupRoleDashboard(
-                    currentUser
-                );
+            document
+                .getElementById("adminDashboard")
+                .classList
+                .remove("d-none");
 
-            }
+            await loadAdminDashboard();
 
         }
         catch (error) {
@@ -126,244 +119,115 @@ function setTodayText() {
 
 }
 
-
-async function loadCurrentUser() {
-
-    const response =
-        await apiFetch(
-            "/api/auth/me"
-        );
-
-
-    const data =
-        await parseApiResponse(
-            response
-        );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            "Unable to load user"
-        );
-
-    }
-
-
-    sessionStorage.setItem(
-        "current_user",
-        JSON.stringify(data)
-    );
-
-
-    return data;
-
-}
-
-
 function setupUserInfo(
     user
 ) {
 
-    const role =
-        String(
-            user.role || ""
+    const name =
+        user.full_name ||
+        user.username ||
+        "Quản trị viên";
+
+
+    const welcomeName =
+        document.getElementById(
+            "welcomeName"
         );
 
-
-    document.getElementById(
-        "welcomeName"
-    ).textContent =
-        user.full_name ||
-        user.username;
-
-
-    document.getElementById(
-        "sidebarUserName"
-    ).textContent =
-        user.full_name ||
-        user.username;
-
-
-    document.getElementById(
-        "topUserName"
-    ).textContent =
-        user.full_name ||
-        user.username;
-
-
-    document.getElementById(
-        "topUserRole"
-    ).textContent =
-        role;
-
-
-    document.getElementById(
-        "profileName"
-    ).textContent =
-        user.full_name || "-";
-
-
-    document.getElementById(
-        "profileUsername"
-    ).textContent =
-        user.username || "-";
-
-
-    document.getElementById(
-        "profileEmail"
-    ).textContent =
-        user.email || "-";
-
-
-    document.getElementById(
-        "profileRole"
-    ).textContent =
-        role;
-
-
-    const initials =
-        (
-            user.full_name ||
-            user.username ||
-            "U"
-        )
-        .trim()
-        .split(/\s+/)
-        .slice(-2)
-        .map(
-            part =>
-                part.charAt(0)
-                    .toUpperCase()
-        )
-        .join("");
-
-
-    document.getElementById(
-        "userAvatar"
-    ).textContent =
-        initials;
-
-
-    document
-        .querySelectorAll(
-            ".role-link"
-        )
-        .forEach(
-            link =>
-                link.classList.add(
-                    "d-none"
-                )
-        );
-
-
-    const roleClass =
-        {
-            Admin:
-                "role-admin",
-
-            Receptionist:
-                "role-receptionist",
-
-            Doctor:
-                "role-doctor",
-
-            Patient:
-                "role-patient",
-        }[role];
-
-
-    if (roleClass) {
-
-        document
-            .querySelectorAll(
-                `.${roleClass}`
-            )
-            .forEach(
-                link =>
-                    link.classList.remove(
-                        "d-none"
-                    )
-            );
-
-    }
-
-}
-
-
-function setupRoleDashboard(
-    user
-) {
-
-    document
-        .getElementById(
-            "roleDashboard"
-        )
-        .classList
-        .remove("d-none");
-
-
-    const configs = {
-
-        Receptionist: {
-
-            title:
-                "Khu vực lễ tân",
-
-            text:
-                "Lễ tân sẽ quản lý bệnh nhân, lịch hẹn, tiếp nhận và thanh toán.",
-
-        },
-
-
-        Doctor: {
-
-            title:
-                "Khu vực bác sĩ",
-
-            text:
-                "Bác sĩ sẽ theo dõi lịch khám, bệnh nhân, hồ sơ bệnh án, lịch sử khám và đơn thuốc.",
-
-        },
-
-
-        Patient: {
-
-            title:
-                "Khu vực bệnh nhân",
-
-            text:
-                "Bệnh nhân sẽ quản lý hồ sơ cá nhân, lịch hẹn, hóa đơn và trợ lý AI.",
-
-        },
-
-    };
-
-
-    const config =
-        configs[user.role];
-
-
-    if (!config) {
-
-        return;
-
+    if (welcomeName) {
+        welcomeName.textContent =
+            name;
     }
 
 
-    document.getElementById(
-        "roleDashboardTitle"
-    ).textContent =
-        config.title;
+    const sidebarName =
+        document.getElementById(
+            "sidebarUserName"
+        );
+
+    if (sidebarName) {
+        sidebarName.textContent =
+            name;
+    }
 
 
-    document.getElementById(
-        "roleDashboardText"
-    ).textContent =
-        config.text;
+    const topName =
+        document.getElementById(
+            "topUserName"
+        );
+
+    if (topName) {
+        topName.textContent =
+            name;
+    }
+
+
+    const topRole =
+        document.getElementById(
+            "topUserRole"
+        );
+
+    if (topRole) {
+        topRole.textContent =
+            "Quản trị viên";
+    }
+
+
+    const profileName =
+        document.getElementById(
+            "profileName"
+        );
+
+    if (profileName) {
+        profileName.textContent =
+            name;
+    }
+
+
+    const profileUsername =
+        document.getElementById(
+            "profileUsername"
+        );
+
+    if (profileUsername) {
+        profileUsername.textContent =
+            user.username || "-";
+    }
+
+
+    const profileEmail =
+        document.getElementById(
+            "profileEmail"
+        );
+
+    if (profileEmail) {
+        profileEmail.textContent =
+            user.email || "-";
+    }
+
+
+    const profileRole =
+        document.getElementById(
+            "profileRole"
+        );
+
+    if (profileRole) {
+        profileRole.textContent =
+            "Quản trị viên";
+    }
+
+
+    const avatar =
+        document.getElementById(
+            "userAvatar"
+        );
+
+    if (avatar) {
+        avatar.textContent =
+            getInitials(name);
+    }
 
 }
-
 
 async function loadAdminDashboard() {
 
@@ -871,7 +735,6 @@ function showDashboardAlert(
         document.getElementById(
             "dashboardAlert"
         );
-
 
     alertBox.className =
         `alert alert-${type}`;

@@ -2,7 +2,7 @@
 
 
 {% block title %}
-Dashboard | Receptionist | ClinicCare
+Receptionist Dashboard | ClinicCare
 {% endblock %}
 
 
@@ -189,6 +189,57 @@ Dashboard | Receptionist | ClinicCare
 
                 </div>
 
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="content-card p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="text-secondary small mb-1">
+                                    Đã tiếp nhận
+                                </div>
+
+                                <div
+                                    id="confirmedAppointments"
+                                    class="fs-3 fw-bold">
+                                    --
+                                </div>
+                            </div>
+
+                            <div
+                                class="quick-icon
+                                bg-success-subtle
+                                text-success">
+                                <i class="bi bi-person-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="content-card p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="text-secondary small mb-1">
+                                    Doanh thu hôm nay
+                                </div>
+
+                                <div
+                                    id="todayRevenue"
+                                    class="fs-3 fw-bold">
+                                    --
+                                </div>
+                            </div>
+
+                            <div
+                                class="quick-icon
+                                bg-primary-subtle
+                                text-primary">
+                                <i class="bi bi-cash-stack"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
 
             </div>
 
@@ -293,7 +344,7 @@ Dashboard | Receptionist | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for('static', path='js/receptionist.js') }}">
+    src="{{ url_for('static', path='js/receptionist-dashboard.js') }}">
 </script>
 
 {% endblock %}

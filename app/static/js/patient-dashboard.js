@@ -404,55 +404,6 @@ function renderRecentInvoices(
 
 }
 
-
-//function renderStatusBadge(
-//    status
-//) {
-//
-//    const map = {
-//
-//        Pending: [
-//            "Đang chờ",
-//            "status-pending"
-//        ],
-//
-//        Confirmed: [
-//            "Đã xác nhận",
-//            "status-confirmed"
-//        ],
-//
-//        Completed: [
-//            "Hoàn thành",
-//            "status-completed"
-//        ],
-//
-//        Cancelled: [
-//            "Đã hủy",
-//            "status-cancelled"
-//        ],
-//
-//    };
-//
-//
-//    const [label, css] =
-//        map[status] ||
-//        [
-//            status,
-//            "status-pending"
-//        ];
-//
-//
-//    return `
-//        <span class="status-badge ${css}">
-//            <i class="bi bi-circle-fill"
-//               style="font-size: 5px"></i>
-//            ${label}
-//        </span>
-//    `;
-//
-//}
-
-
 function renderInvoiceStatus(
     status
 ) {

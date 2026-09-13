@@ -8,7 +8,7 @@ const PUBLIC_PATHS = [
 const ROLE_ROUTES = {
 
     Admin:
-        "/dashboard",
+        "/admin/dashboard",
 
     Receptionist:
         "/receptionist/dashboard",
@@ -107,10 +107,10 @@ function getRequiredRole(
 
     if (
         pathname ===
-        "/dashboard"
+        "/admin"
         ||
         pathname.startsWith(
-            "/dashboard/"
+            "/admin/"
         )
     ) {
 
@@ -166,7 +166,7 @@ function getRequiredRole(
 }
 
 
-async function loadCurrentUser() {
+async function fetchCurrentUserForGuard() {
 
     const cachedUser =
         getCurrentUser();
@@ -278,7 +278,7 @@ async function protectPrivatePage() {
     try {
 
         const currentUser =
-            await loadCurrentUser();
+            await fetchCurrentUserForGuard();
 
 
         if (!currentUser) {
@@ -290,7 +290,7 @@ async function protectPrivatePage() {
 
         }
 
-
+        updateUserInterface(currentUser);
         /*
          * Có token nhưng role không
          * phù hợp với URL hiện tại.
@@ -323,6 +323,96 @@ async function protectPrivatePage() {
 
 }
 
+function updateUserInterface(
+    user
+) {
+
+    if (!user) {
+        return;
+    }
+
+
+    const name =
+        user.full_name ||
+        user.username ||
+        "Người dùng";
+
+
+    const sidebarName =
+        document.getElementById(
+            "sidebarUserName"
+        );
+
+
+    if (sidebarName) {
+
+        sidebarName.textContent =
+            name;
+
+    }
+
+
+    const topName =
+        document.getElementById(
+            "topUserName"
+        );
+
+
+    if (topName) {
+
+        topName.textContent =
+            name;
+
+    }
+
+
+    const avatar =
+        document.getElementById(
+            "userAvatar"
+        );
+
+
+    if (avatar) {
+
+        avatar.textContent =
+            getInitials(name);
+
+    }
+
+
+    const topRole =
+        document.getElementById(
+            "topUserRole"
+        );
+
+
+    if (topRole) {
+
+        const roleText = {
+
+            Admin:
+                "Quản trị viên",
+
+            Receptionist:
+                "Lễ tân",
+
+            Doctor:
+                "Bác sĩ",
+
+            Patient:
+                "Bệnh nhân",
+
+        };
+
+
+        topRole.textContent =
+            roleText[user.role] ||
+            user.role ||
+            "";
+
+    }
+
+}
 
 document.addEventListener(
     "DOMContentLoaded",

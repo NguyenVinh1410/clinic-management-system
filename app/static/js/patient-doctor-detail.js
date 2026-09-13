@@ -4,7 +4,24 @@ document.addEventListener(
 
         try {
 
-            await loadDoctorDetail();
+            await loadCurrentUser();
+
+            const [doctor, specialty] =
+                await Promise.all([
+                    loadDoctorDetail(),
+                    loadDoctorSpecialty(),
+                ]);
+
+            if (doctor && specialty) {
+
+                doctor.specialty_name =
+                    specialty.name;
+
+                renderDoctorDetail(
+                    doctor
+                );
+
+            }
 
             await loadDoctorSchedules();
 
@@ -38,18 +55,76 @@ async function loadDoctorDetail() {
     if (!response.ok) {
 
         throw new Error(
-            data.detail
+            data.detail ||
+            "Không thể tải thông tin bác sĩ."
         );
 
     }
 
 
-    renderDoctorDetail(
-        data
-    );
+    return data;
 
 }
 
+async function loadDoctorSpecialty() {
+
+    const doctor =
+        await getDoctorData();
+
+
+    const response =
+        await apiFetch(
+            `/api/specialty/${doctor.specialty_id}`
+        );
+
+
+    const data =
+        await parseApiResponse(
+            response
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.detail ||
+            "Không thể tải chuyên khoa."
+        );
+
+    }
+
+
+    return data;
+
+}
+
+async function getDoctorData() {
+
+    const response =
+        await apiFetch(
+            `/api/doctor/${doctorId}`
+        );
+
+
+    const data =
+        await parseApiResponse(
+            response
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.detail ||
+            "Không thể tải bác sĩ."
+        );
+
+    }
+
+
+    return data;
+
+}
 
 function renderDoctorDetail(
     doctor
@@ -98,7 +173,10 @@ function renderDoctorDetail(
                             <div
                                 class="text-primary fw-semibold mb-3">
 
-                                Bác sĩ chuyên khoa #${doctor.specialty_id}
+                                ${escapeHtml(
+                                    doctor.specialty_name ||
+                                    "Chưa cập nhật"
+                                )}
 
                             </div>
 

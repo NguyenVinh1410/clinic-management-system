@@ -1,0 +1,502 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quản lý bác sĩ | Admin | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "admin/partials/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "admin/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Quản lý nhân sự
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Quản lý bác sĩ
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Xem và quản lý danh sách bác sĩ trong phòng khám.
+                </p>
+
+            </div>
+
+
+            <div
+                id="doctorAlert"
+                class="alert d-none mb-4">
+            </div>
+
+
+            <div class="content-card">
+
+                <div
+                    class="p-4 border-bottom
+                           d-flex
+                           justify-content-between
+                           align-items-center
+                           gap-3
+                           flex-wrap">
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+                            Danh sách bác sĩ
+                        </h5>
+
+                        <p class="text-secondary small mb-0">
+                            Quản lý chuyên khoa và trạng thái bác sĩ.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="refreshDoctors"
+                        class="btn btn-outline-primary">
+
+                        <i class="bi bi-arrow-clockwise me-1"></i>
+
+                        Làm mới
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#doctorCreateModal">
+
+                        <i class="bi bi-person-plus me-1"></i>
+
+                        Thêm bác sĩ
+
+                    </button>
+
+                </div>
+
+
+                <div class="p-4">
+
+                    <div class="row g-3 mb-4">
+
+                        <div class="col-12 col-md-7">
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="doctorSearch"
+                                    class="form-control"
+                                    placeholder="Tìm theo tên bác sĩ...">
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-5">
+
+                            <select
+                                id="specialtyFilter"
+                                class="form-select">
+
+                                <option value="">
+                                    Tất cả chuyên khoa
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-responsive">
+
+                        <table
+                            class="table
+                                   align-middle
+                                   mb-0">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Bác sĩ
+                                    </th>
+
+                                    <th>
+                                        Chuyên khoa
+                                    </th>
+
+                                    <th>
+                                        Bằng cấp
+                                    </th>
+
+                                    <th>
+                                        Trạng thái
+                                    </th>
+
+                                    <th class="text-end">
+                                        Thao tác
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="doctorList">
+
+                                <tr>
+
+                                    <td
+                                        colspan="5"
+                                        class="text-center
+                                               py-5
+                                               text-secondary">
+
+                                        Đang tải...
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- CREATE DOCTOR MODAL -->
+
+<div
+    class="modal fade"
+    id="doctorCreateModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div
+        class="modal-dialog
+               modal-lg
+               modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h5 class="modal-title fw-bold">
+                        Thêm tài khoản bác sĩ
+                    </h5>
+
+                    <div class="text-secondary small">
+                        Tạo tài khoản đăng nhập và hồ sơ bác sĩ.
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <form id="doctorCreateForm">
+
+                <div class="modal-body">
+
+                    <div class="row g-3">
+
+                        <!-- USERNAME -->
+
+                        <div class="col-12 col-md-6">
+
+                            <label
+                                class="form-label fw-semibold">
+
+                                Username
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="createDoctorUsername"
+                                class="form-control"
+                                required>
+
+                            <div class="form-text">
+                                Ít nhất 6 ký tự, có chữ và số.
+                            </div>
+
+                        </div>
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="col-12 col-md-6">
+
+                            <label
+                                class="form-label fw-semibold">
+
+                                Mật khẩu
+
+                            </label>
+
+                            <input
+                                type="password"
+                                id="createDoctorPassword"
+                                class="form-control"
+                                required>
+
+                            <div class="form-text">
+                                Ít nhất 6 ký tự và có số.
+                            </div>
+
+                        </div>
+
+
+                        <!-- NAME -->
+
+                        <div class="col-12">
+
+                            <label
+                                class="form-label fw-semibold">
+
+                                Họ và tên
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="createDoctorFullName"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="col-12 col-md-6">
+
+                            <label
+                                class="form-label fw-semibold">
+
+                                Email
+
+                            </label>
+
+                            <input
+                                type="email"
+                                id="createDoctorEmail"
+                                class="form-control">
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div class="col-12 col-md-6">
+
+                            <label
+                                class="form-label fw-semibold">
+
+                                Số điện thoại
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="createDoctorPhone"
+                                class="form-control">
+
+                        </div>
+
+
+                        <!-- GENDER -->
+
+                        <div class="col-12 col-md-6">
+
+                            <label
+                                class="form-label fw-semibold">
+
+                                Giới tính
+
+                            </label>
+
+                            <select
+                                id="createDoctorGender"
+                                class="form-select">
+
+                                <option value="">
+                                    Không chọn
+                                </option>
+
+                                <option value="Male">
+                                    Nam
+                                </option>
+
+                                <option value="Female">
+                                    Nữ
+                                </option>
+
+                                <option value="Other">
+                                    Khác
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- SPECIALTY -->
+
+                        <div class="col-12 col-md-6">
+
+                            <label
+                                class="form-label fw-semibold">
+
+                                Chuyên khoa
+
+                            </label>
+
+                            <select
+                                id="createDoctorSpecialty"
+                                class="form-select"
+                                required>
+
+                                <option value="">
+                                    Chọn chuyên khoa
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- QUALIFICATION -->
+
+                        <div class="col-12">
+
+                            <label
+                                class="form-label fw-semibold">
+
+                                Bằng cấp / Chứng chỉ
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="createDoctorQualification"
+                                class="form-control">
+
+                        </div>
+
+
+                        <!-- BIO -->
+
+                        <div class="col-12">
+
+                            <label
+                                class="form-label fw-semibold">
+
+                                Giới thiệu
+
+                            </label>
+
+                            <textarea
+                                id="createDoctorBio"
+                                class="form-control"
+                                rows="4">
+                            </textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+
+                        Hủy
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        <i
+                            class="bi bi-person-plus me-1">
+                        </i>
+
+                        Tạo tài khoản
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/admin-doctors.js'
+    ) }}">
+</script>
+
+{% endblock %}

@@ -119,11 +119,21 @@ function renderInvoices() {
     ) {
 
         container.innerHTML = `
-            <div class="content-card">
+            <div
+                class="content-card">
 
-                <div class="text-center py-5 text-secondary">
+                <div
+                    class="text-center
+                           py-5
+                           text-secondary">
 
-                    <i class="bi bi-receipt fs-1 d-block mb-3"></i>
+                    <i
+                        class="bi
+                               bi-receipt
+                               fs-1
+                               d-block
+                               mb-3">
+                    </i>
 
                     Bạn chưa có hóa đơn.
 
@@ -140,76 +150,84 @@ function renderInvoices() {
     container.innerHTML =
         patientInvoices
             .map(
-                invoice =>
-                    `
+                invoice => {
 
-                    <div class="content-card mb-3">
+                    const isPaid =
+                        invoice.status === "Paid";
 
+
+                    return `
                         <div
-                            class="p-4">
+                            class="content-card mb-4">
 
                             <div
-                                class="d-flex flex-column flex-md-row justify-content-between gap-3">
-
-                                <div>
-
-                                    <div
-                                        class="d-flex align-items-center gap-2 mb-2">
-
-                                        <div
-                                            class="stat-icon icon-primary"
-                                            style="
-                                                width:42px;
-                                                height:42px;
-                                            ">
-
-                                            <i class="bi bi-receipt"></i>
-
-                                        </div>
-
-
-                                        <div>
-
-                                            <h5 class="fw-bold mb-0">
-
-                                                Hóa đơn
-                                                #${invoice.invoice_id}
-
-                                            </h5>
-
-
-                                            <div
-                                                class="small text-secondary">
-
-                                                Lịch khám
-                                                #${invoice.appointment_id}
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
+                                class="p-4
+                                       border-bottom">
 
                                 <div
-                                    class="text-md-end">
+                                    class="d-flex
+                                           justify-content-between
+                                           gap-3
+                                           flex-wrap">
 
-                                    <div
-                                        class="small text-secondary">
+                                    <div>
 
-                                        Tổng tiền
+                                        <h5
+                                            class="fw-bold mb-1">
+
+                                            Hóa đơn
+                                            #${invoice.invoice_id}
+
+                                        </h5>
+
+
+                                        <div
+                                            class="small
+                                                   text-secondary">
+
+                                            Lịch khám
+                                            #${invoice.appointment_id}
+
+                                        </div>
+
+
+                                        <div
+                                            class="small
+                                                   text-secondary
+                                                   mt-1">
+
+                                            ${formatDateTime(
+                                                invoice.appointment_time
+                                            )}
+
+                                        </div>
 
                                     </div>
 
 
-                                    <div
-                                        class="fs-4 fw-bold">
+                                    <div>
 
-                                        ${formatCurrency(
-                                            invoice.total_amount
-                                        )}
+                                        ${
+                                            isPaid
+                                                ? `
+                                                    <span
+                                                        class="badge
+                                                               text-bg-success">
+
+                                                        Đã thanh toán
+
+                                                    </span>
+                                                  `
+                                                : `
+                                                    <span
+                                                        class="badge
+                                                               text-bg-warning">
+
+                                                        Chưa thanh toán
+
+                                                    </span>
+                                                  `
+                                        }
 
                                     </div>
 
@@ -218,37 +236,227 @@ function renderInvoices() {
                             </div>
 
 
-                            <hr>
+                            <div class="p-4">
+
+                                <div
+                                    class="row g-3">
+
+                                    <div
+                                        class="col-12
+                                               col-md-4">
+
+                                        <div
+                                            class="text-secondary
+                                                   small">
+
+                                            Tiền khám
+
+                                        </div>
+
+                                        <div
+                                            class="fw-semibold
+                                                   mt-1">
+
+                                            ${formatCurrency(
+                                                invoice.consultation_fee
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div
+                                        class="col-12
+                                               col-md-4">
+
+                                        <div
+                                            class="text-secondary
+                                                   small">
+
+                                            Tiền thuốc
+
+                                        </div>
+
+                                        <div
+                                            class="fw-semibold
+                                                   mt-1">
+
+                                            ${formatCurrency(
+                                                invoice.medicine_total
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div
+                                        class="col-12
+                                               col-md-4">
+
+                                        <div
+                                            class="text-secondary
+                                                   small">
+
+                                            Tổng tiền
+
+                                        </div>
+
+                                        <div
+                                            class="fw-bold
+                                                   fs-5
+                                                   mt-1">
+
+                                            ${formatCurrency(
+                                                invoice.total_amount
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                ${
+                                    invoice.medicines &&
+                                    invoice.medicines.length
+                                        ? `
+                                            <hr>
+
+                                            <div>
+
+                                                <div
+                                                    class="fw-semibold
+                                                           mb-3">
+
+                                                    Chi tiết thuốc
+
+                                                </div>
+
+
+                                                <div
+                                                    class="table-responsive">
+
+                                                    <table
+                                                        class="table
+                                                               table-sm
+                                                               align-middle">
+
+                                                        <thead>
+
+                                                            <tr>
+
+                                                                <th>
+                                                                    Thuốc
+                                                                </th>
+
+                                                                <th>
+                                                                    SL
+                                                                </th>
+
+                                                                <th>
+                                                                    Đơn giá
+                                                                </th>
+
+                                                                <th>
+                                                                    Thành tiền
+                                                                </th>
+
+                                                            </tr>
+
+                                                        </thead>
+
+
+                                                        <tbody>
+
+                                                            ${
+                                                                invoice.medicines
+                                                                    .map(
+                                                                        medicine => `
+                                                                            <tr>
+
+                                                                                <td>
+
+                                                                                    ${escapeHtml(
+                                                                                        medicine.medicine_name
+                                                                                    )}
+
+                                                                                </td>
+
+                                                                                <td>
+
+                                                                                    ${medicine.quantity}
+
+                                                                                </td>
+
+                                                                                <td>
+
+                                                                                    ${formatCurrency(
+                                                                                        medicine.unit_price
+                                                                                    )}
+
+                                                                                </td>
+
+                                                                                <td>
+
+                                                                                    ${formatCurrency(
+                                                                                        medicine.line_total
+                                                                                    )}
+
+                                                                                </td>
+
+                                                                            </tr>
+                                                                        `
+                                                                    )
+                                                                    .join("")
+                                                            }
+
+                                                        </tbody>
+
+                                                    </table>
+
+                                                </div>
+
+                                            </div>
+                                          `
+                                        : ""
+                                }
+
+                            </div>
 
 
                             <div
-                                class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                                class="p-4
+                                       border-top
+                                       d-flex
+                                       justify-content-between
+                                       align-items-center
+                                       gap-3
+                                       flex-wrap">
 
                                 <div>
 
                                     ${
-                                        invoice.status === "Paid"
-                                            ? `
-                                                <span class="badge text-bg-success">
-
-                                                    Đã thanh toán
-
-                                                </span>
-                                              `
-                                            : `
-                                                <span class="badge text-bg-warning">
-
-                                                    Chưa thanh toán
-
-                                                </span>
-                                              `
-                                    }
-
-                                    ${
-                                        invoice.paid_at
+                                        isPaid
                                             ? `
                                                 <div
-                                                    class="small text-secondary mt-2">
+                                                    class="small
+                                                           text-secondary">
+
+                                                    Phương thức:
+                                                    ${
+                                                        invoice.payment_method ||
+                                                        "—"
+                                                    }
+
+                                                </div>
+
+
+                                                <div
+                                                    class="small
+                                                           text-secondary">
 
                                                     Thanh toán:
                                                     ${formatDateTime(
@@ -257,49 +465,67 @@ function renderInvoices() {
 
                                                 </div>
                                               `
-                                            : ""
-                                    }
-
-                                </div>
-
-
-                                <div>
-
-                                    ${
-                                        invoice.status === "Unpaid"
-                                            ? `
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-primary"
-                                                    data-pay-id="${invoice.invoice_id}">
-
-                                                    <i class="bi bi-credit-card me-2"></i>
-
-                                                    Thanh toán Online
-
-                                                </button>
-                                              `
                                             : `
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-light"
-                                                    disabled>
+                                                <div
+                                                    class="small
+                                                           text-secondary">
 
-                                                    Đã thanh toán
+                                                    Phương thức thanh toán:
 
-                                                </button>
+                                                </div>
+
+                                                <div
+                                                    class="fw-semibold">
+
+                                                    Online
+
+                                                </div>
                                               `
                                     }
 
                                 </div>
+
+
+                                ${
+                                    !isPaid
+                                        ? `
+                                            <button
+                                                type="button"
+                                                class="btn btn-primary"
+                                                data-pay-id="${invoice.invoice_id}">
+
+                                                <i
+                                                    class="bi
+                                                           bi-credit-card me-2">
+                                                </i>
+
+                                                Thanh toán Online
+
+                                            </button>
+                                          `
+                                        : `
+                                            <button
+                                                type="button"
+                                                class="btn btn-light"
+                                                disabled>
+
+                                                <i
+                                                    class="bi
+                                                           bi-check-circle me-2">
+                                                </i>
+
+                                                Đã thanh toán
+
+                                            </button>
+                                          `
+                                }
 
                             </div>
 
                         </div>
+                    `;
 
-                    </div>
-
-                    `
+                }
             )
             .join("");
 
@@ -330,7 +556,6 @@ function renderInvoices() {
 
 }
 
-
 async function payInvoice(
     invoiceId,
     button
@@ -349,8 +574,22 @@ async function payInvoice(
     }
 
 
-    button.disabled =
-        true;
+    button.disabled = true;
+
+
+    const originalText =
+        button.innerHTML;
+
+
+    button.innerHTML = `
+        <span
+            class="spinner-border
+                   spinner-border-sm
+                   me-2">
+        </span>
+
+        Đang thanh toán...
+    `;
 
 
     try {
@@ -362,9 +601,12 @@ async function payInvoice(
                     method: "PATCH",
 
                     body: JSON.stringify({
+
                         payment_method:
                             "Online",
+
                     }),
+
                 }
             );
 
@@ -377,13 +619,54 @@ async function payInvoice(
 
         if (!response.ok) {
 
+            let message =
+                "Thanh toán thất bại.";
+
+
+            if (
+                typeof data ===
+                "object"
+            ) {
+
+                if (
+                    Array.isArray(
+                        data.detail
+                    )
+                ) {
+
+                    message =
+                        data.detail
+                            .map(
+                                item =>
+                                    item.msg
+                            )
+                            .join(
+                                "; "
+                            );
+
+                }
+                else if (
+                    data.detail
+                ) {
+
+                    message =
+                        data.detail;
+
+                }
+
+            }
+
+
             showInvoiceAlert(
-                typeof data === "object"
-                    ? data.detail ||
-                      "Thanh toán thất bại."
-                    : "Thanh toán thất bại.",
+                message,
                 "danger"
             );
+
+
+            button.disabled = false;
+
+            button.innerHTML =
+                originalText;
 
             return;
 
@@ -411,31 +694,13 @@ async function payInvoice(
             "danger"
         );
 
+
+        button.disabled = false;
+
+        button.innerHTML =
+            originalText;
+
     }
-    finally {
-
-        button.disabled =
-            false;
-
-    }
-
-}
-
-
-function formatCurrency(
-    value
-) {
-
-    return new Intl.NumberFormat(
-        "vi-VN",
-        {
-            style: "currency",
-            currency: "VND",
-            maximumFractionDigits: 0,
-        }
-    ).format(
-        Number(value || 0)
-    );
 
 }
 

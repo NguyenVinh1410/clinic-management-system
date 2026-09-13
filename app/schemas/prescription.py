@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 
 class PrescriptionDetailCreate(BaseModel):
 
@@ -26,6 +26,13 @@ class PrescriptionCreate(BaseModel):
 class PrescriptionUpdate(BaseModel):
     details: list[PrescriptionDetailCreate] = Field(min_length=1)
 
+class PrescriptionMedicineResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    medicine_id: int
+    name: str
+    unit: str
+    price: float
+
 class PrescriptionDetailResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -37,6 +44,13 @@ class PrescriptionDetailResponse(BaseModel):
     quantity: int
     dosage: str
     usage_note: str | None
+
+    medicine: PrescriptionMedicineResponse
+
+    @computed_field
+    @property
+    def line_total(self) -> float:
+        return float(self.medicine.price * self.quantity)
 
 class PrescriptionResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)

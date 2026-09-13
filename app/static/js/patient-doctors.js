@@ -18,12 +18,17 @@ document.addEventListener(
 
         try {
 
-            await Promise.all([
-                loadPatientHeader(),
-                loadSpecialties(),
-                loadDoctors(),
-            ]);
+            /*
+             * Không chạy song song nữa.
+             *
+             * Phải load Specialty trước
+             * rồi mới render Doctor.
+             */
+            await loadCurrentUser();
 
+            await loadSpecialties();
+
+            await loadDoctors();
 
             setupDoctorFilters();
 
@@ -31,6 +36,7 @@ document.addEventListener(
         catch (error) {
 
             console.error(
+                "Lỗi Patient Doctors:",
                 error
             );
 
@@ -38,54 +44,6 @@ document.addEventListener(
 
     }
 );
-
-
-async function loadPatientHeader() {
-
-    const response =
-        await apiFetch(
-            "/api/patient/me"
-        );
-
-
-    const data =
-        await parseApiResponse(
-            response
-        );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            data.detail
-        );
-
-    }
-
-
-    const name =
-        data.full_name ||
-        data.username;
-
-
-    document.getElementById(
-        "sidebarUserName"
-    ).textContent =
-        name;
-
-
-    document.getElementById(
-        "topUserName"
-    ).textContent =
-        name;
-
-
-    document.getElementById(
-        "userAvatar"
-    ).textContent =
-        getInitials(name);
-
-}
 
 
 async function loadSpecialties() {
@@ -105,19 +63,41 @@ async function loadSpecialties() {
     if (!response.ok) {
 
         throw new Error(
-            data.detail
+            data.detail ||
+            "Không thể tải danh sách chuyên khoa."
         );
 
     }
 
 
-    allSpecialties = data;
+    allSpecialties =
+        Array.isArray(data)
+            ? data
+            : data.items || [];
 
 
     const select =
         document.getElementById(
             "specialtyFilter"
         );
+
+
+    if (!select) {
+
+        return;
+
+    }
+
+
+    /*
+     * Xóa option cũ để tránh duplicate
+     * nếu sau này reload.
+     */
+    select.innerHTML = `
+        <option value="">
+            Tất cả chuyên khoa
+        </option>
+    `;
 
 
     allSpecialties.forEach(
@@ -164,13 +144,18 @@ async function loadDoctors() {
     if (!response.ok) {
 
         throw new Error(
-            data.detail
+            data.detail ||
+            "Không thể tải danh sách bác sĩ."
         );
 
     }
 
 
-    allDoctors = data;
+    allDoctors =
+        Array.isArray(data)
+            ? data
+            : data.items || [];
+
 
     renderDoctors(
         allDoctors
@@ -189,6 +174,13 @@ function renderDoctors(
         );
 
 
+    if (!container) {
+
+        return;
+
+    }
+
+
     if (
         !doctors ||
         doctors.length === 0
@@ -199,9 +191,12 @@ function renderDoctors(
 
                 <div class="content-card">
 
-                    <div class="text-center py-5 text-secondary">
+                    <div
+                        class="text-center py-5 text-secondary">
 
-                        <i class="bi bi-person-x fs-1 d-block mb-3"></i>
+                        <i
+                            class="bi bi-person-x fs-1 d-block mb-3">
+                        </i>
 
                         Không tìm thấy bác sĩ.
 
@@ -229,12 +224,16 @@ function renderDoctors(
                             class="patient-doctor-card p-3">
 
                             <div
-                                class="d-flex align-items-start gap-3">
+                                class="d-flex
+                                       align-items-start
+                                       gap-3">
 
                                 <div
                                     class="doctor-avatar">
 
-                                    <i class="bi bi-person-fill"></i>
+                                    <i
+                                        class="bi bi-person-fill">
+                                    </i>
 
                                 </div>
 
@@ -253,19 +252,28 @@ function renderDoctors(
 
 
                                     <div
-                                        class="small text-primary fw-semibold mb-2">
+                                        class="small
+                                               text-primary
+                                               fw-semibold
+                                               mb-2">
 
-                                        ${getSpecialtyName(
-                                            doctor.specialty_id
+                                        ${escapeHtml(
+                                            getSpecialtyName(
+                                                doctor.specialty_id
+                                            )
                                         )}
 
                                     </div>
 
 
                                     <div
-                                        class="small text-secondary mb-1">
+                                        class="small
+                                               text-secondary
+                                               mb-1">
 
-                                        <i class="bi bi-mortarboard me-1"></i>
+                                        <i
+                                            class="bi bi-mortarboard me-1">
+                                        </i>
 
                                         ${escapeHtml(
                                             doctor.qualification ||
@@ -279,11 +287,15 @@ function renderDoctors(
                             </div>
 
 
-                            <div class="d-flex gap-2 mt-3">
+                            <div
+                                class="d-flex gap-2 mt-3">
 
                                 <a
                                     href="/patient/doctors/${doctor.user_id}"
-                                    class="btn btn-sm btn-light flex-grow-1">
+                                    class="btn
+                                           btn-sm
+                                           btn-light
+                                           flex-grow-1">
 
                                     Xem hồ sơ
 
@@ -292,7 +304,9 @@ function renderDoctors(
 
                                 <a
                                     href="/patient/book-appointment?doctor_id=${doctor.user_id}"
-                                    class="btn btn-sm btn-primary">
+                                    class="btn
+                                           btn-sm
+                                           btn-primary">
 
                                     Đặt lịch
 
@@ -325,6 +339,16 @@ function setupDoctorFilters() {
         );
 
 
+    if (
+        !searchInput ||
+        !specialtySelect
+    ) {
+
+        return;
+
+    }
+
+
     function applyFilter() {
 
         const keyword =
@@ -341,13 +365,18 @@ function setupDoctorFilters() {
             allDoctors.filter(
                 doctor => {
 
+                    const doctorName =
+                        String(
+                            doctor.full_name || ""
+                        )
+                        .toLowerCase();
+
+
                     const matchName =
                         !keyword ||
-                        doctor.full_name
-                            .toLowerCase()
-                            .includes(
-                                keyword
-                            );
+                        doctorName.includes(
+                            keyword
+                        );
 
 
                     const matchSpecialty =
@@ -355,7 +384,9 @@ function setupDoctorFilters() {
                         String(
                             doctor.specialty_id
                         ) ===
-                        specialtyId;
+                        String(
+                            specialtyId
+                        );
 
 
                     return (
@@ -395,8 +426,12 @@ function getSpecialtyName(
     const specialty =
         allSpecialties.find(
             item =>
-                item.specialty_id ===
-                specialtyId
+                Number(
+                    item.specialty_id
+                ) ===
+                Number(
+                    specialtyId
+                )
         );
 
 

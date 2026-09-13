@@ -24,7 +24,10 @@ class PrescriptionService:
 
         stmt = (
             select(Prescription)
-            .options(joinedload(Prescription.details))
+            .options(
+                joinedload(Prescription.details)
+                .joinedload(PrescriptionDetail.medicine)
+            )
             .where(Prescription.prescription_id == prescription_id)
         )
 
@@ -43,7 +46,10 @@ class PrescriptionService:
 
         stmt = (
             select(Prescription)
-            .options(joinedload(Prescription.details))
+            .options(
+                joinedload(Prescription.details)
+                .joinedload(PrescriptionDetail.medicine)
+            )
             .where(Prescription.record_id == record_id)
         )
 
@@ -86,7 +92,7 @@ class PrescriptionService:
                 selectinload(Prescription.details)
                 .selectinload(PrescriptionDetail.medicine),
 
-                selectinload(Prescription.record)
+                selectinload(Prescription.medical_record)
                 .selectinload(MedicalRecord.appointment)
             )
             .where(Appointment.patient_id == patient_id)

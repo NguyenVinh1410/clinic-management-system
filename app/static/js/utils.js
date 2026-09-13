@@ -127,54 +127,6 @@ async function loadCurrentUser() {
     }
 
 
-    const name =
-        data.full_name ||
-        data.username ||
-        "Người dùng";
-
-
-    const sidebarName =
-        document.getElementById(
-            "sidebarUserName"
-        );
-
-
-    if (sidebarName) {
-
-        sidebarName.textContent =
-            name;
-
-    }
-
-
-    const topName =
-        document.getElementById(
-            "topUserName"
-        );
-
-
-    if (topName) {
-
-        topName.textContent =
-            name;
-
-    }
-
-
-    const avatar =
-        document.getElementById(
-            "userAvatar"
-        );
-
-
-    if (avatar) {
-
-        avatar.textContent =
-            getInitials(name);
-
-    }
-
-
     return data;
 
 }
@@ -191,4 +143,16 @@ function formatCurrency(
         "vi-VN"
     ) + " đ";
 
+}
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}
+Đơn thuốc | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "patient/partials/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "patient/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Thông tin khám
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Đơn thuốc của tôi
+                </h2>
+
+                <p class="text-secondary">
+                    Xem các đơn thuốc đã được bác sĩ kê.
+                </p>
+
+            </div>
+
+
+            <div
+                id="prescriptionAlert"
+                class="alert d-none">
+            </div>
+
+
+            <div id="prescriptionList">
+
+                <div
+                    class="content-card">
+
+                    <div
+                        class="text-center
+                               py-5
+                               text-secondary">
+
+                        Đang tải...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/patient-prescriptions.js'
+    ) }}">
+</script>
+
+{% endblock %}
