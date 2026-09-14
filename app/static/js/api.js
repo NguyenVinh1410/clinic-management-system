@@ -12,6 +12,8 @@ function clearAccessToken(){
     sessionStorage.removeItem("access_token");
 
     sessionStorage.removeItem("current_user");
+
+    sessionStorage.removeItem("ai_chat_session_id");
 }
 
 function isAuthenticated(){

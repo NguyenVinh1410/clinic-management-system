@@ -77,13 +77,12 @@ class ChatService:
             .all()
         )
 
-
     @staticmethod
     def send_message(
-        db: Session,
-        session: ChatSession,
-        patient_id: int,
-        content: str,
+            db: Session,
+            session: ChatSession,
+            patient_id: int,
+            content: str,
     ) -> tuple[str, str]:
 
         content = content.strip()
@@ -98,6 +97,28 @@ class ChatService:
                 "Tin nhan khong duoc vuot qua 2000 ky tu"
             )
 
+        history_messages = (
+            ChatService.get_messages(
+                db=db,
+                session=session,
+            )
+        )
+
+        history = []
+
+        for item in history_messages[-10:]:
+            history.append(
+                {
+                    "role": (
+                        "user"
+                        if item.sender_type
+                           == ChatSenderType.PATIENT
+                        else "assistant"
+                    ),
+                    "content": item.content,
+                }
+            )
+
         patient_message = ChatMessage(
             session_id=session.session_id,
             sender_type=ChatSenderType.PATIENT,
@@ -108,10 +129,12 @@ class ChatService:
         db.add(patient_message)
         db.flush()
 
-        intent, reply = AIService.handle_message(
+        intent, reply = AIService.handle_llm_message(
             db=db,
             patient_id=patient_id,
+            chat_session_id=session.session_id,
             message=content,
+            history=history,
         )
 
         ai_message = ChatMessage(

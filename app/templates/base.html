@@ -32,14 +32,35 @@
         href="{{ url_for('static', path='css/style.css') }}"
     >
 
+    {% if request.url.path.startswith('/patient/') %}
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            path='css/ai-chat.css'
+        ) }}"
+    >
+
+    {% endif %}
+
     {% block head %}
     {% endblock %}
+
+
+
 </head>
 
 <body class="{% block page_class %}{% endblock %}">
 
     {% block body %}
     {% endblock %}
+
+    {% if request.url.path.startswith('/patient/') %}
+
+    {% include "patient/partials/ai-chat.html" %}
+
+    {% endif %}
 
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
@@ -62,6 +83,17 @@
     <script
         src="https://cdn.jsdelivr.net/npm/chart.js">
     </script>
+
+    {% if request.url.path.startswith('/patient/') %}
+
+    <script
+        src="{{ url_for(
+            'static',
+            path='js/ai-chat.js'
+        ) }}">
+    </script>
+
+    {% endif %}
 
     {% block scripts %}
     {% endblock %}

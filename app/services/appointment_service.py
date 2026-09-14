@@ -8,8 +8,8 @@ from app.models.enums import AppointmentStatus, AppointmentCreatedBy, UserRole, 
 from app.models.user import User, Doctor, Patient
 from app.models.working_schedule import WorkingSchedule
 from app.models.appointment import Appointment
-from app.routers import appointment
 from app.schemas.appointment import AppointmentCreate, AppointmentUpdate
+from app.models.chat import ChatSession
 
 
 class AppointmentService:
@@ -324,6 +324,83 @@ class AppointmentService:
         return appointment
 
     @staticmethod
+    def create_appointment_by_ai(
+            db: Session,
+            patient_id: int,
+            schedule_id: int,
+            appointment_time: datetime,
+            chat_session_id: int,
+    ) -> Appointment:
+
+        AppointmentService.validate_patient(
+            db=db,
+            patient_id=patient_id,
+        )
+
+        schedule = AppointmentService.validate_schedule(
+            db=db,
+            schedule_id=schedule_id,
+        )
+
+        doctor = db.get(
+            Doctor,
+            schedule.doctor_id,
+        )
+
+        if doctor is None:
+            raise NotFoundException(
+                "Khong tim thay bac si cua ca lam viec"
+            )
+
+        chat_session = db.get(
+            ChatSession,
+            chat_session_id,
+        )
+
+        if chat_session is None:
+            raise NotFoundException(
+                "Khong tim thay phien tro chuyen"
+            )
+
+        if chat_session.patient_id != patient_id:
+            raise BusinessException(
+                "Phien tro chuyen khong thuoc benh nhan hien tai"
+            )
+
+        if chat_session.appointment is not None:
+            raise ConflictException(
+                "Phien tro chuyen nay da duoc gan voi lich hen"
+            )
+
+        AppointmentService.validate_appointment_time(
+            schedule=schedule,
+            appointment_time=appointment_time,
+        )
+
+        AppointmentService.check_duplicate_appointment(
+            db=db,
+            schedule=schedule,
+            appointment_time=appointment_time,
+            patient_id=patient_id,
+        )
+
+        appointment = Appointment(
+            schedule_id=schedule_id,
+            patient_id=patient_id,
+            chat_session_id=chat_session_id,
+            appointment_time=appointment_time,
+            status=AppointmentStatus.PENDING,
+            created_by=AppointmentCreatedBy.AI,
+            note="Dat lich thong qua AI Assistant",
+        )
+
+        db.add(appointment)
+        db.commit()
+        db.refresh(appointment)
+
+        return appointment
+
+    @staticmethod
     def update_appointment(
             db: Session,
             appointment: Appointment,
@@ -429,6 +506,42 @@ class AppointmentService:
 
         if appointment.status == AppointmentStatus.CANCELLED:
             return appointment
+
+        appointment.status = AppointmentStatus.CANCELLED
+
+        db.commit()
+        db.refresh(appointment)
+
+        return appointment
+
+    @staticmethod
+    def cancel_appointment_by_ai(
+            db: Session,
+            appointment_id: int,
+            patient_id: int,
+    ) -> Appointment:
+
+        appointment = (
+            AppointmentService.get_appointment_by_id(
+                db=db,
+                appointment_id=appointment_id,
+            )
+        )
+
+        if appointment.patient_id != patient_id:
+            raise BusinessException(
+                "Lich hen nay khong thuoc benh nhan hien tai"
+            )
+
+        if appointment.status == AppointmentStatus.COMPLETED:
+            raise BusinessException(
+                "Khong the huy lich da hoan tat"
+            )
+
+        if appointment.status == AppointmentStatus.CANCELLED:
+            raise BusinessException(
+                "Lich hen nay da duoc huy"
+            )
 
         appointment.status = AppointmentStatus.CANCELLED
 

@@ -15,6 +15,16 @@ class Settings(BaseSettings):
     templates_dir: str = Field(default="app/templates", alias="TEMPLATES_DIR")
     static_dir: str = Field(default="app/static", alias="STATIC_DIR")
 
+    ollama_base_url: str = Field(
+        default="http://localhost:11434/v1",
+        alias="OLLAMA_BASE_URL",
+    )
+
+    ollama_model: str = Field(
+        default="qwen3:8b",
+        alias="OLLAMA_MODEL",
+    )
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

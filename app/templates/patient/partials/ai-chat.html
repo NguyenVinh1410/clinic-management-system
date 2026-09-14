@@ -1,0 +1,106 @@
+<div
+    id="aiChatWidget"
+    class="ai-chat-widget">
+
+    <button
+        type="button"
+        id="aiChatToggle"
+        class="ai-chat-toggle"
+        aria-label="Mở AI Assistant">
+
+        <i class="bi bi-robot"></i>
+
+    </button>
+
+
+    <div
+        id="aiChatBox"
+        class="ai-chat-box d-none">
+
+        <div class="ai-chat-header">
+
+            <div
+                class="d-flex align-items-center gap-2">
+
+                <div class="ai-chat-avatar">
+
+                    <i class="bi bi-robot"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="fw-semibold">
+                        AI Assistant
+                    </div>
+
+                    <div class="ai-chat-online">
+                        ● Đang hoạt động
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="aiChatClose"
+                class="btn btn-sm text-white border-0">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="aiChatMessages"
+            class="ai-chat-messages">
+
+            <div class="ai-message">
+
+                <div class="ai-message-avatar">
+                    <i class="bi bi-robot"></i>
+                </div>
+
+                <div class="ai-message-content">
+
+                    Xin chào! Tôi là AI Assistant.
+                    Tôi có thể hỗ trợ bạn tìm bác sĩ,
+                    xem lịch và đặt lịch khám.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <form
+            id="aiChatForm"
+            class="ai-chat-input-area">
+
+            <input
+                type="text"
+                id="aiChatInput"
+                class="form-control"
+                placeholder="Nhập tin nhắn..."
+                autocomplete="off"
+                maxlength="2000">
+
+            <button
+                type="submit"
+                id="aiChatSend"
+                class="btn btn-primary">
+
+                <i class="bi bi-send-fill"></i>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
