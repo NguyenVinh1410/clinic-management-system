@@ -1,10 +1,291 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}
+Quản lý hóa đơn | Admin | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "admin/partials/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "admin/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Quản lý tài chính
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Hóa đơn
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Theo dõi tình trạng hóa đơn và thanh toán.
+                </p>
+
+            </div>
+
+
+            <div
+                id="invoiceAlert"
+                class="alert d-none mb-4">
+            </div>
+
+
+            <div class="content-card">
+
+                <div class="p-4 border-bottom">
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-5">
+
+                            <input
+                                id="invoiceSearch"
+                                type="text"
+                                class="form-control"
+                                placeholder="Tìm bệnh nhân, bác sĩ...">
+
+                        </div>
+
+
+                        <div class="col-12 col-md-3">
+
+                            <select
+                                id="invoiceStatus"
+                                class="form-select">
+
+                                <option value="">
+                                    Tất cả trạng thái
+                                </option>
+
+                                <option value="Unpaid">
+                                    Chưa thanh toán
+                                </option>
+
+                                <option value="Paid">
+                                    Đã thanh toán
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-12 col-md-2">
+
+                            <button
+                                id="refreshInvoices"
+                                class="btn
+                                       btn-outline-primary
+                                       w-100">
+
+                                Làm mới
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table
+                        class="table
+                               align-middle
+                               mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Hóa đơn
+                                </th>
+
+                                <th>
+                                    Bệnh nhân
+                                </th>
+
+                                <th>
+                                    Bác sĩ
+                                </th>
+
+                                <th>
+                                    Ngày khám
+                                </th>
+
+                                <th>
+                                    Tổng tiền
+                                </th>
+
+                                <th>
+                                    Trạng thái
+                                </th>
+
+                                <th
+                                    class="text-end">
+
+                                    Thao tác
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="invoiceList">
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="text-center
+                                           py-5
+                                           text-secondary">
+
+                                    Đang tải...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- PAYMENT MODAL -->
+
+<div
+    class="modal fade"
+    id="paymentModal"
+    tabindex="-1">
+
+    <div
+        class="modal-dialog
+               modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title fw-bold">
+
+                    Thanh toán hóa đơn
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <input
+                    type="hidden"
+                    id="paymentInvoiceId">
+
+
+                <div
+                    class="mb-3">
+
+                    <label
+                        class="form-label fw-semibold">
+
+                        Phương thức thanh toán
+
+                    </label>
+
+
+                    <select
+                        id="paymentMethod"
+                        class="form-select">
+
+                        <option value="Cash">
+                            Tiền mặt
+                        </option>
+
+                        <option value="Online">
+                            Online
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    data-bs-dismiss="modal">
+
+                    Hủy
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="confirmPaymentButton"
+                    class="btn btn-primary">
+
+                    Xác nhận thanh toán
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/admin-invoices.js'
+    ) }}">
+</script>
+
+{% endblock %}

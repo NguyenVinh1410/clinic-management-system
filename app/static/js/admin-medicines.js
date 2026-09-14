@@ -768,16 +768,7 @@ async function discontinueMedicine(
             `/api/medicine/${medicineId}`,
             {
 
-                method: "PATCH",
-
-                body:
-                    JSON.stringify({
-
-                        status:
-                            "Discontinued",
-
-                    }),
-
+                method: "DELETE",
             }
         );
 

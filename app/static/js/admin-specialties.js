@@ -142,6 +142,19 @@ function renderSpecialties() {
                                 type="button"
                                 class="btn
                                        btn-sm
+                                       btn-outline-primary"
+                                data-edit-specialty="${specialty.specialty_id}">
+
+                                <i
+                                    class="bi bi-pencil">
+                                </i>
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn
+                                       btn-sm
                                        btn-outline-danger"
                                 data-delete-specialty="${specialty.specialty_id}">
 
@@ -158,6 +171,25 @@ function renderSpecialties() {
             )
             .join("");
 
+    document
+        .querySelectorAll(
+            "[data-edit-specialty]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () =>
+                        editSpecialty(
+                            Number(
+                                button.dataset.editSpecialty
+                            )
+                        )
+                );
+
+            }
+        );
 
     document
         .querySelectorAll(
@@ -287,6 +319,106 @@ async function createSpecialty(
 
 }
 
+async function editSpecialty(
+    specialtyId
+) {
+
+    const specialty =
+        specialties.find(
+            item =>
+                Number(
+                    item.specialty_id
+                ) ===
+                Number(
+                    specialtyId
+                )
+        );
+
+
+    if (!specialty) {
+
+        return;
+
+    }
+
+
+    const name =
+        window.prompt(
+            "Tên chuyên khoa:",
+            specialty.name
+        );
+
+
+    if (name === null) {
+
+        return;
+
+    }
+
+
+    const description =
+        window.prompt(
+            "Mô tả:",
+            specialty.description || ""
+        );
+
+
+    if (description === null) {
+
+        return;
+
+    }
+
+
+    const response =
+        await apiFetch(
+            `/api/specialty/${specialtyId}`,
+            {
+
+                method:
+                    "PATCH",
+
+                body:
+                    JSON.stringify({
+
+                        name:
+                            name.trim(),
+
+                        description:
+                            description.trim() ||
+                            null,
+
+                    }),
+
+            }
+        );
+
+
+    const data =
+        await parseApiResponse(
+            response
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.detail ||
+            "Không thể cập nhật chuyên khoa."
+        );
+
+    }
+
+
+    showSpecialtyAlert(
+        "Đã cập nhật chuyên khoa.",
+        "success"
+    );
+
+
+    await loadSpecialties();
+
+}
 
 async function deleteSpecialty(
     specialtyId
