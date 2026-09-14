@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.models.enums import UserRole, UserStatus, Gender
 
+
 class UserCreate(BaseModel):
     username: str = Field(
         min_length=1,
@@ -22,7 +23,7 @@ class UserCreate(BaseModel):
 
     email: str | None = Field(
         default=None,
-        max_length=100,
+        max_length=255,
     )
 
     phone: str | None = Field(
@@ -35,7 +36,7 @@ class UserCreate(BaseModel):
 
     role: UserRole
 
-    #Doctor
+    # Doctor
     specialty_id: int | None = Field(
         default=None,
         gt=0,
@@ -51,7 +52,7 @@ class UserCreate(BaseModel):
         max_length=5000,
     )
 
-    #patient
+    # Patient
     dob: date | None = None
 
     address: str | None = Field(
@@ -69,25 +70,19 @@ class UserCreate(BaseModel):
                 "Username phai co it nhat 6 ky tu"
             )
 
-        if not any(
-                char.isalpha()
-                for char in value
-        ):
+        if not any(char.isalpha() for char in value):
             raise ValueError(
                 "Username phai co it nhat 1 chu cai"
             )
 
-        if not any(
-                char.isdigit()
-                for char in value
-        ):
+        if not any(char.isdigit() for char in value):
             raise ValueError(
                 "Username phai co it nhat 1 chu so"
             )
 
         if not all(
-                char.isalnum() or char == "_"
-                for char in value
+            char.isalnum() or char == "_"
+            for char in value
         ):
             raise ValueError(
                 "Username chi duoc chua chu, so va dau gach duoi"
@@ -98,16 +93,12 @@ class UserCreate(BaseModel):
     @field_validator("password")
     @classmethod
     def validate_password(cls, value: str) -> str:
-
         if len(value) < 6:
             raise ValueError(
                 "Password phai co it nhat 6 ky tu"
             )
 
-        if not any(
-                char.isdigit()
-                for char in value
-        ):
+        if not any(char.isdigit() for char in value):
             raise ValueError(
                 "Password phai co it nhat 1 chu so"
             )
@@ -117,7 +108,6 @@ class UserCreate(BaseModel):
     @field_validator("email")
     @classmethod
     def validate_email(cls, value: str | None) -> str | None:
-
         if value is None:
             return None
 
@@ -127,20 +117,20 @@ class UserCreate(BaseModel):
             return None
 
         if "@" not in value:
-            raise ValueError(
-                "Email khong hop le"
-            )
+            raise ValueError("Email khong hop le")
 
         return value
 
     @field_validator("phone")
     @classmethod
     def validate_phone(cls, value: str | None) -> str | None:
-
         if value is None:
             return None
 
         value = value.strip()
+
+        if value == "":
+            return None
 
         if not value.isdigit():
             raise ValueError(
@@ -148,6 +138,117 @@ class UserCreate(BaseModel):
             )
 
         return value
+
+
+class UserUpdate(BaseModel):
+    full_name: str | None = Field(
+        default=None,
+        min_length=2,
+        max_length=100,
+    )
+
+    password: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=255,
+    )
+
+    email: str | None = Field(
+        default=None,
+        max_length=255,
+    )
+
+    phone: str | None = Field(
+        default=None,
+        min_length=9,
+        max_length=20,
+    )
+
+    gender: Gender | None = None
+
+    # Doctor
+    specialty_id: int | None = Field(
+        default=None,
+        gt=0,
+    )
+
+    qualification: str | None = Field(
+        default=None,
+        max_length=255,
+    )
+
+    bio: str | None = Field(
+        default=None,
+        max_length=5000,
+    )
+
+    # Patient
+    dob: date | None = None
+
+    address: str | None = Field(
+        default=None,
+        max_length=255,
+    )
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+
+        if value == "":
+            return None
+
+        if len(value) < 6:
+            raise ValueError(
+                "Password phai co it nhat 6 ky tu"
+            )
+
+        if not any(char.isdigit() for char in value):
+            raise ValueError(
+                "Password phai co it nhat 1 chu so"
+            )
+
+        return value
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+
+        value = value.strip()
+
+        if value == "":
+            return None
+
+        if "@" not in value:
+            raise ValueError("Email khong hop le")
+
+        return value
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+
+        value = value.strip()
+
+        if value == "":
+            return None
+
+        if not value.isdigit():
+            raise ValueError(
+                "SĐT chi duoc chua so"
+            )
+
+        return value
+
+
+class UserStatusUpdate(BaseModel):
+    status: UserStatus
+
 
 class UserResponse(BaseModel):
     model_config = ConfigDict(
@@ -163,4 +264,3 @@ class UserResponse(BaseModel):
 
     role: UserRole
     status: UserStatus
-

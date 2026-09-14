@@ -17,6 +17,7 @@ from app.routers import (
     medical_history,
     dashboard,
     web,
+    chat
 )
 
 app = FastAPI(title=settings.app_name, debug=settings.debug)
@@ -51,6 +52,7 @@ app.include_router(invoice.router)
 app.include_router(medical_history.router)
 app.include_router(medical_history.doctor_router)
 app.include_router(dashboard.router)
+app.include_router(chat.router)
 
 app.include_router(web.router)
 

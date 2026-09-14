@@ -1,0 +1,838 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quản lý người dùng | Admin | ClinicCare
+{% endblock %}
+
+
+{% block body %}
+
+<div class="app-shell">
+
+    {% include "admin/partials/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "admin/partials/topbar.html" %}
+
+
+        <section class="content-area">
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Quản lý nhân sự
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Quản lý người dùng
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Quản lý tài khoản bác sĩ, lễ tân và bệnh nhân.
+                </p>
+
+            </div>
+
+
+            <div
+                id="userAlert"
+                class="alert d-none mb-4">
+            </div>
+
+
+            <div class="content-card">
+
+                <div
+                    class="p-4 border-bottom
+                           d-flex
+                           justify-content-between
+                           align-items-center
+                           gap-3
+                           flex-wrap">
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+                            Danh sách người dùng
+                        </h5>
+
+                        <p class="text-secondary small mb-0">
+                            Admin có thể tạo, chỉnh sửa và khóa tài khoản.
+                        </p>
+
+                    </div>
+
+
+                    <div class="d-flex gap-2">
+
+                        <button
+                            type="button"
+                            id="refreshUsers"
+                            class="btn btn-outline-primary">
+
+                            <i class="bi bi-arrow-clockwise me-1"></i>
+
+                            Làm mới
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#userCreateModal">
+
+                            <i class="bi bi-person-plus me-1"></i>
+
+                            Thêm người dùng
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="p-4">
+
+                    <div class="row g-3 mb-4">
+
+                        <div class="col-12 col-lg-8">
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="userSearch"
+                                    class="form-control"
+                                    placeholder="Tìm theo họ tên, username hoặc số điện thoại...">
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12 col-lg-4">
+
+                            <select
+                                id="roleFilter"
+                                class="form-select">
+
+                                <option value="">
+                                    Tất cả vai trò
+                                </option>
+
+                                <option value="Doctor">
+                                    Bác sĩ
+                                </option>
+
+                                <option value="Receptionist">
+                                    Lễ tân
+                                </option>
+
+                                <option value="Patient">
+                                    Bệnh nhân
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-responsive">
+
+                        <table
+                            class="table
+                                   align-middle
+                                   mb-0">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Người dùng
+                                    </th>
+
+                                    <th>
+                                        Username
+                                    </th>
+
+                                    <th>
+                                        Vai trò
+                                    </th>
+
+                                    <th>
+                                        Số điện thoại
+                                    </th>
+
+                                    <th>
+                                        Trạng thái
+                                    </th>
+
+                                    <th class="text-end">
+                                        Thao tác
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="userList">
+
+                                <tr>
+
+                                    <td
+                                        colspan="6"
+                                        class="text-center py-5 text-secondary">
+
+                                        Đang tải...
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- CREATE MODAL -->
+
+<div
+    class="modal fade"
+    id="userCreateModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div
+        class="modal-dialog
+               modal-lg
+               modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h5 class="modal-title fw-bold">
+                        Thêm người dùng
+                    </h5>
+
+                    <div class="text-secondary small">
+                        Tạo tài khoản bác sĩ, lễ tân hoặc bệnh nhân.
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <form id="createUserForm">
+
+                <div class="modal-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Username
+                            </label>
+
+                            <input
+                                id="createUsername"
+                                class="form-control"
+                                required>
+
+                            <div class="form-text">
+                                Ít nhất 6 ký tự, có chữ và số.
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Mật khẩu
+                            </label>
+
+                            <input
+                                type="password"
+                                id="createPassword"
+                                class="form-control"
+                                required>
+
+                            <div class="form-text">
+                                Ít nhất 6 ký tự và có số.
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <label class="form-label fw-semibold">
+                                Họ và tên
+                            </label>
+
+                            <input
+                                id="createFullName"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="createEmail"
+                                class="form-control">
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Số điện thoại
+                            </label>
+
+                            <input
+                                id="createPhone"
+                                class="form-control">
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Giới tính
+                            </label>
+
+                            <select
+                                id="createGender"
+                                class="form-select">
+
+                                <option value="">
+                                    Không chọn
+                                </option>
+
+                                <option value="Male">
+                                    Nam
+                                </option>
+
+                                <option value="Female">
+                                    Nữ
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Vai trò
+                            </label>
+
+                            <select
+                                id="createRole"
+                                class="form-select"
+                                required>
+
+                                <option value="">
+                                    Chọn vai trò
+                                </option>
+
+                                <option value="Doctor">
+                                    Bác sĩ
+                                </option>
+
+                                <option value="Receptionist">
+                                    Lễ tân
+                                </option>
+
+                                <option value="Patient">
+                                    Bệnh nhân
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div
+                            class="col-12 d-none"
+                            id="createDoctorFields">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Chuyên khoa
+                                    </label>
+
+                                    <select
+                                        id="createSpecialty"
+                                        class="form-select">
+
+                                        <option value="">
+                                            Chọn chuyên khoa
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Bằng cấp / Chứng chỉ
+                                    </label>
+
+                                    <input
+                                        id="createQualification"
+                                        class="form-control">
+
+                                </div>
+
+
+                                <div class="col-12">
+
+                                    <label class="form-label fw-semibold">
+                                        Giới thiệu
+                                    </label>
+
+                                    <textarea
+                                        id="createBio"
+                                        class="form-control"
+                                        rows="3">
+                                    </textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="col-12 d-none"
+                            id="createPatientFields">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Ngày sinh
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="createDob"
+                                        class="form-control">
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Địa chỉ
+                                    </label>
+
+                                    <input
+                                        id="createAddress"
+                                        class="form-control">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+
+                        Hủy
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        <i class="bi bi-person-plus me-1"></i>
+
+                        Tạo tài khoản
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- EDIT MODAL -->
+
+<div
+    class="modal fade"
+    id="userEditModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div
+        class="modal-dialog
+               modal-lg
+               modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h5 class="modal-title fw-bold">
+                        Chỉnh sửa người dùng
+                    </h5>
+
+                    <div
+                        id="editUserSubtitle"
+                        class="text-secondary small">
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <form id="editUserForm">
+
+                <div class="modal-body">
+
+                    <input
+                        type="hidden"
+                        id="editUserId">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Username
+                            </label>
+
+                            <input
+                                id="editUsername"
+                                class="form-control"
+                                disabled>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Vai trò
+                            </label>
+
+                            <input
+                                id="editRole"
+                                class="form-control"
+                                disabled>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <label class="form-label fw-semibold">
+                                Họ và tên
+                            </label>
+
+                            <input
+                                id="editFullName"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="editEmail"
+                                class="form-control">
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Số điện thoại
+                            </label>
+
+                            <input
+                                id="editPhone"
+                                class="form-control">
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Giới tính
+                            </label>
+
+                            <select
+                                id="editGender"
+                                class="form-select">
+
+                                <option value="">
+                                    Không chọn
+                                </option>
+
+                                <option value="Male">
+                                    Nam
+                                </option>
+
+                                <option value="Female">
+                                    Nữ
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div
+                            class="col-12 d-none"
+                            id="editDoctorFields">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Chuyên khoa
+                                    </label>
+
+                                    <select
+                                        id="editSpecialty"
+                                        class="form-select">
+
+                                        <option value="">
+                                            Chọn chuyên khoa
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Bằng cấp / Chứng chỉ
+                                    </label>
+
+                                    <input
+                                        id="editQualification"
+                                        class="form-control">
+
+                                </div>
+
+
+                                <div class="col-12">
+
+                                    <label class="form-label fw-semibold">
+                                        Giới thiệu
+                                    </label>
+
+                                    <textarea
+                                        id="editBio"
+                                        class="form-control"
+                                        rows="3">
+                                    </textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="col-12 d-none"
+                            id="editPatientFields">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Ngày sinh
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="editDob"
+                                        class="form-control">
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Địa chỉ
+                                    </label>
+
+                                    <input
+                                        id="editAddress"
+                                        class="form-control">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <label class="form-label fw-semibold">
+                                Mật khẩu mới
+                            </label>
+
+                            <input
+                                type="password"
+                                id="editPassword"
+                                class="form-control">
+
+                            <div class="form-text">
+                                Để trống nếu không đổi mật khẩu.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+
+                        Hủy
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+
+                        Lưu thay đổi
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        path='js/admin-users.js'
+    ) }}">
+</script>
+
+{% endblock %}

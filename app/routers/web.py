@@ -203,6 +203,19 @@ def admin_dashboard(request: Request):
     )
 
 @router.get(
+    "/admin/users",
+    include_in_schema=False,
+)
+def admin_users(
+    request: Request,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/users.html",
+        context={},
+    )
+
+@router.get(
     "/admin/working-schedules",
     include_in_schema=False,
 )
