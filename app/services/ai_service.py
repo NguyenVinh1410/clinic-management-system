@@ -1,19 +1,23 @@
 import re
+from datetime import datetime, date, time, timedelta
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
 from app.models.enums import AppointmentStatus, UserStatus, WorkingScheduleStatus
 from app.models.user import Doctor
+from app.models.appointment import Appointment
 from app.models.specialty import Specialty
 from app.models.working_schedule import WorkingSchedule
 from app.services.appointment_service import AppointmentService
 
 
 class AIIntent:
+    GREETING = "greeting"
     FIND_DOCTOR = "find_doctor"
     FIND_SPECIALTY = "find_specialty"
     WORKING_HOURS = "working_hours"
+    FIND_AVAILABLE_SLOTS = "find_available_slots"
     MY_APPOINTMENTS = "my_appointments"
     PROCESS_GUIDANCE = "process_guidance"
     UNKNOWN = "unknown"
@@ -104,6 +108,18 @@ class AIService:
         text = AIService.normalize_text(message)
 
         if any(
+                keyword in text
+                for keyword in [
+                    "xin chao",
+                    "chao",
+                    "hello",
+                    "hi",
+                    "alo",
+                ]
+        ):
+            return AIIntent.GREETING
+
+        if any(
             keyword in text
             for keyword in [
                 "xem lich cua toi",
@@ -114,6 +130,20 @@ class AIService:
             ]
         ):
             return AIIntent.MY_APPOINTMENTS
+
+        if any(
+                keyword in text
+                for keyword in [
+                    "gio trong",
+                    "khung gio trong",
+                    "lich trong",
+                    "con gio nao",
+                    "con khung gio nao",
+                    "gio nao con trong",
+                    "dat lich vao gio nao",
+                ]
+        ):
+            return AIIntent.FIND_AVAILABLE_SLOTS
 
         if any(
             keyword in text
@@ -163,24 +193,51 @@ class AIService:
 
         return AIIntent.UNKNOWN
 
-
     @staticmethod
     def handle_message(
-        db: Session,
-        patient_id: int,
-        message: str,
+            db: Session,
+            patient_id: int,
+            message: str,
     ) -> tuple[str, str]:
+
+        if AIService.is_gibberish(message):
+            return (
+                AIIntent.UNKNOWN,
+                AIService.unknown_reply(),
+            )
 
         intent = AIService.detect_intent(message)
 
-        if intent == AIIntent.FIND_SPECIALTY:
+        if intent == AIIntent.GREETING:
+
+            reply = (
+                "Xin chào! Tôi là AI Assistant của phòng khám. "
+                "Tôi có thể hỗ trợ bạn tìm bác sĩ, "
+                "xem chuyên khoa, lịch làm việc, "
+                "lịch khám và quy trình khám."
+            )
+
+        elif intent == AIIntent.FIND_SPECIALTY:
             reply = AIService.find_specialties(db)
 
         elif intent == AIIntent.FIND_DOCTOR:
-            reply = AIService.find_doctors(db, message)
+            reply = AIService.find_doctors(
+                db,
+                message,
+            )
+
+        elif intent == AIIntent.FIND_AVAILABLE_SLOTS:
+
+            reply = AIService.find_available_slots(
+                db=db,
+                message=message,
+            )
 
         elif intent == AIIntent.WORKING_HOURS:
-            reply = AIService.find_working_hours(db, message)
+            reply = AIService.find_working_hours(
+                db,
+                message,
+            )
 
         elif intent == AIIntent.MY_APPOINTMENTS:
             reply = AIService.get_my_appointments(
@@ -196,7 +253,6 @@ class AIService:
             reply = AIService.unknown_reply()
 
         return intent, reply
-
 
     @staticmethod
     def find_specialties(
@@ -301,6 +357,44 @@ class AIService:
             + "\n".join(lines)
         )
 
+    @staticmethod
+    def find_doctor_from_message(
+            db: Session,
+            message: str,
+    ) -> Doctor | None:
+
+        text = AIService.normalize_text(
+            message
+        )
+
+        stmt = (
+            select(Doctor)
+            .options(
+                joinedload(
+                    Doctor.specialty
+                )
+            )
+            .where(
+                Doctor.status == UserStatus.ACTIVE
+            )
+        )
+
+        doctors = (
+            db.execute(stmt)
+            .scalars()
+            .all()
+        )
+
+        for doctor in doctors:
+
+            doctor_name = AIService.normalize_text(
+                doctor.full_name
+            )
+
+            if doctor_name in text:
+                return doctor
+
+        return None
 
     @staticmethod
     def find_working_hours(
@@ -385,6 +479,67 @@ class AIService:
             + "\n".join(lines)
         )
 
+    @staticmethod
+    def find_available_slots(
+            db: Session,
+            message: str,
+    ) -> str:
+
+        doctor = (
+            AIService.find_doctor_from_message(
+                db,
+                message,
+            )
+        )
+
+        if doctor is None:
+            return (
+                "Bạn vui lòng cho tôi biết tên bác sĩ "
+                "mà bạn muốn xem lịch."
+            )
+
+        work_date = (
+            AIService.extract_date(
+                message
+            )
+        )
+
+        if work_date is None:
+            return (
+                "Bạn vui lòng cho tôi biết ngày muốn khám. "
+                "Ví dụ: hôm nay, ngày mai hoặc 17/09."
+            )
+
+        available_slots = (
+            AIService.get_available_slots(
+                db=db,
+                doctor_id=doctor.user_id,
+                work_date=work_date,
+            )
+        )
+
+        if work_date < date.today():
+            return (
+                "Ngày khám không được ở trong quá khứ. "
+                "Bạn vui lòng chọn ngày khác."
+            )
+
+        if not available_slots:
+            return (
+                f"Bác sĩ {doctor.full_name} "
+                f"không còn khung giờ trống "
+                f"ngày {work_date.strftime('%d/%m/%Y')}."
+            )
+
+        return (
+                f"Bác sĩ {doctor.full_name} "
+                f"còn các khung giờ trống ngày "
+                f"{work_date.strftime('%d/%m/%Y')}:\n"
+                + "\n".join(
+            f"- {slot}"
+            for slot in available_slots
+        )
+        )
 
     @staticmethod
     def get_my_appointments(
@@ -446,13 +601,183 @@ class AIService:
             "6. Xem thông tin hóa đơn và thanh toán."
         )
 
+    @staticmethod
+    def is_gibberish(message: str) -> bool:
+        text = AIService.normalize_text(message)
+
+        if not text:
+            return True
+
+        letters = [
+            char
+            for char in text
+            if char.isalpha()
+        ]
+
+        if len(letters) < 3:
+            return False
+
+        vowel_count = sum(
+            1
+            for char in letters
+            if char in "aeiouy"
+        )
+
+        vowel_ratio = vowel_count / len(letters)
+
+        return (
+                len(letters) >= 8
+                and vowel_ratio < 0.15
+        )
 
     @staticmethod
     def unknown_reply() -> str:
         return (
-            "Tôi có thể hỗ trợ bạn các việc sau: "
-            "tìm bác sĩ, xem chuyên khoa, "
-            "xem lịch làm việc, xem lịch khám "
-            "và hướng dẫn quy trình khám. "
-            "Tôi không hỗ trợ chẩn đoán bệnh hoặc kê đơn."
+            "Xin lỗi, tôi chưa hiểu yêu cầu của bạn. "
+            "Bạn có thể hỏi tôi về:\n"
+            "- Tìm bác sĩ\n"
+            "- Xem chuyên khoa\n"
+            "- Xem lịch làm việc\n"
+            "- Xem lịch khám của bạn\n"
+            "- Hướng dẫn quy trình khám\n\n"
+            "Tôi không hỗ trợ chẩn đoán bệnh hoặc kê đơn thuốc."
         )
+
+    @staticmethod
+    def get_available_slots(
+            db: Session,
+            doctor_id: int,
+            work_date: date,
+    ) -> list[str]:
+
+        schedule_stmt = (
+            select(WorkingSchedule)
+            .where(
+                WorkingSchedule.doctor_id == doctor_id,
+                WorkingSchedule.work_date == work_date,
+                WorkingSchedule.status
+                == WorkingScheduleStatus.ACTIVE,
+            )
+            .order_by(
+                WorkingSchedule.start_time
+            )
+        )
+
+        schedules = (
+            db.execute(schedule_stmt)
+            .scalars()
+            .all()
+        )
+
+        if not schedules:
+            return []
+
+        appointment_stmt = (
+            select(Appointment)
+            .join(
+                WorkingSchedule,
+                Appointment.schedule_id
+                == WorkingSchedule.schedule_id,
+            )
+            .where(
+                WorkingSchedule.doctor_id == doctor_id,
+                WorkingSchedule.work_date == work_date,
+                Appointment.status.in_(
+                    [
+                        AppointmentStatus.PENDING,
+                        AppointmentStatus.CONFIRMED,
+                    ]
+                ),
+            )
+        )
+
+        appointments = (
+            db.execute(appointment_stmt)
+            .scalars()
+            .all()
+        )
+
+        booked_times = {
+            appointment.appointment_time
+            for appointment in appointments
+        }
+
+        available_slots = []
+
+        for schedule in schedules:
+
+            current_time = schedule.start_time
+
+            while True:
+
+                slot_end = (
+                        datetime.combine(
+                            work_date,
+                            current_time,
+                        )
+                        + timedelta(minutes=30)
+                ).time()
+
+                if slot_end > schedule.end_time:
+                    break
+
+                slot_datetime = datetime.combine(
+                    work_date,
+                    current_time,
+                )
+
+                if (
+                        slot_datetime
+                        not in booked_times
+                ):
+                    available_slots.append(
+                        current_time.strftime("%H:%M")
+                    )
+
+                current_time = (
+                        datetime.combine(
+                            work_date,
+                            current_time,
+                        )
+                        + timedelta(minutes=30)
+                ).time()
+
+        return available_slots
+
+    @staticmethod
+    def extract_date(
+            message: str,
+    ) -> date | None:
+
+        text = AIService.normalize_text(
+            message
+        )
+
+        today = date.today()
+
+        if "hom nay" in text:
+            return today
+
+        if "ngay mai" in text:
+            return today + timedelta(days=1)
+
+        match = re.search(
+            r"(\d{1,2})[\/\-](\d{1,2})",
+            text,
+        )
+
+        if match:
+
+            day = int(match.group(1))
+            month = int(match.group(2))
+
+            try:
+                return date(
+                    today.year,
+                    month,
+                    day,
+                )
+            except ValueError:
+                return None
+
+        return None

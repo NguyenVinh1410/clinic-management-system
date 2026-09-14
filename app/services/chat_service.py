@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.core.exceptions import NotFoundException
+from app.core.exceptions import NotFoundException, BusinessException
 from app.models.chat import ChatMessage, ChatSession
 from app.models.enums import ChatSenderType
 from app.services.ai_service import AIService
@@ -89,12 +89,12 @@ class ChatService:
         content = content.strip()
 
         if not content:
-            raise ValueError(
+            raise BusinessException(
                 "Noi dung tin nhan khong duoc de trong"
             )
 
         if len(content) > 2000:
-            raise ValueError(
+            raise BusinessException(
                 "Tin nhan khong duoc vuot qua 2000 ky tu"
             )
 
