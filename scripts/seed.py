@@ -1,7 +1,10 @@
+from __future__ import annotations
+
+import argparse
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from app.core.security import hash_password
@@ -36,64 +39,104 @@ from app.models.enums import (
     WorkingScheduleStatus,
 )
 
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+CONSULTATION_FEE = Decimal("100000.00")
+
+
 PASSWORDS = {
     "admin": "Admin123",
-    "receptionist": "Reception123",
+    "admin02": "Admin123",
+
+    "receptionist01": "Reception123",
+    "receptionist02": "Reception123",
+
     "doctor01": "Doctor123",
     "doctor02": "Doctor123",
     "doctor03": "Doctor123",
+    "doctor04": "Doctor123",
+    "doctor05": "Doctor123",
+    "doctor06": "Doctor123",
+
     "patient01": "Patient123",
     "patient02": "Patient123",
     "patient03": "Patient123",
+    "patient04": "Patient123",
+    "patient05": "Patient123",
+    "patient06": "Patient123",
+    "patient07": "Patient123",
+    "patient08": "Patient123",
+    "patient09": "Patient123",
+    "patient10": "Patient123",
+    "patient11": "Patient123",
+    "patient12": "Patient123",
 }
 
+
+# ============================================================
+# BASIC HELPERS
+# ============================================================
+
 def get_user(
-        db: Session,
-        username: str,
+    db: Session,
+    username: str,
 ) -> User | None:
+
     return db.execute(
-        select(User)
-        .where(User.username == username)
+        select(User).where(
+            User.username == username
+        )
     ).scalar_one_or_none()
 
+
 def get_or_create_specialty(
-        db: Session,
-        *,
-        name: str,
-        description: str,
-) -> Specialty:
+    db: Session,
+    *,
+    name: str,
+    description: str,
+) -> tuple[Specialty, bool]:
+
     specialty = db.execute(
-        select(Specialty)
-        .where(Specialty.name == name)
+        select(Specialty).where(
+            Specialty.name == name
+        )
     ).scalar_one_or_none()
 
     if specialty is not None:
-        return specialty
+        return specialty, False
 
-    specialty = Specialty(name=name, description=description)
+    specialty = Specialty(
+        name=name,
+        description=description,
+    )
 
     db.add(specialty)
     db.flush()
 
-    return specialty
+    return specialty, True
+
 
 def get_or_create_medicine(
-        db: Session,
-        *,
-        name: str,
-        unit: str,
-        price: Decimal,
-        stock_qty: int,
-        status: MedicineStatus = MedicineStatus.ACTIVE,
-) -> Medicine:
+    db: Session,
+    *,
+    name: str,
+    unit: str,
+    price: Decimal,
+    stock_qty: int,
+    status: MedicineStatus = MedicineStatus.ACTIVE,
+) -> tuple[Medicine, bool]:
 
     medicine = db.execute(
-        select(Medicine)
-        .where(Medicine.name == name)
+        select(Medicine).where(
+            Medicine.name == name
+        )
     ).scalar_one_or_none()
 
     if medicine is not None:
-        return medicine
+        return medicine, False
 
     medicine = Medicine(
         name=name,
@@ -106,28 +149,49 @@ def get_or_create_medicine(
     db.add(medicine)
     db.flush()
 
-    return medicine
+    return medicine, True
 
-def get_or_create_admin(db: Session) -> Admin:
 
-    existing = get_user(db, "admin")
+# ============================================================
+# USERS
+# ============================================================
+
+def get_or_create_admin(
+    db: Session,
+    *,
+    username: str,
+    full_name: str,
+    email: str,
+    phone: str,
+    gender: Gender,
+    status: UserStatus = UserStatus.ACTIVE,
+) -> Admin:
+
+    existing = get_user(
+        db,
+        username,
+    )
 
     if existing is not None:
         if not isinstance(existing, Admin):
-            raise RuntimeError("Username 'admin' dang duoc dung cho user khong phai admin")
+            raise RuntimeError(
+                f"Username '{username}' khong phai Admin"
+            )
 
         return existing
 
     admin = Admin(
-        username="admin",
-        password=hash_password(PASSWORDS["admin"]),
-        full_name="System Administrator",
-        email="admin@clinic.local",
-        phone="0900000001",
-        gender=Gender.MALE,
+        username=username,
+        password=hash_password(
+            PASSWORDS[username]
+        ),
+        full_name=full_name,
+        email=email,
+        phone=phone,
+        gender=gender,
         role=UserRole.ADMIN,
-        status=UserStatus.ACTIVE,
-        type="admin"
+        status=status,
+        type="admin",
     )
 
     db.add(admin)
@@ -135,28 +199,42 @@ def get_or_create_admin(db: Session) -> Admin:
 
     return admin
 
-def get_or_create_receptionist(db: Session) -> Receptionist:
 
-    existing = get_user(db, "receptionist01")
+def get_or_create_receptionist(
+    db: Session,
+    *,
+    username: str,
+    full_name: str,
+    email: str,
+    phone: str,
+    gender: Gender,
+    status: UserStatus = UserStatus.ACTIVE,
+) -> Receptionist:
+
+    existing = get_user(
+        db,
+        username,
+    )
 
     if existing is not None:
-
         if not isinstance(existing, Receptionist):
             raise RuntimeError(
-                "Username 'receptionist01' khong phai Receptionist"
+                f"Username '{username}' khong phai Receptionist"
             )
 
         return existing
 
     receptionist = Receptionist(
-        username="receptionist01",
-        password=hash_password(PASSWORDS["receptionist"]),
-        full_name="Le Thi Thu Ha",
-        email="receptionist@clinic.local",
-        phone="0900000002",
-        gender=Gender.FEMALE,
+        username=username,
+        password=hash_password(
+            PASSWORDS[username]
+        ),
+        full_name=full_name,
+        email=email,
+        phone=phone,
+        gender=gender,
         role=UserRole.RECEPTIONIST,
-        status=UserStatus.ACTIVE,
+        status=status,
         type="receptionist",
     )
 
@@ -164,6 +242,7 @@ def get_or_create_receptionist(db: Session) -> Receptionist:
     db.flush()
 
     return receptionist
+
 
 def get_or_create_doctor(
     db: Session,
@@ -176,12 +255,15 @@ def get_or_create_doctor(
     specialty_id: int,
     qualification: str,
     bio: str,
+    status: UserStatus = UserStatus.ACTIVE,
 ) -> Doctor:
 
-    existing = get_user(db, username)
+    existing = get_user(
+        db,
+        username,
+    )
 
     if existing is not None:
-
         if not isinstance(existing, Doctor):
             raise RuntimeError(
                 f"Username '{username}' khong phai Doctor"
@@ -191,13 +273,15 @@ def get_or_create_doctor(
 
     doctor = Doctor(
         username=username,
-        password=hash_password(PASSWORDS[username]),
+        password=hash_password(
+            PASSWORDS[username]
+        ),
         full_name=full_name,
         email=email,
         phone=phone,
         gender=gender,
         role=UserRole.DOCTOR,
-        status=UserStatus.ACTIVE,
+        status=status,
         type="doctor",
         specialty_id=specialty_id,
         qualification=qualification,
@@ -209,6 +293,7 @@ def get_or_create_doctor(
 
     return doctor
 
+
 def get_or_create_patient(
     db: Session,
     *,
@@ -219,12 +304,15 @@ def get_or_create_patient(
     gender: Gender,
     dob: date,
     address: str,
+    status: UserStatus = UserStatus.ACTIVE,
 ) -> Patient:
 
-    existing = get_user(db, username)
+    existing = get_user(
+        db,
+        username,
+    )
 
     if existing is not None:
-
         if not isinstance(existing, Patient):
             raise RuntimeError(
                 f"Username '{username}' khong phai Patient"
@@ -234,13 +322,15 @@ def get_or_create_patient(
 
     patient = Patient(
         username=username,
-        password=hash_password(PASSWORDS[username]),
+        password=hash_password(
+            PASSWORDS[username]
+        ),
         full_name=full_name,
         email=email,
         phone=phone,
         gender=gender,
         role=UserRole.PATIENT,
-        status=UserStatus.ACTIVE,
+        status=status,
         type="patient",
         dob=dob,
         address=address,
@@ -250,6 +340,11 @@ def get_or_create_patient(
     db.flush()
 
     return patient
+
+
+# ============================================================
+# WORKING SCHEDULE
+# ============================================================
 
 def get_or_create_schedule(
     db: Session,
@@ -287,6 +382,10 @@ def get_or_create_schedule(
     return schedule
 
 
+# ============================================================
+# APPOINTMENT
+# ============================================================
+
 def get_or_create_appointment(
     db: Session,
     *,
@@ -295,7 +394,7 @@ def get_or_create_appointment(
     appointment_time: datetime,
     status: AppointmentStatus,
     created_by: AppointmentCreatedBy,
-    note: str | None,
+    note: str | None = None,
 ) -> Appointment:
 
     appointment = db.execute(
@@ -323,6 +422,10 @@ def get_or_create_appointment(
 
     return appointment
 
+
+# ============================================================
+# MEDICAL RECORD
+# ============================================================
 
 def get_or_create_record(
     db: Session,
@@ -357,12 +460,16 @@ def get_or_create_record(
     return record
 
 
+# ============================================================
+# PRESCRIPTION
+# ============================================================
+
 def get_or_create_prescription(
     db: Session,
     *,
     record_id: int,
     details: list[dict],
-) -> Prescription:
+) -> tuple[Prescription, bool]:
 
     prescription = db.execute(
         select(Prescription).where(
@@ -371,7 +478,7 @@ def get_or_create_prescription(
     ).scalar_one_or_none()
 
     if prescription is not None:
-        return prescription
+        return prescription, False
 
     prescription = Prescription(
         record_id=record_id
@@ -394,7 +501,26 @@ def get_or_create_prescription(
 
     db.flush()
 
-    return prescription
+    return prescription, True
+
+
+# ============================================================
+# INVOICE
+# ============================================================
+
+def calculate_medicine_total(
+    details: list[dict],
+) -> Decimal:
+
+    total = Decimal("0.00")
+
+    for item in details:
+        total += (
+            item["price"]
+            * item["quantity"]
+        )
+
+    return total
 
 
 def get_or_create_invoice(
@@ -405,7 +531,7 @@ def get_or_create_invoice(
     status: InvoiceStatus,
     payment_method: PaymentMethod | None,
     paid_at: datetime | None,
-) -> Invoice:
+) -> tuple[Invoice, bool]:
 
     invoice = db.execute(
         select(Invoice).where(
@@ -414,7 +540,7 @@ def get_or_create_invoice(
     ).scalar_one_or_none()
 
     if invoice is not None:
-        return invoice
+        return invoice, False
 
     invoice = Invoice(
         appointment_id=appointment_id,
@@ -427,8 +553,22 @@ def get_or_create_invoice(
     db.add(invoice)
     db.flush()
 
-    return invoice
+    return invoice, True
 
+
+def decrease_stock(
+    details: list[dict],
+) -> None:
+
+    for item in details:
+        medicine = item["medicine"]
+
+        medicine.stock_qty -= item["quantity"]
+
+
+# ============================================================
+# CHAT
+# ============================================================
 
 def get_or_create_chat_session(
     db: Session,
@@ -437,211 +577,676 @@ def get_or_create_chat_session(
     appointment_id: int,
 ) -> ChatSession:
 
-    session = (
-        db.execute(
-            select(ChatSession)
-            .where(ChatSession.patient_id == patient_id)
-            .order_by(ChatSession.session_id)
-        )
-        .scalars()
-        .first()
-    )
-
-    if session is None:
-
-        session = ChatSession(
-            patient_id=patient_id
-        )
-
-        db.add(session)
-        db.flush()
-
     appointment = db.get(
         Appointment,
-        appointment_id
+        appointment_id,
     )
 
-    if (
-        appointment is not None
-        and appointment.chat_session_id is None
-    ):
-        appointment.chat_session_id = session.session_id
-        db.flush()
+    if appointment is None:
+        raise RuntimeError(
+            "Appointment khong ton tai"
+        )
+
+    if appointment.chat_session_id is not None:
+        session = db.get(
+            ChatSession,
+            appointment.chat_session_id,
+        )
+
+        if session is not None:
+            return session
+
+    session = ChatSession(
+        patient_id=patient_id
+    )
+
+    db.add(session)
+    db.flush()
+
+    appointment.chat_session_id = (
+        session.session_id
+    )
+
+    db.flush()
 
     return session
 
-def seed_users_and_catalog(db: Session) -> dict:
 
-    cardio = get_or_create_specialty(
-        db,
-        name="Tim mach",
-        description="Kham va dieu tri cac benh ly tim mach.",
-    )
-
-    pediatrics = get_or_create_specialty(
-        db,
-        name="Nhi khoa",
-        description="Kham va dieu tri benh ly tre em.",
-    )
-
-    dermatology = get_or_create_specialty(
-        db,
-        name="Da lieu",
-        description="Kham va dieu tri cac benh ly ve da.",
-    )
-
-    admin = get_or_create_admin(db)
-    receptionist = get_or_create_receptionist(db)
-
-    doctor01 = get_or_create_doctor(
-        db,
-        username="doctor01",
-        full_name="Nguyen Van Minh",
-        email="doctor01@clinic.local",
-        phone="0900000011",
-        gender=Gender.MALE,
-        specialty_id=cardio.specialty_id,
-        qualification="BS.CKII Tim mach",
-        bio="Bac si tim mach, hon 10 nam kinh nghiem.",
-    )
-
-    doctor02 = get_or_create_doctor(
-        db,
-        username="doctor02",
-        full_name="Tran Thi Lan",
-        email="doctor02@clinic.local",
-        phone="0900000012",
-        gender=Gender.FEMALE,
-        specialty_id=pediatrics.specialty_id,
-        qualification="BS.CKII Nhi khoa",
-        bio="Bac si nhi khoa.",
-    )
-
-    doctor03 = get_or_create_doctor(
-        db,
-        username="doctor03",
-        full_name="Pham Quoc Huy",
-        email="doctor03@clinic.local",
-        phone="0900000013",
-        gender=Gender.MALE,
-        specialty_id=dermatology.specialty_id,
-        qualification="BS Da lieu",
-        bio="Bac si chuyen khoa da lieu.",
-    )
-
-    patient01 = get_or_create_patient(
-        db,
-        username="patient01",
-        full_name="Nguyen Van A",
-        email="patient01@clinic.local",
-        phone="0911111111",
-        gender=Gender.MALE,
-        dob=date(1998, 5, 12),
-        address="Quan 1, TP.HCM",
-    )
-
-    patient02 = get_or_create_patient(
-        db,
-        username="patient02",
-        full_name="Le Thi B",
-        email="patient02@clinic.local",
-        phone="0911111112",
-        gender=Gender.FEMALE,
-        dob=date(1995, 8, 20),
-        address="Quan 3, TP.HCM",
-    )
-
-    patient03 = get_or_create_patient(
-        db,
-        username="patient03",
-        full_name="Pham Van C",
-        email="patient03@clinic.local",
-        phone="0911111113",
-        gender=Gender.MALE,
-        dob=date(2000, 2, 10),
-        address="Thu Duc, TP.HCM",
-    )
-
-    paracetamol = get_or_create_medicine(
-        db,
-        name="Paracetamol 500mg",
-        unit="Vien",
-        price=Decimal("2000.00"),
-        stock_qty=100,
-    )
-
-    amoxicillin = get_or_create_medicine(
-        db,
-        name="Amoxicillin 500mg",
-        unit="Vien",
-        price=Decimal("3500.00"),
-        stock_qty=50,
-    )
-
-    vitamin_c = get_or_create_medicine(
-        db,
-        name="Vitamin C 500mg",
-        unit="Vien",
-        price=Decimal("1500.00"),
-        stock_qty=100,
-    )
-
-    discontinued = get_or_create_medicine(
-        db,
-        name="Thuoc mau Discontinued Test",
-        unit="Hop",
-        price=Decimal("10000.00"),
-        stock_qty=10,
-        status=MedicineStatus.DISCONTINUED,
-    )
-
-    return {
-        "admin": admin,
-        "receptionist": receptionist,
-        "doctor01": doctor01,
-        "doctor02": doctor02,
-        "doctor03": doctor03,
-        "patient01": patient01,
-        "patient02": patient02,
-        "patient03": patient03,
-        "cardio": cardio,
-        "pediatrics": pediatrics,
-        "dermatology": dermatology,
-        "paracetamol": paracetamol,
-        "amoxicillin": amoxicillin,
-        "vitamin_c": vitamin_c,
-        "discontinued": discontinued,
-    }
-
-
-def seed_schedules_and_appointments(
+def seed_chat_messages(
     db: Session,
-    data: dict,
+    *,
+    session_id: int,
+    patient_content: str,
+    patient_intent: str,
+    ai_content: str,
+    ai_intent: str,
+) -> None:
+
+    existing = db.execute(
+        select(ChatMessage).where(
+            ChatMessage.session_id == session_id
+        )
+    ).scalars().all()
+
+    if existing:
+        return
+
+    db.add_all(
+        [
+            ChatMessage(
+                session_id=session_id,
+                sender_type=ChatSenderType.PATIENT,
+                content=patient_content,
+                intent=patient_intent,
+            ),
+            ChatMessage(
+                session_id=session_id,
+                sender_type=ChatSenderType.AI,
+                content=ai_content,
+                intent=ai_intent,
+            ),
+        ]
+    )
+
+
+# ============================================================
+# RESET DATABASE
+# ============================================================
+
+def reset_seed_data(
+    db: Session,
+) -> None:
+
+    print("Dang xoa du lieu cu...")
+
+    # Child tables
+    db.execute(
+        delete(ChatMessage)
+    )
+
+    db.execute(
+        delete(PrescriptionDetail)
+    )
+
+    db.execute(
+        delete(Prescription)
+    )
+
+    db.execute(
+        delete(Invoice)
+    )
+
+    db.execute(
+        delete(MedicalRecord)
+    )
+
+    db.execute(
+        delete(Appointment)
+    )
+
+    db.execute(
+        delete(ChatSession)
+    )
+
+    db.execute(
+        delete(WorkingSchedule)
+    )
+
+    # Inheritance child tables
+    db.execute(
+        delete(Doctor)
+    )
+
+    db.execute(
+        delete(Patient)
+    )
+
+    db.execute(
+        delete(Receptionist)
+    )
+
+    db.execute(
+        delete(Admin)
+    )
+
+    # Parent / catalog
+    db.execute(
+        delete(User)
+    )
+
+    db.execute(
+        delete(Medicine)
+    )
+
+    db.execute(
+        delete(Specialty)
+    )
+
+    db.commit()
+
+    print("Da xoa du lieu seed cu.")
+
+
+# ============================================================
+# SEED SPECIALTIES
+# ============================================================
+
+def seed_specialties(
+    db: Session,
 ) -> dict:
 
-    today = datetime.now().date()
+    specialties = {}
+
+    rows = [
+        (
+            "Tim mach",
+            "Kham va dieu tri cac benh ly tim mach.",
+        ),
+        (
+            "Nhi khoa",
+            "Kham va dieu tri benh ly tre em.",
+        ),
+        (
+            "Da lieu",
+            "Kham va dieu tri cac benh ly ve da.",
+        ),
+        (
+            "Noi tong quat",
+            "Kham va dieu tri cac benh noi khoa thong thuong.",
+        ),
+        (
+            "Tai Mui Hong",
+            "Kham cac benh ly tai, mui va hong.",
+        ),
+        (
+            "Rang Ham Mat",
+            "Kham va dieu tri cac benh ly rang ham mat.",
+        ),
+    ]
+
+    for name, description in rows:
+
+        specialty, _ = get_or_create_specialty(
+            db,
+            name=name,
+            description=description,
+        )
+
+        specialties[name] = specialty
+
+    return specialties
+
+
+# ============================================================
+# SEED MEDICINES
+# ============================================================
+
+def seed_medicines(
+    db: Session,
+) -> dict:
+
+    medicines = {}
+
+    rows = [
+        {
+            "key": "paracetamol",
+            "name": "Paracetamol 500mg",
+            "unit": "Vien",
+            "price": Decimal("2000.00"),
+            "stock_qty": 200,
+            "status": MedicineStatus.ACTIVE,
+        },
+        {
+            "key": "amoxicillin",
+            "name": "Amoxicillin 500mg",
+            "unit": "Vien",
+            "price": Decimal("3500.00"),
+            "stock_qty": 120,
+            "status": MedicineStatus.ACTIVE,
+        },
+        {
+            "key": "vitamin_c",
+            "name": "Vitamin C 500mg",
+            "unit": "Vien",
+            "price": Decimal("1500.00"),
+            "stock_qty": 150,
+            "status": MedicineStatus.ACTIVE,
+        },
+        {
+            "key": "loratadine",
+            "name": "Loratadine 10mg",
+            "unit": "Vien",
+            "price": Decimal("2500.00"),
+            "stock_qty": 80,
+            "status": MedicineStatus.ACTIVE,
+        },
+        {
+            "key": "omeprazole",
+            "name": "Omeprazole 20mg",
+            "unit": "Vien",
+            "price": Decimal("3000.00"),
+            "stock_qty": 70,
+            "status": MedicineStatus.ACTIVE,
+        },
+        {
+            "key": "saline",
+            "name": "Nuoc muoi sinh ly",
+            "unit": "Chai",
+            "price": Decimal("8000.00"),
+            "stock_qty": 60,
+            "status": MedicineStatus.ACTIVE,
+        },
+        {
+            "key": "low_stock",
+            "name": "Thuoc Test Ton Kho Thap",
+            "unit": "Vien",
+            "price": Decimal("5000.00"),
+            "stock_qty": 3,
+            "status": MedicineStatus.ACTIVE,
+        },
+        {
+            "key": "discontinued",
+            "name": "Thuoc Discontinued Test",
+            "unit": "Hop",
+            "price": Decimal("10000.00"),
+            "stock_qty": 20,
+            "status": MedicineStatus.DISCONTINUED,
+        },
+    ]
+
+    for item in rows:
+
+        medicine, _ = get_or_create_medicine(
+            db,
+            name=item["name"],
+            unit=item["unit"],
+            price=item["price"],
+            stock_qty=item["stock_qty"],
+            status=item["status"],
+        )
+
+        medicines[item["key"]] = medicine
+
+    return medicines
+
+
+# ============================================================
+# SEED USERS
+# ============================================================
+
+def seed_users(
+    db: Session,
+    specialties: dict,
+) -> dict:
+
+    users = {}
+
+    # --------------------------------------------------------
+    # Admin
+    # --------------------------------------------------------
+
+    users["admin"] = get_or_create_admin(
+        db,
+        username="admin",
+        full_name="System Administrator",
+        email="admin@clinic.local",
+        phone="0900000001",
+        gender=Gender.MALE,
+    )
+
+    users["admin02"] = get_or_create_admin(
+        db,
+        username="admin02",
+        full_name="Nguyen Thanh Nam",
+        email="admin02@clinic.local",
+        phone="0900000003",
+        gender=Gender.MALE,
+    )
+
+    # --------------------------------------------------------
+    # Receptionist
+    # --------------------------------------------------------
+
+    users["receptionist01"] = get_or_create_receptionist(
+        db,
+        username="receptionist01",
+        full_name="Le Thi Thu Ha",
+        email="receptionist01@clinic.local",
+        phone="0900000002",
+        gender=Gender.FEMALE,
+    )
+
+    users["receptionist02"] = get_or_create_receptionist(
+        db,
+        username="receptionist02",
+        full_name="Vo Thi Mai",
+        email="receptionist02@clinic.local",
+        phone="0900000004",
+        gender=Gender.FEMALE,
+    )
+
+    # --------------------------------------------------------
+    # Doctors
+    # --------------------------------------------------------
+
+    doctor_rows = [
+        (
+            "doctor01",
+            "Nguyen Van Minh",
+            "doctor01@clinic.local",
+            "0900000011",
+            Gender.MALE,
+            specialties["Tim mach"],
+            "BS.CKII Tim mach",
+            "Bac si tim mach, hon 10 nam kinh nghiem.",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "doctor02",
+            "Tran Thi Lan",
+            "doctor02@clinic.local",
+            "0900000012",
+            Gender.FEMALE,
+            specialties["Nhi khoa"],
+            "BS.CKII Nhi khoa",
+            "Bac si nhi khoa.",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "doctor03",
+            "Pham Quoc Huy",
+            "doctor03@clinic.local",
+            "0900000013",
+            Gender.MALE,
+            specialties["Da lieu"],
+            "BS Da lieu",
+            "Bac si chuyen khoa da lieu.",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "doctor04",
+            "Hoang Thi Mai",
+            "doctor04@clinic.local",
+            "0900000014",
+            Gender.FEMALE,
+            specialties["Noi tong quat"],
+            "BS Noi tong quat",
+            "Bac si noi khoa tong quat.",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "doctor05",
+            "Doan Minh Khang",
+            "doctor05@clinic.local",
+            "0900000015",
+            Gender.MALE,
+            specialties["Tai Mui Hong"],
+            "BS.CKI Tai Mui Hong",
+            "Bac si tai mui hong.",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "doctor06",
+            "Nguyen Thi Ngoc",
+            "doctor06@clinic.local",
+            "0900000016",
+            Gender.FEMALE,
+            specialties["Rang Ham Mat"],
+            "BS Rang Ham Mat",
+            "Bac si rang ham mat.",
+            UserStatus.LOCKED,
+        ),
+    ]
+
+    for (
+        username,
+        full_name,
+        email,
+        phone,
+        gender,
+        specialty,
+        qualification,
+        bio,
+        status,
+    ) in doctor_rows:
+
+        users[username] = get_or_create_doctor(
+            db,
+            username=username,
+            full_name=full_name,
+            email=email,
+            phone=phone,
+            gender=gender,
+            specialty_id=specialty.specialty_id,
+            qualification=qualification,
+            bio=bio,
+            status=status,
+        )
+
+    # --------------------------------------------------------
+    # Patients
+    # --------------------------------------------------------
+
+    patient_rows = [
+        (
+            "patient01",
+            "Nguyen Van An",
+            "patient01@clinic.local",
+            "0911111111",
+            Gender.MALE,
+            date(1998, 5, 12),
+            "Quan 1, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient02",
+            "Le Thi Bich",
+            "patient02@clinic.local",
+            "0911111112",
+            Gender.FEMALE,
+            date(1995, 8, 20),
+            "Quan 3, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient03",
+            "Pham Van Cuong",
+            "patient03@clinic.local",
+            "0911111113",
+            Gender.MALE,
+            date(2000, 2, 10),
+            "Thu Duc, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient04",
+            "Tran Minh Chau",
+            "patient04@clinic.local",
+            "0911111114",
+            Gender.FEMALE,
+            date(2002, 3, 18),
+            "Quan 7, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient05",
+            "Vo Hoang Long",
+            "patient05@clinic.local",
+            "0911111115",
+            Gender.MALE,
+            date(1994, 11, 2),
+            "Binh Thanh, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient06",
+            "Nguyen Thi Hoa",
+            "patient06@clinic.local",
+            "0911111116",
+            Gender.FEMALE,
+            date(1990, 7, 25),
+            "Go Vap, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient07",
+            "Do Duc Anh",
+            "patient07@clinic.local",
+            "0911111117",
+            Gender.MALE,
+            date(1999, 9, 9),
+            "Tan Binh, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient08",
+            "Bui Ngoc Anh",
+            "patient08@clinic.local",
+            "0911111118",
+            Gender.FEMALE,
+            date(2001, 1, 27),
+            "Phu Nhuan, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient09",
+            "Pham Gia Bao",
+            "patient09@clinic.local",
+            "0911111119",
+            Gender.MALE,
+            date(1988, 6, 13),
+            "Quan 10, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient10",
+            "Huynh Kim Ngan",
+            "patient10@clinic.local",
+            "0911111120",
+            Gender.FEMALE,
+            date(1997, 12, 4),
+            "Quan 5, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient11",
+            "Mai Thanh Tung",
+            "patient11@clinic.local",
+            "0911111121",
+            Gender.MALE,
+            date(1992, 10, 15),
+            "Binh Tan, TP.HCM",
+            UserStatus.ACTIVE,
+        ),
+        (
+            "patient12",
+            "Ngo Thi Yen",
+            "patient12@clinic.local",
+            "0911111122",
+            Gender.FEMALE,
+            date(1996, 4, 30),
+            "Quan 11, TP.HCM",
+            UserStatus.LOCKED,
+        ),
+    ]
+
+    for (
+        username,
+        full_name,
+        email,
+        phone,
+        gender,
+        dob,
+        address,
+        status,
+    ) in patient_rows:
+
+        users[username] = get_or_create_patient(
+            db,
+            username=username,
+            full_name=full_name,
+            email=email,
+            phone=phone,
+            gender=gender,
+            dob=dob,
+            address=address,
+            status=status,
+        )
+
+    return users
+
+
+# ============================================================
+# SEED SCHEDULES
+# ============================================================
+
+def seed_schedules(
+    db: Session,
+    users: dict,
+) -> dict:
+
+    today = date.today()
     yesterday = today - timedelta(days=1)
-    month_ago = today - timedelta(days=25)
-    two_months_ago = today - timedelta(days=55)
+    two_days_ago = today - timedelta(days=2)
+
+    day_7 = today - timedelta(days=7)
+    day_30 = today - timedelta(days=30)
+    day_60 = today - timedelta(days=60)
+
     tomorrow = today + timedelta(days=1)
+    day_2 = today + timedelta(days=2)
+    day_7_future = today + timedelta(days=7)
 
-    d1 = data["doctor01"].user_id
-    d2 = data["doctor02"].user_id
-    d3 = data["doctor03"].user_id
+    d1 = users["doctor01"].user_id
+    d2 = users["doctor02"].user_id
+    d3 = users["doctor03"].user_id
+    d4 = users["doctor04"].user_id
+    d5 = users["doctor05"].user_id
+    d6 = users["doctor06"].user_id
 
-    p1 = data["patient01"].user_id
-    p2 = data["patient02"].user_id
-    p3 = data["patient03"].user_id
+    schedules = {}
 
-    s_today_d1 = get_or_create_schedule(
+    # --------------------------------------------------------
+    # Doctor 1 - Tim mach
+    # --------------------------------------------------------
+
+    schedules["d1_today"] = get_or_create_schedule(
         db,
         doctor_id=d1,
         work_date=today,
         start_time=time(8, 0),
+        end_time=time(12, 0),
+    )
+
+    schedules["d1_yesterday"] = get_or_create_schedule(
+        db,
+        doctor_id=d1,
+        work_date=yesterday,
+        start_time=time(8, 0),
+        end_time=time(12, 0),
+    )
+
+    schedules["d1_30days"] = get_or_create_schedule(
+        db,
+        doctor_id=d1,
+        work_date=day_30,
+        start_time=time(8, 0),
         end_time=time(11, 0),
     )
 
-    s_today_d2 = get_or_create_schedule(
+    schedules["d1_tomorrow"] = get_or_create_schedule(
+        db,
+        doctor_id=d1,
+        work_date=tomorrow,
+        start_time=time(8, 0),
+        end_time=time(12, 0),
+    )
+
+    # --------------------------------------------------------
+    # Doctor 2 - Nhi khoa
+    # --------------------------------------------------------
+
+    schedules["d2_today"] = get_or_create_schedule(
         db,
         doctor_id=d2,
         work_date=today,
@@ -649,39 +1254,15 @@ def seed_schedules_and_appointments(
         end_time=time(17, 0),
     )
 
-    s_today_d3 = get_or_create_schedule(
-        db,
-        doctor_id=d3,
-        work_date=today,
-        start_time=time(15, 0),
-        end_time=time(18, 0),
-    )
-
-    s_yesterday_d1 = get_or_create_schedule(
-        db,
-        doctor_id=d1,
-        work_date=yesterday,
-        start_time=time(8, 0),
-        end_time=time(11, 0),
-    )
-
-    s_month_d2 = get_or_create_schedule(
+    schedules["d2_7days"] = get_or_create_schedule(
         db,
         doctor_id=d2,
-        work_date=month_ago,
-        start_time=time(8, 0),
-        end_time=time(11, 0),
-    )
-
-    s_two_month_d3 = get_or_create_schedule(
-        db,
-        doctor_id=d3,
-        work_date=two_months_ago,
-        start_time=time(14, 0),
+        work_date=day_7,
+        start_time=time(13, 0),
         end_time=time(17, 0),
     )
 
-    s_tomorrow_d2 = get_or_create_schedule(
+    schedules["d2_tomorrow"] = get_or_create_schedule(
         db,
         doctor_id=d2,
         work_date=tomorrow,
@@ -689,360 +1270,1024 @@ def seed_schedules_and_appointments(
         end_time=time(17, 0),
     )
 
-    appt_today_completed = get_or_create_appointment(
+    # --------------------------------------------------------
+    # Doctor 3 - Da lieu
+    # --------------------------------------------------------
+
+    schedules["d3_today"] = get_or_create_schedule(
         db,
-        schedule_id=s_today_d1.schedule_id,
+        doctor_id=d3,
+        work_date=today,
+        start_time=time(15, 0),
+        end_time=time(18, 0),
+    )
+
+    schedules["d3_60days"] = get_or_create_schedule(
+        db,
+        doctor_id=d3,
+        work_date=day_60,
+        start_time=time(14, 0),
+        end_time=time(17, 0),
+    )
+
+    schedules["d3_day2"] = get_or_create_schedule(
+        db,
+        doctor_id=d3,
+        work_date=day_2,
+        start_time=time(15, 0),
+        end_time=time(18, 0),
+    )
+
+    # --------------------------------------------------------
+    # Doctor 4 - Noi tong quat
+    # --------------------------------------------------------
+
+    schedules["d4_yesterday"] = get_or_create_schedule(
+        db,
+        doctor_id=d4,
+        work_date=yesterday,
+        start_time=time(8, 0),
+        end_time=time(11, 0),
+    )
+
+    schedules["d4_day7future"] = get_or_create_schedule(
+        db,
+        doctor_id=d4,
+        work_date=day_7_future,
+        start_time=time(8, 0),
+        end_time=time(12, 0),
+    )
+
+    # --------------------------------------------------------
+    # Doctor 5 - Tai Mui Hong
+    # --------------------------------------------------------
+
+    schedules["d5_two_days"] = get_or_create_schedule(
+        db,
+        doctor_id=d5,
+        work_date=two_days_ago,
+        start_time=time(13, 0),
+        end_time=time(17, 0),
+    )
+
+    schedules["d5_day2"] = get_or_create_schedule(
+        db,
+        doctor_id=d5,
+        work_date=day_2,
+        start_time=time(13, 0),
+        end_time=time(17, 0),
+    )
+
+    # --------------------------------------------------------
+    # Doctor 6 - Locked
+    # --------------------------------------------------------
+
+    schedules["d6_off"] = get_or_create_schedule(
+        db,
+        doctor_id=d6,
+        work_date=day_7_future,
+        start_time=time(14, 0),
+        end_time=time(17, 0),
+        status=WorkingScheduleStatus.OFF,
+    )
+
+    return schedules
+
+
+# ============================================================
+# SEED APPOINTMENTS
+# ============================================================
+
+def seed_appointments(
+    db: Session,
+    users: dict,
+    schedules: dict,
+) -> dict:
+
+    p1 = users["patient01"].user_id
+    p2 = users["patient02"].user_id
+    p3 = users["patient03"].user_id
+    p4 = users["patient04"].user_id
+    p5 = users["patient05"].user_id
+    p6 = users["patient06"].user_id
+    p7 = users["patient07"].user_id
+    p8 = users["patient08"].user_id
+    p9 = users["patient09"].user_id
+    p10 = users["patient10"].user_id
+    p11 = users["patient11"].user_id
+
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+    two_days_ago = today - timedelta(days=2)
+
+    day_7 = today - timedelta(days=7)
+    day_30 = today - timedelta(days=30)
+    day_60 = today - timedelta(days=60)
+
+    tomorrow = today + timedelta(days=1)
+    day_2 = today + timedelta(days=2)
+    day_7_future = today + timedelta(days=7)
+
+    appointments = {}
+
+    # ========================================================
+    # TODAY
+    # ========================================================
+
+    appointments["today_completed_1"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d1_today"].schedule_id,
         patient_id=p1,
         appointment_time=datetime.combine(
             today,
-            time(9, 0)
+            time(8, 30),
         ),
         status=AppointmentStatus.COMPLETED,
         created_by=AppointmentCreatedBy.PATIENT,
-        note="Kham lai dau nguc.",
+        note="Tai kham tim mach.",
     )
 
-    appt_today_pending = get_or_create_appointment(
+    appointments["today_completed_2"] = get_or_create_appointment(
         db,
-        schedule_id=s_today_d2.schedule_id,
-        patient_id=p3,
-        appointment_time=datetime.combine(
-            today,
-            time(16, 0)
-        ),
-        status=AppointmentStatus.PENDING,
-        created_by=AppointmentCreatedBy.PATIENT,
-        note="Kham suc khoe.",
-    )
-
-    appt_today_confirmed = get_or_create_appointment(
-        db,
-        schedule_id=s_today_d3.schedule_id,
+        schedule_id=schedules["d1_today"].schedule_id,
         patient_id=p2,
         appointment_time=datetime.combine(
             today,
-            time(16, 0)
-        ),
-        status=AppointmentStatus.CONFIRMED,
-        created_by=AppointmentCreatedBy.RECEPTIONIST,
-        note="Le tan da xac nhan.",
-    )
-
-    appt_yesterday_paid = get_or_create_appointment(
-        db,
-        schedule_id=s_yesterday_d1.schedule_id,
-        patient_id=p1,
-        appointment_time=datetime.combine(
-            yesterday,
-            time(9, 30)
-        ),
-        status=AppointmentStatus.COMPLETED,
-        created_by=AppointmentCreatedBy.RECEPTIONIST,
-        note="Tai kham.",
-    )
-
-    appt_month_unpaid = get_or_create_appointment(
-        db,
-        schedule_id=s_month_d2.schedule_id,
-        patient_id=p2,
-        appointment_time=datetime.combine(
-            month_ago,
-            time(9, 0)
+            time(9, 0),
         ),
         status=AppointmentStatus.COMPLETED,
         created_by=AppointmentCreatedBy.RECEPTIONIST,
         note="Kham dinh ky.",
     )
 
-    appt_two_month_paid = get_or_create_appointment(
+    appointments["today_pending"] = get_or_create_appointment(
         db,
-        schedule_id=s_two_month_d3.schedule_id,
+        schedule_id=schedules["d2_today"].schedule_id,
         patient_id=p3,
         appointment_time=datetime.combine(
-            two_months_ago,
-            time(15, 0)
+            today,
+            time(11, 0),
+        ),
+        status=AppointmentStatus.PENDING,
+        created_by=AppointmentCreatedBy.PATIENT,
+        note="Cho tiep nhan.",
+    )
+
+    appointments["today_confirmed_1"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d2_today"].schedule_id,
+        patient_id=p4,
+        appointment_time=datetime.combine(
+            today,
+            time(13, 30),
+        ),
+        status=AppointmentStatus.CONFIRMED,
+        created_by=AppointmentCreatedBy.RECEPTIONIST,
+        note="Da tiep nhan, dang cho bac si.",
+    )
+
+    appointments["today_confirmed_2"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d3_today"].schedule_id,
+        patient_id=p5,
+        appointment_time=datetime.combine(
+            today,
+            time(15, 30),
+        ),
+        status=AppointmentStatus.CONFIRMED,
+        created_by=AppointmentCreatedBy.PATIENT,
+        note="Cho kham da lieu.",
+    )
+
+    # ========================================================
+    # YESTERDAY
+    # ========================================================
+
+    appointments["yesterday_completed_1"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d1_yesterday"].schedule_id,
+        patient_id=p6,
+        appointment_time=datetime.combine(
+            yesterday,
+            time(8, 30),
+        ),
+        status=AppointmentStatus.COMPLETED,
+        created_by=AppointmentCreatedBy.RECEPTIONIST,
+        note="Tai kham dau dau.",
+    )
+
+    appointments["yesterday_cancelled"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d1_yesterday"].schedule_id,
+        patient_id=p7,
+        appointment_time=datetime.combine(
+            yesterday,
+            time(9, 30),
+        ),
+        status=AppointmentStatus.CANCELLED,
+        created_by=AppointmentCreatedBy.PATIENT,
+        note="Benh nhan huy lich.",
+    )
+
+    # ========================================================
+    # 7 DAYS AGO
+    # ========================================================
+
+    appointments["day7_completed"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d2_7days"].schedule_id,
+        patient_id=p8,
+        appointment_time=datetime.combine(
+            day_7,
+            time(14, 0),
+        ),
+        status=AppointmentStatus.COMPLETED,
+        created_by=AppointmentCreatedBy.RECEPTIONIST,
+        note="Kham nhi.",
+    )
+
+    # ========================================================
+    # 30 DAYS AGO
+    # ========================================================
+
+    appointments["day30_completed"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d1_30days"].schedule_id,
+        patient_id=p9,
+        appointment_time=datetime.combine(
+            day_30,
+            time(8, 30),
+        ),
+        status=AppointmentStatus.COMPLETED,
+        created_by=AppointmentCreatedBy.PATIENT,
+        note="Kham tim mach.",
+    )
+
+    appointments["day30_completed_2"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d1_30days"].schedule_id,
+        patient_id=p10,
+        appointment_time=datetime.combine(
+            day_30,
+            time(9, 0),
+        ),
+        status=AppointmentStatus.COMPLETED,
+        created_by=AppointmentCreatedBy.RECEPTIONIST,
+        note="Tai kham tim mach.",
+    )
+
+    # ========================================================
+    # 60 DAYS AGO
+    # ========================================================
+
+    appointments["day60_completed"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d3_60days"].schedule_id,
+        patient_id=p11,
+        appointment_time=datetime.combine(
+            day_60,
+            time(14, 30),
         ),
         status=AppointmentStatus.COMPLETED,
         created_by=AppointmentCreatedBy.AI,
-        note="Tao boi AI Assistant de phuc vu test.",
+        note="Appointment duoc tao boi AI Assistant.",
     )
 
-    appt_cancelled = get_or_create_appointment(
+    # ========================================================
+    # 2 DAYS AGO
+    # ========================================================
+
+    appointments["two_days_completed"] = get_or_create_appointment(
         db,
-        schedule_id=s_tomorrow_d2.schedule_id,
+        schedule_id=schedules["d5_two_days"].schedule_id,
+        patient_id=p1,
+        appointment_time=datetime.combine(
+            two_days_ago,
+            time(13, 30),
+        ),
+        status=AppointmentStatus.COMPLETED,
+        created_by=AppointmentCreatedBy.AI,
+        note="Tao boi AI Assistant.",
+    )
+
+    # ========================================================
+    # TOMORROW
+    # ========================================================
+
+    appointments["tomorrow_pending"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d1_tomorrow"].schedule_id,
+        patient_id=p2,
+        appointment_time=datetime.combine(
+            tomorrow,
+            time(8, 0),
+        ),
+        status=AppointmentStatus.PENDING,
+        created_by=AppointmentCreatedBy.PATIENT,
+        note="Lich cho tiep nhan ngay mai.",
+    )
+
+    appointments["tomorrow_confirmed"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d1_tomorrow"].schedule_id,
         patient_id=p3,
         appointment_time=datetime.combine(
             tomorrow,
-            time(14, 0)
+            time(8, 30),
+        ),
+        status=AppointmentStatus.CONFIRMED,
+        created_by=AppointmentCreatedBy.RECEPTIONIST,
+        note="Da xac nhan cho ngay mai.",
+    )
+
+    appointments["tomorrow_cancelled"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d2_tomorrow"].schedule_id,
+        patient_id=p4,
+        appointment_time=datetime.combine(
+            tomorrow,
+            time(14, 0),
         ),
         status=AppointmentStatus.CANCELLED,
         created_by=AppointmentCreatedBy.RECEPTIONIST,
-        note="Test trang thai Cancelled.",
+        note="Test Cancelled.",
     )
 
-    chat_session = get_or_create_chat_session(
+    # ========================================================
+    # DAY 2 FUTURE
+    # ========================================================
+
+    appointments["day2_pending"] = get_or_create_appointment(
         db,
-        patient_id=p1,
-        appointment_id=appt_today_pending.appointment_id,
+        schedule_id=schedules["d3_day2"].schedule_id,
+        patient_id=p5,
+        appointment_time=datetime.combine(
+            day_2,
+            time(15, 0),
+        ),
+        status=AppointmentStatus.PENDING,
+        created_by=AppointmentCreatedBy.AI,
+        note="AI ho tro dat lich.",
     )
 
-    existing_messages = db.execute(
-        select(ChatMessage).where(
-            ChatMessage.session_id == chat_session.session_id
-        )
-    ).scalars().all()
+    appointments["day2_confirmed"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d5_day2"].schedule_id,
+        patient_id=p6,
+        appointment_time=datetime.combine(
+            day_2,
+            time(13, 30),
+        ),
+        status=AppointmentStatus.CONFIRMED,
+        created_by=AppointmentCreatedBy.PATIENT,
+        note="Lich da xac nhan.",
+    )
 
-    if not existing_messages:
+    # ========================================================
+    # 7 DAYS FUTURE
+    # ========================================================
 
-        db.add_all([
-            ChatMessage(
-                session_id=chat_session.session_id,
-                sender_type=ChatSenderType.PATIENT,
-                content="Toi muon dat lich voi bac si.",
-                intent="book_appointment",
-            ),
-            ChatMessage(
-                session_id=chat_session.session_id,
-                sender_type=ChatSenderType.AI,
-                content="Toi da ho tro tim lich phu hop.",
-                intent="book_appointment",
-            ),
-        ])
+    appointments["day7future_confirmed"] = get_or_create_appointment(
+        db,
+        schedule_id=schedules["d4_day7future"].schedule_id,
+        patient_id=p7,
+        appointment_time=datetime.combine(
+            day_7_future,
+            time(8, 0),
+        ),
+        status=AppointmentStatus.CONFIRMED,
+        created_by=AppointmentCreatedBy.PATIENT,
+        note="Lich kham tuong lai.",
+    )
 
-    return {
-        "appt_today_completed": appt_today_completed,
-        "appt_today_pending": appt_today_pending,
-        "appt_today_confirmed": appt_today_confirmed,
-        "appt_yesterday_paid": appt_yesterday_paid,
-        "appt_month_unpaid": appt_month_unpaid,
-        "appt_two_month_paid": appt_two_month_paid,
-        "appt_cancelled": appt_cancelled,
-    }
+    return appointments
 
 
-def seed_medical_records_prescriptions_invoices(
+# ============================================================
+# MEDICAL RECORDS + PRESCRIPTIONS + INVOICES
+# ============================================================
+
+def seed_records_prescriptions_invoices(
     db: Session,
-    data: dict,
+    users: dict,
+    medicines: dict,
     appointments: dict,
 ) -> None:
 
     now = datetime.now()
 
-    paracetamol = data["paracetamol"]
-    amoxicillin = data["amoxicillin"]
-    vitamin_c = data["vitamin_c"]
+    p = medicines
 
-    # ---------------------------------------------------------
-    # Appointment 1
-    # Completed + MedicalRecord + Prescription + Invoice Paid
-    # ---------------------------------------------------------
+    # ========================================================
+    # 1. Today completed - Patient 1
+    # ========================================================
 
-    appt1 = appointments["appt_today_completed"]
+    appt = appointments["today_completed_1"]
 
-    record1 = get_or_create_record(
+    record = get_or_create_record(
         db,
-        appointment_id=appt1.appointment_id,
-        symptoms="Dau dau nhe, met moi.",
-        diagnosis="Cang thang va mat ngu nhe.",
+        appointment_id=appt.appointment_id,
+        symptoms="Dau dau nhe, met moi, choang vang.",
+        diagnosis="Thieu ngu va cang thang.",
         note="Theo doi them 1 tuan.",
-        examined_at=datetime.combine(
-            appt1.appointment_time.date(),
-            time(9, 20),
+        examined_at=appt.appointment_time + timedelta(
+            minutes=20
         ),
     )
 
-    get_or_create_prescription(
+    prescription_details = [
+        {
+            "medicine": p["paracetamol"],
+            "medicine_id": p["paracetamol"].medicine_id,
+            "price": p["paracetamol"].price,
+            "quantity": 2,
+            "dosage": "1 vien moi lan, ngay 2 lan",
+            "usage_note": "Uong sau an.",
+        },
+        {
+            "medicine": p["vitamin_c"],
+            "medicine_id": p["vitamin_c"].medicine_id,
+            "price": p["vitamin_c"].price,
+            "quantity": 2,
+            "dosage": "1 vien moi ngay",
+            "usage_note": "Uong sau an sang.",
+        },
+    ]
+
+    _, created = get_or_create_prescription(
         db,
-        record_id=record1.record_id,
-        details=[
-            {
-                "medicine_id": paracetamol.medicine_id,
-                "quantity": 2,
-                "dosage": "1 vien moi lan, ngay 2 lan",
-                "usage_note": "Uong sau an.",
-            },
-            {
-                "medicine_id": amoxicillin.medicine_id,
-                "quantity": 1,
-                "dosage": "1 vien moi ngay",
-                "usage_note": "Uong sau an toi.",
-            },
-        ],
+        record_id=record.record_id,
+        details=prescription_details,
     )
 
-    invoice1_total = (
-        Decimal("100000.00")
-        + paracetamol.price * 2
-        + amoxicillin.price
+    invoice_total = (
+        CONSULTATION_FEE
+        + calculate_medicine_total(
+            prescription_details
+        )
     )
 
-    get_or_create_invoice(
+    invoice, invoice_created = get_or_create_invoice(
         db,
-        appointment_id=appt1.appointment_id,
-        total_amount=invoice1_total,
+        appointment_id=appt.appointment_id,
+        total_amount=invoice_total,
         status=InvoiceStatus.PAID,
         payment_method=PaymentMethod.CASH,
-        paid_at=now - timedelta(hours=4),
+        paid_at=now,
     )
 
-    # ---------------------------------------------------------
-    # Appointment 2
-    # Completed + MedicalRecord + Prescription + Invoice Paid
-    # ---------------------------------------------------------
+    if created and invoice_created:
+        decrease_stock(
+            prescription_details
+        )
 
-    appt2 = appointments["appt_yesterday_paid"]
+    # ========================================================
+    # 2. Today completed - Patient 2
+    # ========================================================
 
-    record2 = get_or_create_record(
+    appt = appointments["today_completed_2"]
+
+    record = get_or_create_record(
         db,
-        appointment_id=appt2.appointment_id,
-        symptoms="Ho, dau hong.",
+        appointment_id=appt.appointment_id,
+        symptoms="Ho, dau hong, so mui.",
         diagnosis="Viem hong cap.",
         note="Uong du nuoc, nghi ngoi.",
-        examined_at=appt2.appointment_time + timedelta(minutes=20),
+        examined_at=appt.appointment_time + timedelta(
+            minutes=20
+        ),
     )
 
-    get_or_create_prescription(
+    prescription_details = [
+        {
+            "medicine": p["amoxicillin"],
+            "medicine_id": p["amoxicillin"].medicine_id,
+            "price": p["amoxicillin"].price,
+            "quantity": 5,
+            "dosage": "1 vien moi ngay",
+            "usage_note": "Uong sau an.",
+        },
+        {
+            "medicine": p["vitamin_c"],
+            "medicine_id": p["vitamin_c"].medicine_id,
+            "price": p["vitamin_c"].price,
+            "quantity": 2,
+            "dosage": "1 vien moi ngay",
+            "usage_note": "Uong sau an.",
+        },
+    ]
+
+    _, created = get_or_create_prescription(
         db,
-        record_id=record2.record_id,
-        details=[
-            {
-                "medicine_id": vitamin_c.medicine_id,
-                "quantity": 2,
-                "dosage": "1 vien moi ngay",
-                "usage_note": "Uong sau an sang.",
-            },
-        ],
+        record_id=record.record_id,
+        details=prescription_details,
     )
 
-    invoice2_total = (
-        Decimal("100000.00")
-        + vitamin_c.price * 2
+    invoice_total = (
+        CONSULTATION_FEE
+        + calculate_medicine_total(
+            prescription_details
+        )
     )
 
-    get_or_create_invoice(
+    _, invoice_created = get_or_create_invoice(
         db,
-        appointment_id=appt2.appointment_id,
-        total_amount=invoice2_total,
+        appointment_id=appt.appointment_id,
+        total_amount=invoice_total,
         status=InvoiceStatus.PAID,
         payment_method=PaymentMethod.ONLINE,
+        paid_at=now,
+    )
+
+    if created and invoice_created:
+        decrease_stock(
+            prescription_details
+        )
+
+    # ========================================================
+    # 3. Yesterday completed
+    # ========================================================
+
+    appt = appointments["yesterday_completed_1"]
+
+    record = get_or_create_record(
+        db,
+        appointment_id=appt.appointment_id,
+        symptoms="Dau bung nhe sau khi an.",
+        diagnosis="Roi loan tieu hoa.",
+        note="Dieu chinh che do an.",
+        examined_at=appt.appointment_time + timedelta(
+            minutes=20
+        ),
+    )
+
+    prescription_details = [
+        {
+            "medicine": p["omeprazole"],
+            "medicine_id": p["omeprazole"].medicine_id,
+            "price": p["omeprazole"].price,
+            "quantity": 5,
+            "dosage": "1 vien moi ngay",
+            "usage_note": "Uong truoc bua sang.",
+        }
+    ]
+
+    _, created = get_or_create_prescription(
+        db,
+        record_id=record.record_id,
+        details=prescription_details,
+    )
+
+    invoice_total = (
+        CONSULTATION_FEE
+        + calculate_medicine_total(
+            prescription_details
+        )
+    )
+
+    _, invoice_created = get_or_create_invoice(
+        db,
+        appointment_id=appt.appointment_id,
+        total_amount=invoice_total,
+        status=InvoiceStatus.PAID,
+        payment_method=PaymentMethod.CASH,
         paid_at=now - timedelta(days=1),
     )
 
-    # ---------------------------------------------------------
-    # Appointment 3
-    # Completed + Prescription + Invoice UNPAID
-    # Dung de test /pay
-    # ---------------------------------------------------------
+    if created and invoice_created:
+        decrease_stock(
+            prescription_details
+        )
 
-    appt3 = appointments["appt_month_unpaid"]
+    # ========================================================
+    # 4. 7 days completed - No prescription
+    # ========================================================
 
-    record3 = get_or_create_record(
+    appt = appointments["day7_completed"]
+
+    record = get_or_create_record(
         db,
-        appointment_id=appt3.appointment_id,
-        symptoms="Dau bung nhe sau khi an.",
-        diagnosis="Roi loan tieu hoa.",
-        note="Dieu chinh che do an uong.",
-        examined_at=appt3.appointment_time + timedelta(minutes=20),
-    )
-
-    get_or_create_prescription(
-        db,
-        record_id=record3.record_id,
-        details=[
-            {
-                "medicine_id": paracetamol.medicine_id,
-                "quantity": 1,
-                "dosage": "1 vien khi dau",
-                "usage_note": "Khong qua 3 vien/ngay.",
-            },
-            {
-                "medicine_id": vitamin_c.medicine_id,
-                "quantity": 1,
-                "dosage": "1 vien moi ngay",
-                "usage_note": "Uong sau an.",
-            },
-        ],
-    )
-
-    invoice3_total = (
-        Decimal("100000.00")
-        + paracetamol.price
-        + vitamin_c.price
+        appointment_id=appt.appointment_id,
+        symptoms="Kham suc khoe tre em.",
+        diagnosis="Suc khoe on dinh.",
+        note="Tiep tuc theo doi.",
+        examined_at=appt.appointment_time + timedelta(
+            minutes=15
+        ),
     )
 
     get_or_create_invoice(
         db,
-        appointment_id=appt3.appointment_id,
-        total_amount=invoice3_total,
+        appointment_id=appt.appointment_id,
+        total_amount=CONSULTATION_FEE,
+        status=InvoiceStatus.PAID,
+        payment_method=PaymentMethod.ONLINE,
+        paid_at=now - timedelta(days=7),
+    )
+
+    # ========================================================
+    # 5. 30 days completed - UNPAID
+    # ========================================================
+
+    appt = appointments["day30_completed"]
+
+    record = get_or_create_record(
+        db,
+        appointment_id=appt.appointment_id,
+        symptoms="Dau dau, hoa mat.",
+        diagnosis="Thieu ngu va cang thang.",
+        note="Can ngu du giac.",
+        examined_at=appt.appointment_time + timedelta(
+            minutes=20
+        ),
+    )
+
+    prescription_details = [
+        {
+            "medicine": p["paracetamol"],
+            "medicine_id": p["paracetamol"].medicine_id,
+            "price": p["paracetamol"].price,
+            "quantity": 3,
+            "dosage": "1 vien khi dau",
+            "usage_note": "Khong qua 3 vien/ngay.",
+        },
+        {
+            "medicine": p["vitamin_c"],
+            "medicine_id": p["vitamin_c"].medicine_id,
+            "price": p["vitamin_c"].price,
+            "quantity": 2,
+            "dosage": "1 vien moi ngay",
+            "usage_note": "Uong sau an.",
+        },
+    ]
+
+    get_or_create_prescription(
+        db,
+        record_id=record.record_id,
+        details=prescription_details,
+    )
+
+    invoice_total = (
+        CONSULTATION_FEE
+        + calculate_medicine_total(
+            prescription_details
+        )
+    )
+
+    # Unpaid -> KHONG tru kho
+    get_or_create_invoice(
+        db,
+        appointment_id=appt.appointment_id,
+        total_amount=invoice_total,
         status=InvoiceStatus.UNPAID,
         payment_method=None,
         paid_at=None,
     )
 
-    # ---------------------------------------------------------
-    # Appointment 4
-    # Completed + MedicalRecord + Invoice Paid
-    # Khong co prescription
-    # ---------------------------------------------------------
+    # ========================================================
+    # 6. 30 days completed - PAID
+    # ========================================================
 
-    appt4 = appointments["appt_two_month_paid"]
+    appt = appointments["day30_completed_2"]
+
+    record = get_or_create_record(
+        db,
+        appointment_id=appt.appointment_id,
+        symptoms="Dau nguoi, met moi.",
+        diagnosis="Cam lanh thong thuong.",
+        note="Nghi ngoi nhieu hon.",
+        examined_at=appt.appointment_time + timedelta(
+            minutes=20
+        ),
+    )
+
+    prescription_details = [
+        {
+            "medicine": p["loratadine"],
+            "medicine_id": p["loratadine"].medicine_id,
+            "price": p["loratadine"].price,
+            "quantity": 5,
+            "dosage": "1 vien moi ngay",
+            "usage_note": "Uong vao buoi toi.",
+        }
+    ]
+
+    _, created = get_or_create_prescription(
+        db,
+        record_id=record.record_id,
+        details=prescription_details,
+    )
+
+    invoice_total = (
+        CONSULTATION_FEE
+        + calculate_medicine_total(
+            prescription_details
+        )
+    )
+
+    _, invoice_created = get_or_create_invoice(
+        db,
+        appointment_id=appt.appointment_id,
+        total_amount=invoice_total,
+        status=InvoiceStatus.PAID,
+        payment_method=PaymentMethod.CASH,
+        paid_at=now - timedelta(days=30),
+    )
+
+    if created and invoice_created:
+        decrease_stock(
+            prescription_details
+        )
+
+    # ========================================================
+    # 7. 60 days completed - no prescription
+    # ========================================================
+
+    appt = appointments["day60_completed"]
 
     get_or_create_record(
         db,
-        appointment_id=appt4.appointment_id,
+        appointment_id=appt.appointment_id,
         symptoms="Kham da.",
         diagnosis="Viem da tiep xuc nhe.",
         note="Tranh chat kich ung.",
-        examined_at=appt4.appointment_time + timedelta(minutes=20),
+        examined_at=appt.appointment_time + timedelta(
+            minutes=20
+        ),
     )
 
     get_or_create_invoice(
         db,
-        appointment_id=appt4.appointment_id,
-        total_amount=Decimal("100000.00"),
-        status=InvoiceStatus.PAID,
-        payment_method=PaymentMethod.CASH,
-        paid_at=now - timedelta(days=55),
+        appointment_id=appt.appointment_id,
+        total_amount=CONSULTATION_FEE,
+        status=InvoiceStatus.CANCELLED,
+        payment_method=None,
+        paid_at=None,
     )
 
-    # Ton kho sau 2 invoice Paid trong seed.
-    # Paracetamol: 100 -> 98
-    # Amoxicillin: 50 -> 49
-    # Vitamin C: 100 -> 98
-    if paracetamol.stock_qty >= 100:
-        paracetamol.stock_qty -= 2
+    # ========================================================
+    # 8. Two days ago - AI appointment
+    # ========================================================
 
-    if amoxicillin.stock_qty >= 50:
-        amoxicillin.stock_qty -= 1
+    appt = appointments["two_days_completed"]
 
-    if vitamin_c.stock_qty >= 100:
-        vitamin_c.stock_qty -= 2
+    record = get_or_create_record(
+        db,
+        appointment_id=appt.appointment_id,
+        symptoms="Nghet mui, dau dau.",
+        diagnosis="Viem mui thong thuong.",
+        note="Theo doi them.",
+        examined_at=appt.appointment_time + timedelta(
+            minutes=20
+        ),
+    )
 
+    prescription_details = [
+        {
+            "medicine": p["saline"],
+            "medicine_id": p["saline"].medicine_id,
+            "price": p["saline"].price,
+            "quantity": 2,
+            "dosage": "Su dung 2 lan/ngay",
+            "usage_note": "Rua mui.",
+        }
+    ]
+
+    _, created = get_or_create_prescription(
+        db,
+        record_id=record.record_id,
+        details=prescription_details,
+    )
+
+    invoice_total = (
+        CONSULTATION_FEE
+        + calculate_medicine_total(
+            prescription_details
+        )
+    )
+
+    _, invoice_created = get_or_create_invoice(
+        db,
+        appointment_id=appt.appointment_id,
+        total_amount=invoice_total,
+        status=InvoiceStatus.PAID,
+        payment_method=PaymentMethod.ONLINE,
+        paid_at=now - timedelta(days=2),
+    )
+
+    if created and invoice_created:
+        decrease_stock(
+            prescription_details
+        )
+
+
+# ============================================================
+# SEED CHAT
+# ============================================================
+
+def seed_chats(
+    db: Session,
+    users: dict,
+    appointments: dict,
+) -> None:
+
+    # AI booking
+    appt = appointments["day2_pending"]
+
+    session = get_or_create_chat_session(
+        db,
+        patient_id=users["patient05"].user_id,
+        appointment_id=appt.appointment_id,
+    )
+
+    seed_chat_messages(
+        db,
+        session_id=session.session_id,
+        patient_content=(
+            "Toi muon dat lich voi bac si da lieu "
+            "vao ngay mai."
+        ),
+        patient_intent="book_appointment",
+        ai_content=(
+            "Toi co the ho tro tim bac si va khung gio "
+            "phu hop cho ban."
+        ),
+        ai_intent="book_appointment",
+    )
+
+    # AI appointment completed
+    appt = appointments["two_days_completed"]
+
+    session = get_or_create_chat_session(
+        db,
+        patient_id=users["patient01"].user_id,
+        appointment_id=appt.appointment_id,
+    )
+
+    seed_chat_messages(
+        db,
+        session_id=session.session_id,
+        patient_content=(
+            "Toi muon dat lich voi bac si "
+            "tai mui hong."
+        ),
+        patient_intent="book_appointment",
+        ai_content=(
+            "Da tim thay lich phu hop va ho tro ban."
+        ),
+        ai_intent="book_appointment",
+    )
+
+
+# ============================================================
+# SUMMARY
+# ============================================================
+
+def print_summary(
+    db: Session,
+) -> None:
+
+    print()
+    print("=" * 60)
+    print("SEED COMPLETED")
+    print("=" * 60)
+
+    tables = [
+        ("Users", User),
+        ("Admins", Admin),
+        ("Receptionists", Receptionist),
+        ("Doctors", Doctor),
+        ("Patients", Patient),
+        ("Specialties", Specialty),
+        ("Medicines", Medicine),
+        ("Schedules", WorkingSchedule),
+        ("Appointments", Appointment),
+        ("Medical Records", MedicalRecord),
+        ("Prescriptions", Prescription),
+        ("Prescription Details", PrescriptionDetail),
+        ("Invoices", Invoice),
+        ("Chat Sessions", ChatSession),
+        ("Chat Messages", ChatMessage),
+    ]
+
+    for label, model in tables:
+
+        count = db.execute(
+            select(model)
+        ).scalars().all()
+
+        print(
+            f"{label:<25}: {len(count)}"
+        )
+
+    print()
+    print("TEST ACCOUNTS")
+    print("-" * 60)
+
+    print("Admin:")
+    print("  admin / Admin123")
+    print("  admin02 / Admin123")
+
+    print()
+    print("Receptionist:")
+    print("  receptionist01 / Reception123")
+    print("  receptionist02 / Reception123")
+
+    print()
+    print("Doctor:")
+    print("  doctor01 / Doctor123")
+    print("  doctor02 / Doctor123")
+    print("  doctor03 / Doctor123")
+    print("  doctor04 / Doctor123")
+    print("  doctor05 / Doctor123")
+    print("  doctor06 / Doctor123  <-- LOCKED")
+
+    print()
+    print("Patient:")
+    print("  patient01 / Patient123")
+    print("  patient02 / Patient123")
+    print("  patient03 / Patient123")
+    print("  patient04 / Patient123")
+    print("  patient05 / Patient123")
+    print("  patient06 / Patient123")
+    print("  patient07 / Patient123")
+    print("  patient08 / Patient123")
+    print("  patient09 / Patient123")
+    print("  patient10 / Patient123")
+    print("  patient11 / Patient123")
+    print("  patient12 / Patient123  <-- LOCKED")
+
+    print()
+    print("=" * 60)
+
+
+# ============================================================
+# MAIN
+# ============================================================
 
 def main() -> None:
+
+    parser = argparse.ArgumentParser(
+        description=(
+            "Seed du lieu cho Clinic Management System"
+        )
+    )
+
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Xoa du lieu cu truoc khi seed",
+    )
+
+    args = parser.parse_args()
 
     db = SessionLocal()
 
     try:
 
-        print("=== Seed Clinic Management System ===")
+        print("=" * 60)
+        print("CLINIC MANAGEMENT SYSTEM - SEED")
+        print("=" * 60)
 
-        catalog = seed_users_and_catalog(db)
+        if args.reset:
+            reset_seed_data(db)
 
-        appointments = seed_schedules_and_appointments(
+        specialties = seed_specialties(db)
+
+        medicines = seed_medicines(db)
+
+        users = seed_users(
             db,
-            catalog,
+            specialties,
         )
 
-        seed_medical_records_prescriptions_invoices(
+        schedules = seed_schedules(
             db,
-            catalog,
+            users,
+        )
+
+        appointments = seed_appointments(
+            db,
+            users,
+            schedules,
+        )
+
+        seed_records_prescriptions_invoices(
+            db,
+            users,
+            medicines,
+            appointments,
+        )
+
+        seed_chats(
+            db,
+            users,
             appointments,
         )
 
         db.commit()
 
-        print("\nSeed completed.\n")
+        print_summary(db)
 
     except Exception:
         db.rollback()
@@ -1050,6 +2295,7 @@ def main() -> None:
 
     finally:
         db.close()
+
 
 if __name__ == "__main__":
     main()

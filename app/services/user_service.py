@@ -275,6 +275,11 @@ class UserService:
                 "specialty_id"
             ]
 
+            if specialty_id is None or specialty_id <= 0:
+                raise BusinessException(
+                    "Bác sĩ phải chọn chuyên khoa"
+                )
+
             specialty = db.get(
                 Specialty,
                 specialty_id,

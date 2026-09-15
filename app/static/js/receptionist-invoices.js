@@ -208,14 +208,29 @@ function renderInvoices(
                                     ? `
                                         <button
                                             type="button"
-                                            class="btn btn-sm btn-success"
-                                            onclick="payCash(
-                                                ${invoice.invoice_id}
+                                            class="btn btn-sm btn-success me-1"
+                                            onclick="payInvoice(
+                                                ${invoice.invoice_id},
+                                                'Cash'
                                             )">
 
                                             <i class="bi bi-cash-stack me-1"></i>
 
                                             Thu Cash
+
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-primary"
+                                            onclick="payInvoice(
+                                                ${invoice.invoice_id},
+                                                'Online'
+                                            )">
+
+                                            <i class="bi bi-credit-card me-1"></i>
+
+                                            Thu Online
 
                                         </button>
                                     `
@@ -344,20 +359,24 @@ function setupInvoiceFilters() {
 
 }
 
-async function payCash(
-    invoiceId
+async function payInvoice(
+    invoiceId,
+    paymentMethod
 ) {
+
+    const methodText =
+        paymentMethod === "Cash"
+            ? "tiền mặt"
+            : "online";
 
     const confirmed =
         confirm(
-            "Xác nhận đã thu tiền mặt cho hóa đơn này?"
+            `Xác nhận thanh toán ${methodText} cho hóa đơn này?`
         );
-
 
     if (!confirmed) {
         return;
     }
-
 
     try {
 
@@ -367,27 +386,17 @@ async function payCash(
                 {
                     method: "PATCH",
 
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-                    },
-
                     body: JSON.stringify({
-
                         payment_method:
-                            "Cash",
-
+                            paymentMethod,
                     }),
-
                 }
             );
-
 
         const data =
             await parseApiResponse(
                 response
             );
-
 
         if (!response.ok) {
 
@@ -395,57 +404,43 @@ async function payCash(
                 data.detail ||
                 "Thanh toán thất bại."
             );
-
         }
 
-
         showInvoiceAlert(
-            "Đã thu tiền mặt thành công.",
+            `Đã thanh toán ${methodText} thành công.`,
             "success"
         );
 
-
         await loadInvoices();
-
 
         const params =
             new URLSearchParams(
                 window.location.search
             );
 
-
-        const invoiceId =
+        const detailInvoiceId =
             params.get(
                 "invoice_id"
             );
 
-
-        if (invoiceId) {
+        if (detailInvoiceId) {
 
             await loadInvoiceDetail(
-                invoiceId
+                detailInvoiceId
             );
-
         }
-
-
 
     }
     catch (error) {
 
-        console.error(
-            error
-        );
-
+        console.error(error);
 
         showInvoiceAlert(
             error.message ||
             "Không thể thanh toán hóa đơn.",
             "danger"
         );
-
     }
-
 }
 
 async function loadInvoiceFromUrl() {

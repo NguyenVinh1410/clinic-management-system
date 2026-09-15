@@ -41,15 +41,21 @@ class MedicalRecordService:
 
         stmt = (
             select(MedicalRecord)
+            .options(
+                selectinload(MedicalRecord.appointment)
+                .selectinload(Appointment.schedule)
+                .selectinload(WorkingSchedule.doctor)
+                .selectinload(Doctor.specialty)
+            )
             .where(MedicalRecord.appointment_id == appointment_id)
         )
 
-        record = db.execute(stmt).scalar_one_or_none()
+        record = db.execute(stmt).scalars().first()
 
         if record is None:
             raise NotFoundException("Lich hen chua co ho so benh an")
 
-        return record
+        return MedicalRecordService.build_record_response(record)
 
     @staticmethod
     def get_all_records(db: Session) -> list[MedicalRecord]:

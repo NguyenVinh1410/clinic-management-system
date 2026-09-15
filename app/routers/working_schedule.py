@@ -1,5 +1,5 @@
 from typing import Annotated
-
+from datetime import datetime
 from fastapi import Depends, APIRouter, status
 from sqlalchemy.orm import Session
 
@@ -8,6 +8,7 @@ from app.models.enums import UserRole
 from app.models.user import User
 from app.schemas.working_schedule import WorkingScheduleCreate, WorkingScheduleResponse, WorkingScheduleUpdate
 from app.services.working_schedule_service import WorkingScheduleService
+from app.services.appointment_service import AppointmentService
 
 router = APIRouter(
     prefix="/api/working_schedule",
@@ -149,3 +150,27 @@ def delete_schedule(
     )
 
     return None
+
+@router.get(
+    "/schedule/{schedule_id}/booked-times",
+    response_model=list[datetime],
+)
+def get_booked_times_by_schedule(
+        schedule_id: int,
+        _: Annotated[
+            User,
+            Depends(
+                requires_role(
+                    UserRole.PATIENT
+                )
+            ),
+        ],
+        db: Annotated[
+            Session,
+            Depends(get_db),
+        ],
+):
+    return AppointmentService.get_booked_times_by_schedule(
+        db=db,
+        schedule_id=schedule_id,
+    )

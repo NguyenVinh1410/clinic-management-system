@@ -498,13 +498,19 @@ async function createUser(event) {
     };
 
     if (role === "Doctor") {
+        const specialtyId =
+            document.getElementById("createSpecialty").value;
 
-        payload.specialty_id =
-            Number(
-                document.getElementById(
-                    "createSpecialty"
-                ).value
+        if (!specialtyId) {
+            showUserAlert(
+                "Vui lòng chọn chuyên khoa cho bác sĩ.",
+                "warning"
             );
+            return;
+        }
+
+        payload.specialty_id = Number(specialtyId);
+
 
         payload.qualification =
             valueOrNull(
@@ -778,6 +784,17 @@ async function updateUser(event) {
     }
 
     if (roleValue === "Doctor") {
+
+        const specialtyId =
+            document.getElementById("editSpecialty").value;
+
+        if (!specialtyId) {
+            showUserAlert(
+                "Vui lòng chọn chuyên khoa cho bác sĩ.",
+                "warning"
+            );
+            return;
+        }
 
         payload.specialty_id =
             Number(

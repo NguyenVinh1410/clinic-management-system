@@ -70,12 +70,70 @@ async function apiFetch(url, options = {}){
     return response;
 }
 
-async function parseApiResponse(response){
-    const contentType = response.headers.get("content-type") || "";
+async function parseApiResponse(
+    response
+) {
 
-    if (contentType.includes("application/json")){
-        return response.json();
+    const contentType =
+        response.headers.get(
+            "content-type"
+        ) || "";
+
+    if (
+        !contentType.includes(
+            "application/json"
+        )
+    ) {
+        return response.text();
     }
 
-    return response.text();
+    const data =
+        await response.json();
+
+    if (
+        Array.isArray(
+            data?.detail
+        )
+    ) {
+
+        data.validation_errors =
+            data.detail;
+
+        data.detail =
+            data.detail
+                .map(item => {
+
+                    if (
+                        typeof item ===
+                        "string"
+                    ) {
+                        return item;
+                    }
+
+                    if (item?.msg) {
+                        return item.msg;
+                    }
+
+                    return (
+                        "Dữ liệu không hợp lệ."
+                    );
+                })
+                .join("; ");
+    }
+
+    else if (
+        data?.detail &&
+        typeof data.detail ===
+        "object"
+    ) {
+
+        data.detail =
+            data.detail.msg ||
+            data.detail.message ||
+            JSON.stringify(
+                data.detail
+            );
+    }
+
+    return data;
 }

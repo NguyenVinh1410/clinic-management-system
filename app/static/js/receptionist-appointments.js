@@ -1,6 +1,5 @@
 let allAppointments = [];
 
-
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
@@ -12,7 +11,6 @@ document.addEventListener(
 
             return;
         }
-
 
         try {
 
@@ -486,32 +484,20 @@ async function cancelAppointment(
         return;
     }
 
-
     try {
 
         const response =
             await apiFetch(
-                `/api/appointment/${appointmentId}/status`,
+                `/api/appointment/${appointmentId}/cancel`,
                 {
-                    method: "PATCH",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-                    },
-
-                    body: JSON.stringify({
-                        status: "Cancelled"
-                    }),
+                    method: "POST",
                 }
             );
-
 
         const data =
             await parseApiResponse(
                 response
             );
-
 
         if (!response.ok) {
 
@@ -519,34 +505,26 @@ async function cancelAppointment(
                 data.detail ||
                 "Không thể hủy lịch khám."
             );
-
         }
-
 
         showAppointmentAlert(
             "Đã hủy lịch khám.",
             "success"
         );
 
-
         await loadAppointments();
 
     }
     catch (error) {
 
-        console.error(
-            error
-        );
-
+        console.error(error);
 
         showAppointmentAlert(
             error.message ||
             "Hủy lịch khám thất bại.",
             "danger"
         );
-
     }
-
 }
 
 async function createInvoice(

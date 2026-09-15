@@ -24,6 +24,8 @@ class AppointmentService:
         stmt = (
             select(Appointment)
             .options(
+                joinedload(Appointment.patient),
+
                 joinedload(Appointment.schedule)
                 .joinedload(WorkingSchedule.doctor)
                 .joinedload(Doctor.specialty)
@@ -31,7 +33,7 @@ class AppointmentService:
             .where(Appointment.appointment_id == appointment_id)
         )
 
-        appointment = db.execute(stmt).scalar_one_or_none()
+        appointment = db.execute(stmt).scalars().first()
 
         if appointment is None:
             raise NotFoundException("Khong tim thay lich hen")
@@ -121,6 +123,74 @@ class AppointmentService:
             AppointmentService._appointment_to_response(appointment)
             for appointment in appointments
         ]
+
+    @staticmethod
+    def get_booked_times_by_schedule(
+            db: Session,
+            schedule_id: int,
+    ) -> list[datetime]:
+
+        schedule = db.get(
+            WorkingSchedule,
+            schedule_id,
+        )
+
+        if schedule is None:
+            raise NotFoundException(
+                "Khong tim thay ca lam viec"
+            )
+
+        schedule_start = datetime.combine(
+            schedule.work_date,
+            schedule.start_time,
+        )
+
+        schedule_end = datetime.combine(
+            schedule.work_date,
+            schedule.end_time,
+        )
+
+        stmt = (
+            select(Appointment.appointment_time)
+            .join(
+                WorkingSchedule,
+                Appointment.schedule_id
+                == WorkingSchedule.schedule_id,
+            )
+            .where(
+                WorkingSchedule.doctor_id
+                == schedule.doctor_id,
+
+                Appointment.status.in_(
+                    [
+                        AppointmentStatus.PENDING,
+                        AppointmentStatus.CONFIRMED,
+                    ]
+                ),
+
+                Appointment.appointment_time
+                < schedule_end,
+
+                (
+                        Appointment.appointment_time
+                        + timedelta(
+                    minutes=
+                    AppointmentService
+                    .APPOINTMENT_DURATION_MINUTES
+                )
+                )
+                > schedule_start,
+            )
+            .order_by(
+                Appointment.appointment_time
+            )
+        )
+
+        return list(
+            db.execute(stmt)
+            .scalars()
+            .all()
+        )
 
     @staticmethod
     def validate_patient(
@@ -229,7 +299,7 @@ class AppointmentService:
         if exclude_appointment_id is not None:
             doctor_stmt = doctor_stmt.where(Appointment.appointment_id != exclude_appointment_id)
 
-        existing_doctor_appointment = db.execute(doctor_stmt).scalar_one_or_none()
+        existing_doctor_appointment = db.execute(doctor_stmt).scalars().first()
 
         if existing_doctor_appointment is not None:
             raise ConflictException("Bac si da co lich hen vao thoi gian nay")
@@ -246,14 +316,13 @@ class AppointmentService:
                 ),
                 Appointment.appointment_time < appointment_end,
                 Appointment.appointment_time >= (appointment_time - timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES))
-                #Appointment.appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES) > appointment_time,
             )
         )
 
         if exclude_appointment_id is not None:
             patient_stmt = patient_stmt.where(Appointment.appointment_id != exclude_appointment_id)
 
-        existing_patient_appointment = db.execute(patient_stmt).scalar_one_or_none()
+        existing_patient_appointment = db.execute(patient_stmt).scalars().first()
 
         if existing_patient_appointment is not None:
             raise ConflictException("Benh nhan da co lich hen vao thoi gian nay")
@@ -321,7 +390,7 @@ class AppointmentService:
         db.commit()
         db.refresh(appointment)
 
-        return appointment
+        return AppointmentService._appointment_to_response(appointment)
 
     @staticmethod
     def create_appointment_by_ai(
@@ -454,19 +523,19 @@ class AppointmentService:
         db.commit()
         db.refresh(appointment)
 
-        return appointment
+        return AppointmentService._appointment_to_response(appointment)
 
     @staticmethod
     def update_status(
             db: Session,
             appointment: Appointment,
             new_status: AppointmentStatus
-    ) -> Appointment:
+    ) -> dict:
 
         current_status = appointment.status
 
         if current_status == new_status:
-            return appointment
+            return AppointmentService._appointment_to_response(appointment)
 
         if current_status == AppointmentStatus.PENDING:
             if new_status not in (
@@ -493,26 +562,26 @@ class AppointmentService:
         db.commit()
         db.refresh(appointment)
 
-        return appointment
+        return AppointmentService._appointment_to_response(appointment)
 
     @staticmethod
     def cancel_appointment(
             db: Session,
             appointment: Appointment,
-    ) -> Appointment:
+    ) -> dict:
 
         if appointment.status == AppointmentStatus.COMPLETED:
             raise BusinessException("Khong the huy lich da hoan tat")
 
         if appointment.status == AppointmentStatus.CANCELLED:
-            return appointment
+            raise BusinessException("Lich hen nay duoc huy")
 
         appointment.status = AppointmentStatus.CANCELLED
 
         db.commit()
         db.refresh(appointment)
 
-        return appointment
+        return AppointmentService._appointment_to_response(appointment)
 
     @staticmethod
     def cancel_appointment_by_ai(
@@ -575,7 +644,7 @@ class AppointmentService:
     def check_in_appointment(
             db: Session,
             appointment: Appointment,
-    ) -> Appointment:
+    ) -> dict:
 
         today = datetime.now().date()
 
@@ -599,7 +668,7 @@ class AppointmentService:
         db.commit()
         db.refresh(appointment)
 
-        return appointment
+        return AppointmentService._appointment_to_response(appointment)
 
     @staticmethod
     def _appointment_to_response(
@@ -609,6 +678,19 @@ class AppointmentService:
         schedule = appointment.schedule
         doctor = schedule.doctor
 
+        specialty_name = ""
+
+        if doctor.specialty is not None:
+            specialty_name = doctor.specialty.name
+
+        patient_name = ""
+
+        patient_phone = None
+
+        if appointment.patient is not None:
+            patient_name = appointment.patient.full_name
+            patient_phone = appointment.patient.phone
+
         return {
             "appointment_id": appointment.appointment_id,
 
@@ -616,9 +698,9 @@ class AppointmentService:
 
             "patient_id": appointment.patient_id,
 
-            "patient_name": appointment.patient.full_name,
+            "patient_name": patient_name,
 
-            "patient_phone": appointment.patient.phone,
+            "patient_phone": patient_phone,
 
             "chat_session_id": appointment.chat_session_id,
 
@@ -636,9 +718,5 @@ class AppointmentService:
 
             "specialty_id": doctor.specialty_id,
 
-            "specialty_name": (
-                doctor.specialty.name
-                if doctor.specialty.name is not None
-                else ""
-            ),
+            "specialty_name": specialty_name,
         }

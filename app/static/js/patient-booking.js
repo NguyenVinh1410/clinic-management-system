@@ -348,12 +348,13 @@ async function loadSchedules(
 
     }
 
+    const today = getLocalDateString();
 
     schedules =
         data.filter(
             schedule =>
-                schedule.status ===
-                "Active"
+                schedule.status === "Active" &&
+                schedule.work_date >= today
         );
 
 
@@ -432,54 +433,56 @@ async function selectSchedule(
                 scheduleId
         );
 
-
     if (!selectedSchedule) {
-
         return;
-
     }
-
 
     selectedSlot = null;
 
+    const bookedTimes =
+        await loadBookedAppointmentsForSchedule(
+            scheduleId
+        );
 
     renderSlots(
-        selectedSchedule
+        selectedSchedule,
+        bookedTimes
     );
 
-
     updateSummary();
-
 }
-
 
 async function loadBookedAppointmentsForSchedule(
     scheduleId
 ) {
 
-    /*
-     * Backend hiện có endpoint:
-     *
-     * GET /api/appointment/doctor/{doctor_id}
-     *
-     * nhưng Patient không được dùng endpoint đó.
-     *
-     * Vì vậy frontend không nên gọi API này.
-     *
-     * Backend hiện tại tự chống trùng
-     * khi POST appointment.
-     *
-     * Ta render các slot theo ca và
-     * để backend xác nhận cuối cùng.
-     */
+    const response =
+        await apiFetch(
+            `/api/appointment/schedule/${scheduleId}/booked-times`
+        );
 
-    return [];
+    const data =
+        await parseApiResponse(
+            response
+        );
 
+    if (!response.ok) {
+
+        throw new Error(
+            data.detail ||
+            "Không thể tải các khung giờ đã đặt."
+        );
+
+    }
+
+    return Array.isArray(data)
+        ? data
+        : [];
 }
 
-
 function renderSlots(
-    schedule
+    schedule,
+    bookedTimes = []
 ) {
 
     const container =
@@ -511,15 +514,13 @@ function renderSlots(
 
     while (
         current.getTime() +
-        30 * 60 * 1000
-        <=
+        30 * 60 * 1000 <=
         end.getTime()
     ) {
 
         slots.push(
             new Date(current)
         );
-
 
         current =
             new Date(
@@ -539,8 +540,19 @@ function renderSlots(
         `;
 
         return;
-
     }
+
+
+    const now = new Date();
+
+    const bookedSet = new Set(
+        bookedTimes.map(
+            value =>
+                toLocalISOString(
+                    new Date(value)
+                )
+        )
+    );
 
 
     container.innerHTML =
@@ -553,13 +565,37 @@ function renderSlots(
                             slot
                         );
 
+                    const isBooked =
+                        bookedSet.has(iso);
+
+                    const isPast =
+                        slot.getTime() <=
+                        now.getTime();
+
+                    const disabled =
+                        isBooked || isPast;
+
+                    const statusText =
+                        isBooked
+                            ? " · Đã đặt"
+                            : isPast
+                                ? " · Đã qua"
+                                : "";
 
                     return `
-
                         <button
                             type="button"
-                            class="slot-button"
-                            data-slot="${iso}">
+                            class="slot-button ${
+                                disabled
+                                    ? "disabled"
+                                    : ""
+                            }"
+                            data-slot="${iso}"
+                            ${
+                                disabled
+                                    ? "disabled"
+                                    : ""
+                            }>
 
                             ${slot.toLocaleTimeString(
                                 "vi-VN",
@@ -567,12 +603,10 @@ function renderSlots(
                                     hour: "2-digit",
                                     minute: "2-digit",
                                 }
-                            )}
+                            )}${statusText}
 
                         </button>
-
                     `;
-
                 }
             )
             .join("");
@@ -580,7 +614,7 @@ function renderSlots(
 
     container
         .querySelectorAll(
-            ".slot-button"
+            ".slot-button:not(:disabled)"
         )
         .forEach(
             button => {
@@ -914,4 +948,25 @@ function formatTime(
         5
     );
 
+}
+
+function getLocalDateString() {
+
+    const now =
+        new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
 }

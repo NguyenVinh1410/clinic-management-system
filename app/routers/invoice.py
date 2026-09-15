@@ -36,10 +36,12 @@ def create_invoice(
             Depends(get_db),
         ]
 ):
-    return InvoiceService.create_invoice(
+    invoice = InvoiceService.create_invoice(
         db=db,
         data=data,
     )
+
+    return InvoiceService.build_invoice_response(invoice)
 
 @router.get(
     "",
@@ -84,38 +86,6 @@ def get_my_invoices(
     )
 
 @router.get(
-    "/{invoice_id}",
-    response_model=InvoiceResponse,
-    status_code=status.HTTP_200_OK,
-)
-def get_invoice(
-        invoice_id: int,
-        current_user: Annotated[
-            User,
-            Depends(requires_role(
-                UserRole.ADMIN,
-                UserRole.RECEPTIONIST,
-                UserRole.PATIENT
-            ))
-        ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
-):
-    invoice = InvoiceService.get_invoice_by_id(
-        db=db,
-        invoice_id=invoice_id,
-    )
-
-    InvoiceService.validate_patient_access(
-        invoice=invoice,
-        current_user=current_user,
-    )
-
-    return invoice
-
-@router.get(
     "/appointment/{appointment_id}",
     response_model=InvoiceResponse,
     status_code=status.HTTP_200_OK,
@@ -148,6 +118,38 @@ def get_invoice_by_appointment(
 
     return invoice
 
+@router.get(
+    "/{invoice_id}",
+    response_model=InvoiceResponse,
+    status_code=status.HTTP_200_OK,
+)
+def get_invoice(
+        invoice_id: int,
+        current_user: Annotated[
+            User,
+            Depends(requires_role(
+                UserRole.ADMIN,
+                UserRole.RECEPTIONIST,
+                UserRole.PATIENT
+            ))
+        ],
+        db: Annotated[
+            Session,
+            Depends(get_db),
+        ]
+):
+    invoice = InvoiceService.get_invoice_by_id(
+        db=db,
+        invoice_id=invoice_id,
+    )
+
+    InvoiceService.validate_patient_access(
+        invoice=invoice,
+        current_user=current_user,
+    )
+
+    return InvoiceService.build_invoice_response(invoice)
+
 @router.patch(
     "/{invoice_id}/pay",
     response_model=InvoiceResponse,
@@ -174,9 +176,16 @@ def pay_invoice(
         invoice_id=invoice_id,
     )
 
-    return InvoiceService.pay_invoice(
+    InvoiceService.validate_patient_access(
+        invoice=invoice,
+        current_user=current_user,
+    )
+
+    updated_invoice = InvoiceService.pay_invoice(
         db=db,
         invoice=invoice,
         data=data,
         current_user=current_user,
     )
+
+    return InvoiceService.build_invoice_response(updated_invoice)

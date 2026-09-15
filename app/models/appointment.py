@@ -117,3 +117,11 @@ class Appointment(Base):
             if self.schedule.doctor.specialty is not None
             else ""
         )
+
+    @property
+    def patient_name(self) -> str:
+        return self.patient.full_name
+
+    @property
+    def patient_phone(self) -> str | None:
+        return self.patient.phone

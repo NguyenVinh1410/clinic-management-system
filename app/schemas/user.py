@@ -1,6 +1,6 @@
 from datetime import date
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.models.enums import UserRole, UserStatus, Gender
 
@@ -39,7 +39,6 @@ class UserCreate(BaseModel):
     # Doctor
     specialty_id: int | None = Field(
         default=None,
-        gt=0,
     )
 
     qualification: str | None = Field(
@@ -139,6 +138,21 @@ class UserCreate(BaseModel):
 
         return value
 
+    @model_validator(mode="after")
+    def validate_role_specific_fields(self):
+        if (
+                self.role == UserRole.DOCTOR
+                and (
+                self.specialty_id is None
+                or self.specialty_id <= 0
+        )
+        ):
+            raise ValueError(
+                "Bác sĩ phải chọn chuyên khoa"
+            )
+
+        return self
+
 
 class UserUpdate(BaseModel):
     full_name: str | None = Field(
@@ -169,7 +183,6 @@ class UserUpdate(BaseModel):
     # Doctor
     specialty_id: int | None = Field(
         default=None,
-        gt=0,
     )
 
     qualification: str | None = Field(
@@ -245,6 +258,21 @@ class UserUpdate(BaseModel):
 
         return value
 
+    @model_validator(mode="after")
+    def validate_role_specific_fields(self):
+        if (
+                self.role == UserRole.DOCTOR
+                and (
+                self.specialty_id is None
+                or self.specialty_id <= 0
+        )
+        ):
+            raise ValueError(
+                "Bác sĩ phải chọn chuyên khoa"
+            )
+
+        return self
+
 
 class UserStatusUpdate(BaseModel):
     status: UserStatus
@@ -264,3 +292,10 @@ class UserResponse(BaseModel):
 
     role: UserRole
     status: UserStatus
+
+    specialty_id: int | None = None
+    qualification: str | None = None
+    bio: str | None = None
+
+    dob: date | None = None
+    address: str | None = None

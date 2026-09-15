@@ -229,20 +229,6 @@ def admin_working_schedules(
     )
 
 @router.get(
-    "/admin/doctors",
-    include_in_schema=False,
-)
-def admin_doctors(
-        request: Request,
-):
-    return templates.TemplateResponse(
-        request=request,
-        name="admin/doctors.html",
-        context={},
-    )
-
-
-@router.get(
     "/admin/specialties",
     include_in_schema=False,
 )
@@ -268,21 +254,6 @@ def admin_medicines(
         name="admin/medicines.html",
         context={},
     )
-
-
-@router.get(
-    "/admin/patients",
-    include_in_schema=False,
-)
-def admin_patients(
-        request: Request,
-):
-    return templates.TemplateResponse(
-        request=request,
-        name="admin/patients.html",
-        context={},
-    )
-
 
 @router.get(
     "/admin/appointments",

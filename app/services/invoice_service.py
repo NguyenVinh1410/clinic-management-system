@@ -24,7 +24,7 @@ class InvoiceService:
     def get_invoice_by_id(
             db: Session,
             invoice_id: int,
-    ) -> InvoiceResponse:
+    ) -> Invoice:
 
         stmt = (
             select(Invoice)
@@ -51,7 +51,7 @@ class InvoiceService:
         if invoice is None:
             raise NotFoundException("Khong tim thay hoa don")
 
-        return InvoiceService.build_invoice_response(invoice)
+        return invoice
 
     @staticmethod
     def get_all_invoices(db: Session) -> list[InvoiceResponse]:
@@ -87,7 +87,7 @@ class InvoiceService:
     def get_invoice_by_appointment(
             db: Session,
             appointment_id: int,
-    ) -> InvoiceResponse:
+    ) -> Invoice:
 
         stmt = (
             select(Invoice)
@@ -114,7 +114,7 @@ class InvoiceService:
         if invoice is None:
             raise NotFoundException("lich hen chua co hoa don")
 
-        return InvoiceService.build_invoice_response(invoice)
+        return invoice
 
     @staticmethod
     def get_appointment(
@@ -293,6 +293,9 @@ class InvoiceService:
 
         if invoice.status == InvoiceStatus.PAID:
             raise ConflictException("Hoa don da duoc thanh toan")
+
+        if invoice.status == InvoiceStatus.CANCELLED:
+            raise BusinessException("Khong the thanh toan hoa don da huy")
 
         appointment = InvoiceService.get_appointment(
             db=db,
