@@ -1,51 +1,77 @@
 const API_BASE_URL = "";
 
-function getAccessToken(){
-    return sessionStorage.getItem("access_token");
+function getAccessToken() {
+    return sessionStorage.getItem(
+        "access_token"
+    );
 }
 
-function setAccessToken(token){
-    sessionStorage.setItem("access_token", token)
+function setAccessToken(token) {
+    sessionStorage.setItem(
+        "access_token",
+        token
+    );
 }
 
-function clearAccessToken(){
-    sessionStorage.removeItem("access_token");
+function clearAccessToken() {
 
-    sessionStorage.removeItem("current_user");
+    sessionStorage.removeItem(
+        "access_token"
+    );
 
-    sessionStorage.removeItem("ai_chat_session_id");
+    sessionStorage.removeItem(
+        "current_user"
+    );
+
+    sessionStorage.removeItem(
+        "ai_chat_session_id"
+    );
 }
 
-function isAuthenticated(){
-    return Boolean(getAccessToken());
+function isAuthenticated() {
+    return Boolean(
+        getAccessToken()
+    );
 }
 
-async function apiFetch(url, options = {}){
-    const token = getAccessToken();
+async function apiFetch(
+    url,
+    options = {}
+) {
 
-    const headers = new Headers(options.headers || {});
+    const token =
+        getAccessToken();
+
+    const headers =
+        new Headers(
+            options.headers || {}
+        );
 
     headers.set(
         "Accept",
         "application/json"
     );
 
-    if(
+    if (
         options.body &&
         !(options.body instanceof FormData) &&
         !headers.has("Content-Type")
     ) {
+
         headers.set(
             "Content-Type",
             "application/json"
         );
+
     }
 
-    if(token){
+    if (token) {
+
         headers.set(
             "Authorization",
             `Bearer ${token}`
         );
+
     }
 
     const response =
@@ -53,20 +79,34 @@ async function apiFetch(url, options = {}){
             `${API_BASE_URL}${url}`,
             {
                 ...options,
-                headers
+                headers,
+                cache:
+                    options.cache ||
+                    "no-store",
             }
         );
 
-    if (response.status === 401){
+    if (
+        response.status === 401
+    ) {
+
         clearAccessToken();
 
-        const pathname = window.location.pathname;
+        const pathname =
+            window.location.pathname;
 
-        if (pathname !== "/login" && pathname !== "/register"){
-            window.location.href = "/login";
+        if (
+            pathname !== "/login" &&
+            pathname !== "/register"
+        ) {
+
+            window.location.href =
+                "/login";
+
         }
 
     }
+
     return response;
 }
 

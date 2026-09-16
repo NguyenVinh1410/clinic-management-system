@@ -171,15 +171,12 @@ class AppointmentService:
                 Appointment.appointment_time
                 < schedule_end,
 
-                (
-                        Appointment.appointment_time
-                        + timedelta(
-                    minutes=
-                    AppointmentService
-                    .APPOINTMENT_DURATION_MINUTES
+                Appointment.appointment_time >= (
+                        schedule_start
+                        - timedelta(
+                    minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES
                 )
-                )
-                > schedule_start,
+                ),
             )
             .order_by(
                 Appointment.appointment_time
@@ -269,63 +266,115 @@ class AppointmentService:
             schedule: WorkingSchedule,
             appointment_time: datetime,
             patient_id: int,
-            exclude_appointment_id: int | None = None
+            exclude_appointment_id: int | None = None,
     ) -> None:
 
-        appointment_end = appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES)
+        appointment_end = (
+                appointment_time
+                + timedelta(
+            minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES
+        )
+        )
+
+        appointment_start_limit = (
+                appointment_time
+                - timedelta(
+            minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES
+        )
+        )
+
+        # ==========================================
+        # 1. Kiểm tra bác sĩ có bị trùng lịch không
+        # ==========================================
 
         doctor_stmt = (
             select(Appointment)
             .join(
                 WorkingSchedule,
-                Appointment.schedule_id == WorkingSchedule.schedule_id
+                Appointment.schedule_id
+                == WorkingSchedule.schedule_id,
             )
             .where(
-                WorkingSchedule.doctor_id == schedule.doctor_id,
+                WorkingSchedule.doctor_id
+                == schedule.doctor_id,
+
                 Appointment.status.in_(
                     [
                         AppointmentStatus.PENDING,
-                        AppointmentStatus.CONFIRMED
+                        AppointmentStatus.CONFIRMED,
                     ]
                 ),
-                Appointment.appointment_time < appointment_end,
-                (
-                    Appointment.appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES)
-                )
-                > appointment_time,
+
+                Appointment.appointment_time
+                < appointment_end,
+
+                Appointment.appointment_time
+                >= appointment_start_limit,
             )
         )
 
         if exclude_appointment_id is not None:
-            doctor_stmt = doctor_stmt.where(Appointment.appointment_id != exclude_appointment_id)
+            doctor_stmt = doctor_stmt.where(
+                Appointment.appointment_id
+                != exclude_appointment_id
+            )
 
-        existing_doctor_appointment = db.execute(doctor_stmt).scalars().first()
+        existing_doctor_appointment = (
+            db.execute(
+                doctor_stmt
+            )
+            .scalars()
+            .first()
+        )
 
         if existing_doctor_appointment is not None:
-            raise ConflictException("Bac si da co lich hen vao thoi gian nay")
+            raise ConflictException(
+                "Bac si da co lich hen vao thoi gian nay"
+            )
+
+        # ==========================================
+        # 2. Kiểm tra bệnh nhân có trùng lịch không
+        # ==========================================
 
         patient_stmt = (
             select(Appointment)
             .where(
-                Appointment.patient_id == patient_id,
+                Appointment.patient_id
+                == patient_id,
+
                 Appointment.status.in_(
                     [
                         AppointmentStatus.PENDING,
-                        AppointmentStatus.CONFIRMED
+                        AppointmentStatus.CONFIRMED,
                     ]
                 ),
-                Appointment.appointment_time < appointment_end,
-                Appointment.appointment_time >= (appointment_time - timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES))
+
+                Appointment.appointment_time
+                < appointment_end,
+
+                Appointment.appointment_time
+                >= appointment_start_limit,
             )
         )
 
         if exclude_appointment_id is not None:
-            patient_stmt = patient_stmt.where(Appointment.appointment_id != exclude_appointment_id)
+            patient_stmt = patient_stmt.where(
+                Appointment.appointment_id
+                != exclude_appointment_id
+            )
 
-        existing_patient_appointment = db.execute(patient_stmt).scalars().first()
+        existing_patient_appointment = (
+            db.execute(
+                patient_stmt
+            )
+            .scalars()
+            .first()
+        )
 
         if existing_patient_appointment is not None:
-            raise ConflictException("Benh nhan da co lich hen vao thoi gian nay")
+            raise ConflictException(
+                "Benh nhan da co lich hen vao thoi gian nay"
+            )
 
     @staticmethod
     def create_appointment(

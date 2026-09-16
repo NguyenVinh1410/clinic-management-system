@@ -49,12 +49,10 @@ async function loadInvoices() {
             "/api/invoice"
         );
 
-
     const data =
         await parseApiResponse(
             response
         );
-
 
     if (!response.ok) {
 
@@ -65,17 +63,14 @@ async function loadInvoices() {
 
     }
 
-
     allInvoices =
         Array.isArray(data)
             ? data
             : data.items || [];
 
-
     renderInvoices(
         allInvoices
     );
-
 }
 
 function renderInvoices(
@@ -406,6 +401,26 @@ async function payInvoice(
             );
         }
 
+        const index =
+            allInvoices.findIndex(
+                invoice =>
+                    Number(
+                        invoice.invoice_id
+                    ) ===
+                    Number(invoiceId)
+            );
+
+        if (index !== -1) {
+
+            allInvoices[index] =
+                data;
+
+            renderInvoices(
+                allInvoices
+            );
+        }
+
+
         showInvoiceAlert(
             `Đã thanh toán ${methodText} thành công.`,
             "success"
@@ -632,8 +647,9 @@ function renderInvoiceDetail(
 
 
         payButton.onclick =
-            () => payCash(
-                invoice.invoice_id
+            () => payInvoice(
+                invoice.invoice_id,
+                "Cash"
             );
 
     }

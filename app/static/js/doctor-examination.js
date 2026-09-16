@@ -581,14 +581,11 @@ async function saveMedicalRecord(
             null,
 
         examined_at:
-            new Date(
                 document.getElementById(
                     "examinedAt"
-                ).value
-            ).toISOString(),
+                ).value,
 
     };
-
 
     try {
 

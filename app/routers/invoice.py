@@ -116,7 +116,7 @@ def get_invoice_by_appointment(
         current_user=current_user,
     )
 
-    return invoice
+    return InvoiceService.build_invoice_response(invoice)
 
 @router.get(
     "/{invoice_id}",

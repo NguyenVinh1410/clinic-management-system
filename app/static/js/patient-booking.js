@@ -455,24 +455,19 @@ async function selectSchedule(
 async function loadBookedAppointmentsForSchedule(
     scheduleId
 ) {
-
     const response =
         await apiFetch(
-            `/api/appointment/schedule/${scheduleId}/booked-times`
+            `/api/working_schedule/schedule/${scheduleId}/booked-times`
         );
 
     const data =
-        await parseApiResponse(
-            response
-        );
+        await parseApiResponse(response);
 
     if (!response.ok) {
-
         throw new Error(
             data.detail ||
             "Không thể tải các khung giờ đã đặt."
         );
-
     }
 
     return Array.isArray(data)
@@ -950,23 +945,23 @@ function formatTime(
 
 }
 
-function getLocalDateString() {
-
-    const now =
-        new Date();
-
-    const year =
-        now.getFullYear();
-
-    const month =
-        String(
-            now.getMonth() + 1
-        ).padStart(2, "0");
-
-    const day =
-        String(
-            now.getDate()
-        ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
+//function getLocalDateString() {
+//
+//    const now =
+//        new Date();
+//
+//    const year =
+//        now.getFullYear();
+//
+//    const month =
+//        String(
+//            now.getMonth() + 1
+//        ).padStart(2, "0");
+//
+//    const day =
+//        String(
+//            now.getDate()
+//        ).padStart(2, "0");
+//
+//    return `${year}-${month}-${day}`;
+//}

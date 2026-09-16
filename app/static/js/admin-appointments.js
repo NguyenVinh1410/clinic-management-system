@@ -95,7 +95,6 @@ function renderAppointments(
 
         tbody.innerHTML = `
             <tr>
-
                 <td
                     colspan="6"
                     class="text-center
@@ -105,12 +104,10 @@ function renderAppointments(
                     Không có lịch khám phù hợp.
 
                 </td>
-
             </tr>
         `;
 
         return;
-
     }
 
 
@@ -126,6 +123,10 @@ function renderAppointments(
         );
 
 
+    const today =
+        getLocalDateString();
+
+
     tbody.innerHTML =
         sorted
             .map(
@@ -134,17 +135,32 @@ function renderAppointments(
                     let action = "";
 
 
+                    const appointmentDate =
+                        String(
+                            appointment.appointment_time ||
+                            ""
+                        ).slice(0, 10);
+
+
+                    /*
+                     * =====================================
+                     * PENDING
+                     * =====================================
+                     *
+                     * Chỉ cho phép Tiếp nhận
+                     * khi lịch khám là HÔM NAY.
+                     */
+
                     if (
-                        appointment.status ===
-                        "Pending"
+                        appointment.status === "Pending"
+                        &&
+                        appointmentDate === today
                     ) {
 
                         action = `
                             <button
                                 type="button"
-                                class="btn
-                                       btn-sm
-                                       btn-primary"
+                                class="btn btn-sm btn-primary"
                                 data-checkin="${appointment.appointment_id}">
 
                                 <i
@@ -157,17 +173,40 @@ function renderAppointments(
                         `;
 
                     }
+
+                    /*
+                     * Pending nhưng chưa đến ngày khám
+                     */
+
                     else if (
-                        appointment.status ===
-                        "Confirmed"
+                        appointment.status === "Pending"
+                    ) {
+
+                        action = `
+                            <span
+                                class="text-secondary small">
+
+                                Chưa đến ngày khám
+
+                            </span>
+                        `;
+
+                    }
+
+                    /*
+                     * =====================================
+                     * CONFIRMED
+                     * =====================================
+                     */
+
+                    else if (
+                        appointment.status === "Confirmed"
                     ) {
 
                         action = `
                             <button
                                 type="button"
-                                class="btn
-                                       btn-sm
-                                       btn-outline-danger"
+                                class="btn btn-sm btn-outline-danger"
                                 data-cancel="${appointment.appointment_id}">
 
                                 Hủy
@@ -176,6 +215,13 @@ function renderAppointments(
                         `;
 
                     }
+
+                    /*
+                     * =====================================
+                     * COMPLETED / CANCELLED
+                     * =====================================
+                     */
+
                     else {
 
                         action = `
@@ -206,19 +252,19 @@ function renderAppointments(
                                     class="fw-semibold">
 
                                     ${escapeHtml(
-                                        appointment.patient_name
+                                        appointment.patient_name ||
+                                        ""
                                     )}
 
                                 </div>
 
                                 <div
-                                    class="small
-                                           text-secondary">
+                                    class="small text-secondary">
 
-                                    ${
+                                    ${escapeHtml(
                                         appointment.patient_phone ||
-                                        "Chưa có SĐT"
-                                    }
+                                        ""
+                                    )}
 
                                 </div>
 
@@ -227,36 +273,46 @@ function renderAppointments(
 
                             <td>
 
-                                ${escapeHtml(
-                                    appointment.doctor_name
-                                )}
+                                <div
+                                    class="fw-semibold">
+
+                                    ${escapeHtml(
+                                        appointment.doctor_name ||
+                                        ""
+                                    )}
+
+                                </div>
+
+                                <div
+                                    class="small text-secondary">
+
+                                    ${escapeHtml(
+                                        appointment.specialty_name ||
+                                        ""
+                                    )}
+
+                                </div>
 
                             </td>
 
 
                             <td>
-
-                                ${escapeHtml(
-                                    appointment.specialty_name ||
-                                    "Chưa cập nhật"
-                                )}
-
-                            </td>
-
-
-                            <td>
-
                                 ${renderStatusBadge(
                                     appointment.status
                                 )}
-
                             </td>
 
 
-                            <td class="text-end">
+                            <td>
+                                ${escapeHtml(
+                                    appointment.created_by ||
+                                    ""
+                                )}
+                            </td>
 
+
+                            <td>
                                 ${action}
-
                             </td>
 
                         </tr>
@@ -265,10 +321,6 @@ function renderAppointments(
                 }
             )
             .join("");
-
-
-    bindAppointmentActions();
-
 }
 
 
@@ -327,46 +379,60 @@ async function checkinAppointment(
             "Xác nhận tiếp nhận bệnh nhân?"
         );
 
-
     if (!confirmed) {
-
         return;
-
     }
 
 
-    const response =
-        await apiFetch(
-            `/api/appointment/${appointmentId}/checkin`,
-            {
-                method: "POST",
-            }
+    try {
+
+        const response =
+            await apiFetch(
+                `/api/appointment/${appointmentId}/checkin`,
+                {
+                    method: "POST",
+                }
+            );
+
+
+        const data =
+            await parseApiResponse(
+                response
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "Không thể tiếp nhận."
+            );
+
+        }
+
+
+        showAppointmentAlert(
+            "Đã tiếp nhận bệnh nhân.",
+            "success"
         );
 
 
-    const data =
-        await parseApiResponse(
-            response
+        await loadAppointments();
+
+    }
+    catch (error) {
+
+        console.error(
+            error
         );
 
-
-    if (!response.ok) {
-
-        throw new Error(
-            data.detail ||
-            "Không thể tiếp nhận."
+        showAppointmentAlert(
+            error.message ||
+            "Không thể tiếp nhận bệnh nhân.",
+            "danger"
         );
 
     }
-
-
-    showAppointmentAlert(
-        "Đã tiếp nhận bệnh nhân.",
-        "success"
-    );
-
-
-    await loadAppointments();
 
 }
 
@@ -486,6 +552,7 @@ function setupAppointmentFilters() {
                             ""
                         ).slice(0, 10);
 
+                    const today = getLocalDateString();
 
                     const matchSearch =
                         !keyword ||

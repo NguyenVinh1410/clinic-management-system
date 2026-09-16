@@ -76,11 +76,35 @@ def get_doctor_schedule(
     ))
 
 @router.get(
+    "/schedule/{schedule_id}/booked-times",
+    response_model=list[datetime],
+)
+def get_booked_times_by_schedule(
+        schedule_id: int,
+        _: Annotated[
+            User,
+            Depends(
+                requires_role(
+                    UserRole.PATIENT
+                )
+            ),
+        ],
+        db: Annotated[
+            Session,
+            Depends(get_db),
+        ],
+):
+    return AppointmentService.get_booked_times_by_schedule(
+        db=db,
+        schedule_id=schedule_id,
+    )
+
+@router.get(
     "/{schedule_id}",
     response_model=WorkingScheduleResponse,
     status_code=status.HTTP_200_OK,
 )
-def get_schedule(
+def get_schedule_by_id(
         schedule_id: int,
         _: Annotated[
             User,
@@ -150,27 +174,3 @@ def delete_schedule(
     )
 
     return None
-
-@router.get(
-    "/schedule/{schedule_id}/booked-times",
-    response_model=list[datetime],
-)
-def get_booked_times_by_schedule(
-        schedule_id: int,
-        _: Annotated[
-            User,
-            Depends(
-                requires_role(
-                    UserRole.PATIENT
-                )
-            ),
-        ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ],
-):
-    return AppointmentService.get_booked_times_by_schedule(
-        db=db,
-        schedule_id=schedule_id,
-    )

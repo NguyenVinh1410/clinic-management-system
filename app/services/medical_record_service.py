@@ -1,4 +1,5 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
@@ -14,6 +15,23 @@ from app.schemas.medical_record import MedicalRecordCreate, MedicalRecordUpdate,
 
 
 class MedicalRecordService:
+    LOCAL_TZ = ZoneInfo(
+        "Asia/Ho_Chi_Minh"
+    )
+
+    @staticmethod
+    def _to_local_naive(
+            value: datetime
+    ) -> datetime:
+
+        if value.tzinfo is None:
+            return value
+
+        return value.astimezone(
+            MedicalRecordService.LOCAL_TZ
+        ).replace(
+            tzinfo=None
+        )
 
     @staticmethod
     def get_record_by_id(
@@ -160,6 +178,29 @@ class MedicalRecordService:
             doctor_id=doctor_id
         )
 
+        examined_at = (
+            MedicalRecordService
+            ._to_local_naive(
+                data.examined_at
+            )
+        )
+
+        now = datetime.now(
+            MedicalRecordService.LOCAL_TZ
+        ).replace(
+            tzinfo=None
+        )
+
+        if examined_at > now:
+            raise BusinessException(
+                "Thoi gian kham khong duoc o tuong lai"
+            )
+
+        if examined_at < appointment.appointment_time:
+            raise BusinessException(
+                "Khong the ghi ho so truoc gio hen kham"
+            )
+
         if(appointment.status == AppointmentStatus.CANCELLED):
             raise BusinessException("Khong the tao ho so cho lich hen da huy")
 
@@ -190,7 +231,12 @@ class MedicalRecordService:
             db.commit()
             db.refresh(record)
 
-            return record
+            hydrated = MedicalRecordService.get_record_by_id(
+                db=db,
+                record_id=record.record_id,
+            )
+
+            return MedicalRecordService.build_record_response(hydrated)
 
         except IntegrityError as exc:
             db.rollback()
@@ -230,7 +276,12 @@ class MedicalRecordService:
         db.commit()
         db.refresh(record)
 
-        return record
+        hydrated = MedicalRecordService.get_record_by_id(
+            db=db,
+            record_id=record.record_id,
+        )
+
+        return MedicalRecordService.build_record_response(hydrated)
 
     @staticmethod
     def build_record_response(record: MedicalRecord) -> MedicalRecordResponse:
