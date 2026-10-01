@@ -4,8 +4,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.enums import MedicineStatus
 
-class MedicineCreate(BaseModel):
 
+class MedicineCreate(BaseModel):
     name: str = Field(
         min_length=1,
         max_length=150,
@@ -25,6 +25,7 @@ class MedicineCreate(BaseModel):
     stock_qty: int = Field(ge=0)
 
     status: MedicineStatus = MedicineStatus.ACTIVE
+
 
 class MedicineUpdate(BaseModel):
     name: str | None = Field(
@@ -52,6 +53,7 @@ class MedicineUpdate(BaseModel):
     )
 
     status: MedicineStatus | None = None
+
 
 class MedicineResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)

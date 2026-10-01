@@ -14,6 +14,7 @@ router = APIRouter(
     tags=["medicine"],
 )
 
+
 @router.post(
     "",
     response_model=MedicineResponse,
@@ -25,16 +26,13 @@ def create_medicine(
             User,
             Depends(requires_role(UserRole.ADMIN)),
         ],
-
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     return MedicineService.create_medicine(
         db=db,
         data=data,
     )
+
 
 @router.get(
     "",
@@ -49,13 +47,10 @@ def get_medicines(
                 UserRole.DOCTOR
             ))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
-
     return MedicineService.get_all_medicines(db=db)
+
 
 @router.get(
     "/{medicine_id}",
@@ -71,16 +66,13 @@ def get_medicine(
                 UserRole.DOCTOR
             ))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
-
     return MedicineService.get_medicine_by_id(
         db=db,
         medicine_id=medicine_id,
     )
+
 
 @router.patch(
     "/{medicine_id}",
@@ -93,10 +85,7 @@ def update_medicine(
             User,
             Depends(requires_role(UserRole.ADMIN)),
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     medicine = MedicineService.get_medicine_by_id(
         db=db,
@@ -109,6 +98,7 @@ def update_medicine(
         data=data,
     )
 
+
 @router.delete(
     "/{medicine_id}",
     response_model=MedicineResponse,
@@ -119,10 +109,7 @@ def discontinue_medicine(
             User,
             Depends(requires_role(UserRole.ADMIN)),
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     medicine = MedicineService.get_medicine_by_id(
         db=db,

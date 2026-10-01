@@ -6,7 +6,6 @@ from app.core.exceptions import ConflictException, NotFoundException
 from app.models.user import User, Patient
 
 
-
 class PatientService:
 
     @staticmethod

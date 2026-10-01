@@ -3,7 +3,7 @@ from datetime import datetime, date
 from sqlalchemy import DateTime, Date, Enum as SQLEnum, String, func, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.database.base import  Base
+from app.database.base import Base
 from app.models.enums import UserRole, UserStatus, Gender
 
 
@@ -86,11 +86,15 @@ class User(Base):
         "polymorphic_identity": "user",
     }
 
+
 class Admin(User):
     __tablename__ = "admin"
 
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("user.user_id", ondelete="CASCADE"),
+        ForeignKey(
+            "user.user_id",
+            ondelete="CASCADE"
+        ),
         primary_key=True,
     )
 
@@ -98,11 +102,15 @@ class Admin(User):
         "polymorphic_identity": "admin",
     }
 
+
 class Receptionist(User):
     __tablename__ = "receptionist"
 
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("user.user_id", ondelete="CASCADE"),
+        ForeignKey(
+            "user.user_id",
+            ondelete="CASCADE"
+        ),
         primary_key=True,
     )
 
@@ -110,11 +118,15 @@ class Receptionist(User):
         "polymorphic_identity": "receptionist",
     }
 
+
 class Doctor(User):
     __tablename__ = "doctor"
 
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("user.user_id", ondelete="CASCADE"),
+        ForeignKey(
+            "user.user_id",
+            ondelete="CASCADE"
+        ),
         primary_key=True,
     )
 
@@ -129,7 +141,10 @@ class Doctor(User):
     )
 
     specialty_id: Mapped[int] = mapped_column(
-        ForeignKey("specialty.specialty_id", ondelete="RESTRICT"),
+        ForeignKey(
+            "specialty.specialty_id",
+            ondelete="RESTRICT"
+        ),
         nullable=False,
     )
 
@@ -147,11 +162,15 @@ class Doctor(User):
         "polymorphic_identity": "doctor",
     }
 
+
 class Patient(User):
     __tablename__ = "patient"
 
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("user.user_id", ondelete="CASCADE"),
+        ForeignKey(
+            "user.user_id",
+            ondelete="CASCADE"
+        ),
         primary_key=True,
     )
 

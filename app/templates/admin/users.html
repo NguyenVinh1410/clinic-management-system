@@ -36,15 +36,15 @@ Quản lý người dùng | Admin | ClinicCare
 
 
             <div
-                id="userAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="userAlert">
             </div>
 
 
             <div class="content-card">
 
                 <div
-                    class="p-4 border-bottom
+                        class="p-4 border-bottom
                            d-flex
                            justify-content-between
                            align-items-center
@@ -67,9 +67,9 @@ Quản lý người dùng | Admin | ClinicCare
                     <div class="d-flex gap-2">
 
                         <button
-                            type="button"
-                            id="refreshUsers"
-                            class="btn btn-outline-primary">
+                                class="btn btn-outline-primary"
+                                id="refreshUsers"
+                                type="button">
 
                             <i class="bi bi-arrow-clockwise me-1"></i>
 
@@ -79,10 +79,10 @@ Quản lý người dùng | Admin | ClinicCare
 
 
                         <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#userCreateModal">
+                                class="btn btn-primary"
+                                data-bs-target="#userCreateModal"
+                                data-bs-toggle="modal"
+                                type="button">
 
                             <i class="bi bi-person-plus me-1"></i>
 
@@ -108,10 +108,10 @@ Quản lý người dùng | Admin | ClinicCare
                                 </span>
 
                                 <input
-                                    type="text"
-                                    id="userSearch"
-                                    class="form-control"
-                                    placeholder="Tìm theo họ tên, username hoặc số điện thoại...">
+                                        class="form-control"
+                                        id="userSearch"
+                                        placeholder="Tìm theo họ tên, username hoặc số điện thoại..."
+                                        type="text">
 
                             </div>
 
@@ -121,8 +121,8 @@ Quản lý người dùng | Admin | ClinicCare
                         <div class="col-12 col-lg-4">
 
                             <select
-                                id="roleFilter"
-                                class="form-select">
+                                    class="form-select"
+                                    id="roleFilter">
 
                                 <option value="">
                                     Tất cả vai trò
@@ -150,56 +150,56 @@ Quản lý người dùng | Admin | ClinicCare
                     <div class="table-responsive">
 
                         <table
-                            class="table
+                                class="table
                                    align-middle
                                    mb-0">
 
                             <thead>
 
-                                <tr>
+                            <tr>
 
-                                    <th>
-                                        Người dùng
-                                    </th>
+                                <th>
+                                    Người dùng
+                                </th>
 
-                                    <th>
-                                        Username
-                                    </th>
+                                <th>
+                                    Username
+                                </th>
 
-                                    <th>
-                                        Vai trò
-                                    </th>
+                                <th>
+                                    Vai trò
+                                </th>
 
-                                    <th>
-                                        Số điện thoại
-                                    </th>
+                                <th>
+                                    Số điện thoại
+                                </th>
 
-                                    <th>
-                                        Trạng thái
-                                    </th>
+                                <th>
+                                    Trạng thái
+                                </th>
 
-                                    <th class="text-end">
-                                        Thao tác
-                                    </th>
+                                <th class="text-end">
+                                    Thao tác
+                                </th>
 
-                                </tr>
+                            </tr>
 
                             </thead>
 
 
                             <tbody id="userList">
 
-                                <tr>
+                            <tr>
 
-                                    <td
-                                        colspan="6"
-                                        class="text-center py-5 text-secondary">
+                                <td
+                                        class="text-center py-5 text-secondary"
+                                        colspan="6">
 
-                                        Đang tải...
+                                    Đang tải...
 
-                                    </td>
+                                </td>
 
-                                </tr>
+                            </tr>
 
                             </tbody>
 
@@ -218,16 +218,14 @@ Quản lý người dùng | Admin | ClinicCare
 </div>
 
 
-<!-- CREATE MODAL -->
-
 <div
-    class="modal fade"
-    id="userCreateModal"
-    tabindex="-1"
-    aria-hidden="true">
+        aria-hidden="true"
+        class="modal fade"
+        id="userCreateModal"
+        tabindex="-1">
 
     <div
-        class="modal-dialog
+            class="modal-dialog
                modal-lg
                modal-dialog-centered">
 
@@ -249,9 +247,9 @@ Quản lý người dùng | Admin | ClinicCare
 
 
                 <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal">
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        type="button">
                 </button>
 
             </div>
@@ -270,9 +268,9 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                id="createUsername"
-                                class="form-control"
-                                required>
+                                    class="form-control"
+                                    id="createUsername"
+                                    required>
 
                             <div class="form-text">
                                 Ít nhất 6 ký tự, có chữ và số.
@@ -288,10 +286,10 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                type="password"
-                                id="createPassword"
-                                class="form-control"
-                                required>
+                                    class="form-control"
+                                    id="createPassword"
+                                    required
+                                    type="password">
 
                             <div class="form-text">
                                 Ít nhất 6 ký tự và có số.
@@ -307,9 +305,9 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                id="createFullName"
-                                class="form-control"
-                                required>
+                                    class="form-control"
+                                    id="createFullName"
+                                    required>
 
                         </div>
 
@@ -321,9 +319,9 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                type="email"
-                                id="createEmail"
-                                class="form-control">
+                                    class="form-control"
+                                    id="createEmail"
+                                    type="email">
 
                         </div>
 
@@ -335,8 +333,8 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                id="createPhone"
-                                class="form-control">
+                                    class="form-control"
+                                    id="createPhone">
 
                         </div>
 
@@ -348,8 +346,8 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <select
-                                id="createGender"
-                                class="form-select">
+                                    class="form-select"
+                                    id="createGender">
 
                                 <option value="">
                                     Không chọn
@@ -375,9 +373,9 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <select
-                                id="createRole"
-                                class="form-select"
-                                required>
+                                    class="form-select"
+                                    id="createRole"
+                                    required>
 
                                 <option value="">
                                     Chọn vai trò
@@ -401,8 +399,8 @@ Quản lý người dùng | Admin | ClinicCare
 
 
                         <div
-                            class="col-12 d-none"
-                            id="createDoctorFields">
+                                class="col-12 d-none"
+                                id="createDoctorFields">
 
                             <div class="row g-3">
 
@@ -413,9 +411,9 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <select
-                                        id="createSpecialty"
-                                        class="form-select"
-                                        required>
+                                            class="form-select"
+                                            id="createSpecialty"
+                                            required>
 
                                         <option value="">
                                             Chọn chuyên khoa
@@ -433,8 +431,8 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        id="createQualification"
-                                        class="form-control">
+                                            class="form-control"
+                                            id="createQualification">
 
                                 </div>
 
@@ -446,9 +444,9 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <textarea
-                                        id="createBio"
-                                        class="form-control"
-                                        rows="3">
+                                            class="form-control"
+                                            id="createBio"
+                                            rows="3">
                                     </textarea>
 
                                 </div>
@@ -459,8 +457,8 @@ Quản lý người dùng | Admin | ClinicCare
 
 
                         <div
-                            class="col-12 d-none"
-                            id="createPatientFields">
+                                class="col-12 d-none"
+                                id="createPatientFields">
 
                             <div class="row g-3">
 
@@ -471,9 +469,9 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        type="date"
-                                        id="createDob"
-                                        class="form-control">
+                                            class="form-control"
+                                            id="createDob"
+                                            type="date">
 
                                 </div>
 
@@ -485,8 +483,8 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        id="createAddress"
-                                        class="form-control">
+                                            class="form-control"
+                                            id="createAddress">
 
                                 </div>
 
@@ -502,17 +500,17 @@ Quản lý người dùng | Admin | ClinicCare
                 <div class="modal-footer">
 
                     <button
-                        type="button"
-                        class="btn btn-light"
-                        data-bs-dismiss="modal">
+                            class="btn btn-light"
+                            data-bs-dismiss="modal"
+                            type="button">
 
                         Hủy
 
                     </button>
 
                     <button
-                        type="submit"
-                        class="btn btn-primary">
+                            class="btn btn-primary"
+                            type="submit">
 
                         <i class="bi bi-person-plus me-1"></i>
 
@@ -531,16 +529,14 @@ Quản lý người dùng | Admin | ClinicCare
 </div>
 
 
-<!-- EDIT MODAL -->
-
 <div
-    class="modal fade"
-    id="userEditModal"
-    tabindex="-1"
-    aria-hidden="true">
+        aria-hidden="true"
+        class="modal fade"
+        id="userEditModal"
+        tabindex="-1">
 
     <div
-        class="modal-dialog
+            class="modal-dialog
                modal-lg
                modal-dialog-centered">
 
@@ -555,17 +551,17 @@ Quản lý người dùng | Admin | ClinicCare
                     </h5>
 
                     <div
-                        id="editUserSubtitle"
-                        class="text-secondary small">
+                            class="text-secondary small"
+                            id="editUserSubtitle">
                     </div>
 
                 </div>
 
 
                 <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal">
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        type="button">
                 </button>
 
             </div>
@@ -576,8 +572,8 @@ Quản lý người dùng | Admin | ClinicCare
                 <div class="modal-body">
 
                     <input
-                        type="hidden"
-                        id="editUserId">
+                            id="editUserId"
+                            type="hidden">
 
                     <div class="row g-3">
 
@@ -588,9 +584,9 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                id="editUsername"
-                                class="form-control"
-                                disabled>
+                                    class="form-control"
+                                    disabled
+                                    id="editUsername">
 
                         </div>
 
@@ -602,9 +598,9 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                id="editRole"
-                                class="form-control"
-                                disabled>
+                                    class="form-control"
+                                    disabled
+                                    id="editRole">
 
                         </div>
 
@@ -616,9 +612,9 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                id="editFullName"
-                                class="form-control"
-                                required>
+                                    class="form-control"
+                                    id="editFullName"
+                                    required>
 
                         </div>
 
@@ -630,9 +626,9 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                type="email"
-                                id="editEmail"
-                                class="form-control">
+                                    class="form-control"
+                                    id="editEmail"
+                                    type="email">
 
                         </div>
 
@@ -644,8 +640,8 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                id="editPhone"
-                                class="form-control">
+                                    class="form-control"
+                                    id="editPhone">
 
                         </div>
 
@@ -657,8 +653,8 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <select
-                                id="editGender"
-                                class="form-select">
+                                    class="form-select"
+                                    id="editGender">
 
                                 <option value="">
                                     Không chọn
@@ -678,8 +674,8 @@ Quản lý người dùng | Admin | ClinicCare
 
 
                         <div
-                            class="col-12 d-none"
-                            id="editDoctorFields">
+                                class="col-12 d-none"
+                                id="editDoctorFields">
 
                             <div class="row g-3">
 
@@ -690,8 +686,8 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <select
-                                        id="editSpecialty"
-                                        class="form-select">
+                                            class="form-select"
+                                            id="editSpecialty">
 
                                         <option value="">
                                             Chọn chuyên khoa
@@ -709,8 +705,8 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        id="editQualification"
-                                        class="form-control">
+                                            class="form-control"
+                                            id="editQualification">
 
                                 </div>
 
@@ -722,9 +718,9 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <textarea
-                                        id="editBio"
-                                        class="form-control"
-                                        rows="3">
+                                            class="form-control"
+                                            id="editBio"
+                                            rows="3">
                                     </textarea>
 
                                 </div>
@@ -735,8 +731,8 @@ Quản lý người dùng | Admin | ClinicCare
 
 
                         <div
-                            class="col-12 d-none"
-                            id="editPatientFields">
+                                class="col-12 d-none"
+                                id="editPatientFields">
 
                             <div class="row g-3">
 
@@ -747,9 +743,9 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        type="date"
-                                        id="editDob"
-                                        class="form-control">
+                                            class="form-control"
+                                            id="editDob"
+                                            type="date">
 
                                 </div>
 
@@ -761,8 +757,8 @@ Quản lý người dùng | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        id="editAddress"
-                                        class="form-control">
+                                            class="form-control"
+                                            id="editAddress">
 
                                 </div>
 
@@ -778,9 +774,9 @@ Quản lý người dùng | Admin | ClinicCare
                             </label>
 
                             <input
-                                type="password"
-                                id="editPassword"
-                                class="form-control">
+                                    class="form-control"
+                                    id="editPassword"
+                                    type="password">
 
                             <div class="form-text">
                                 Để trống nếu không đổi mật khẩu.
@@ -796,17 +792,17 @@ Quản lý người dùng | Admin | ClinicCare
                 <div class="modal-footer">
 
                     <button
-                        type="button"
-                        class="btn btn-light"
-                        data-bs-dismiss="modal">
+                            class="btn btn-light"
+                            data-bs-dismiss="modal"
+                            type="button">
 
                         Hủy
 
                     </button>
 
                     <button
-                        type="submit"
-                        class="btn btn-primary">
+                            class="btn btn-primary"
+                            type="submit">
 
                         <i class="bi bi-check-lg me-1"></i>
 
@@ -830,7 +826,7 @@ Quản lý người dùng | Admin | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/admin-users.js'
     ) }}">

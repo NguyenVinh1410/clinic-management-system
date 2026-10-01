@@ -35,8 +35,8 @@ Lịch khám | Receptionist | ClinicCare
                 </p>
 
                 <a
-                    href="/receptionist/checkin"
-                    class="btn btn-primary">
+                        class="btn btn-primary"
+                        href="/receptionist/checkin">
 
                     <i class="bi bi-person-check me-1"></i>
 
@@ -48,8 +48,8 @@ Lịch khám | Receptionist | ClinicCare
 
 
             <div
-                id="appointmentAlert"
-                class="alert d-none">
+                    class="alert d-none"
+                    id="appointmentAlert">
             </div>
 
 
@@ -62,16 +62,16 @@ Lịch khám | Receptionist | ClinicCare
                         <div class="col-12 col-md-4">
 
                             <label
-                                class="form-label small fw-semibold">
+                                    class="form-label small fw-semibold">
 
                                 Ngày
 
                             </label>
 
                             <input
-                                type="date"
-                                id="appointmentDate"
-                                class="form-control">
+                                    class="form-control"
+                                    id="appointmentDate"
+                                    type="date">
 
                         </div>
 
@@ -79,15 +79,15 @@ Lịch khám | Receptionist | ClinicCare
                         <div class="col-12 col-md-4">
 
                             <label
-                                class="form-label small fw-semibold">
+                                    class="form-label small fw-semibold">
 
                                 Trạng thái
 
                             </label>
 
                             <select
-                                id="appointmentStatus"
-                                class="form-select">
+                                    class="form-select"
+                                    id="appointmentStatus">
 
                                 <option value="">
                                     Tất cả
@@ -117,17 +117,17 @@ Lịch khám | Receptionist | ClinicCare
                         <div class="col-12 col-md-4">
 
                             <label
-                                class="form-label small fw-semibold">
+                                    class="form-label small fw-semibold">
 
                                 Tìm kiếm
 
                             </label>
 
                             <input
-                                type="text"
-                                id="appointmentSearch"
-                                class="form-control"
-                                placeholder="Tên bác sĩ hoặc bệnh nhân...">
+                                    class="form-control"
+                                    id="appointmentSearch"
+                                    placeholder="Tên bác sĩ hoặc bệnh nhân..."
+                                    type="text">
 
                         </div>
 
@@ -142,51 +142,51 @@ Lịch khám | Receptionist | ClinicCare
 
                         <thead>
 
-                            <tr>
+                        <tr>
 
-                                <th>
-                                    Thời gian
-                                </th>
+                            <th>
+                                Thời gian
+                            </th>
 
-                                <th>
-                                    Bệnh nhân
-                                </th>
+                            <th>
+                                Bệnh nhân
+                            </th>
 
-                                <th>
-                                    Bác sĩ
-                                </th>
+                            <th>
+                                Bác sĩ
+                            </th>
 
-                                <th>
-                                    Chuyên khoa
-                                </th>
+                            <th>
+                                Chuyên khoa
+                            </th>
 
-                                <th>
-                                    Trạng thái
-                                </th>
+                            <th>
+                                Trạng thái
+                            </th>
 
-                                <th class="text-end">
-                                    Thao tác
-                                </th>
+                            <th class="text-end">
+                                Thao tác
+                            </th>
 
-                            </tr>
+                        </tr>
 
                         </thead>
 
 
                         <tbody
-                            id="appointmentList">
+                                id="appointmentList">
 
-                            <tr>
+                        <tr>
 
-                                <td
-                                    colspan="6"
-                                    class="text-center py-5 text-secondary">
+                            <td
+                                    class="text-center py-5 text-secondary"
+                                    colspan="6">
 
-                                    Đang tải...
+                                Đang tải...
 
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
                         </tbody>
 
@@ -208,7 +208,7 @@ Lịch khám | Receptionist | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/receptionist-appointments.js'
     ) }}">

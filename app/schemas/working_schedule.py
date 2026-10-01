@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from app.models.enums import WorkingScheduleStatus
 
+
 class WorkingScheduleCreate(BaseModel):
     doctor_id: int = Field(gt=0)
 
@@ -17,11 +18,11 @@ class WorkingScheduleCreate(BaseModel):
 
     @model_validator(mode="after")
     def validate_time(self):
-
         if self.start_time >= self.end_time:
             raise ValueError("Start time phai nho hon end time")
 
         return self
+
 
 class WorkingScheduleUpdate(BaseModel):
     work_date: date | None = None
@@ -32,14 +33,15 @@ class WorkingScheduleUpdate(BaseModel):
 
     @model_validator(mode="after")
     def validate_time(self):
-        if(
-            self.start_time is not None
-            and self.end_time is not None
-            and self.start_time >= self.end_time
+        if (
+                self.start_time is not None
+                and self.end_time is not None
+                and self.start_time >= self.end_time
         ):
             raise ValueError("Start time phai nho hon end time")
 
         return self
+
 
 class WorkingScheduleResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -55,5 +57,3 @@ class WorkingScheduleResponse(BaseModel):
     end_time: time
 
     status: WorkingScheduleStatus
-
-

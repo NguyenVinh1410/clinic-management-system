@@ -36,8 +36,8 @@ Quản lý chuyên khoa | Admin | ClinicCare
 
 
             <div
-                id="specialtyAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="specialtyAlert">
             </div>
 
 
@@ -59,21 +59,21 @@ Quản lý chuyên khoa | Admin | ClinicCare
                         <div class="p-4">
 
                             <form
-                                id="specialtyForm">
+                                    id="specialtyForm">
 
                                 <div class="mb-3">
 
                                     <label
-                                        class="form-label fw-semibold">
+                                            class="form-label fw-semibold">
 
                                         Tên chuyên khoa
 
                                     </label>
 
                                     <input
-                                        id="specialtyName"
-                                        class="form-control"
-                                        required>
+                                            class="form-control"
+                                            id="specialtyName"
+                                            required>
 
                                 </div>
 
@@ -81,29 +81,29 @@ Quản lý chuyên khoa | Admin | ClinicCare
                                 <div class="mb-4">
 
                                     <label
-                                        class="form-label fw-semibold">
+                                            class="form-label fw-semibold">
 
                                         Mô tả
 
                                     </label>
 
                                     <textarea
-                                        id="specialtyDescription"
-                                        class="form-control"
-                                        rows="4">
+                                            class="form-control"
+                                            id="specialtyDescription"
+                                            rows="4">
                                     </textarea>
 
                                 </div>
 
 
                                 <button
-                                    type="submit"
-                                    class="btn
+                                        class="btn
                                            btn-primary
-                                           w-100">
+                                           w-100"
+                                        type="submit">
 
                                     <i
-                                        class="bi bi-plus-lg me-1">
+                                            class="bi bi-plus-lg me-1">
                                     </i>
 
                                     Thêm chuyên khoa
@@ -124,7 +124,7 @@ Quản lý chuyên khoa | Admin | ClinicCare
                     <div class="content-card">
 
                         <div
-                            class="p-4 border-bottom
+                                class="p-4 border-bottom
                                    d-flex
                                    justify-content-between
                                    align-items-center">
@@ -134,10 +134,10 @@ Quản lý chuyên khoa | Admin | ClinicCare
                             </h5>
 
                             <button
-                                id="refreshSpecialties"
-                                class="btn
+                                    class="btn
                                        btn-sm
-                                       btn-outline-primary">
+                                       btn-outline-primary"
+                                    id="refreshSpecialties">
 
                                 Làm mới
 
@@ -149,47 +149,47 @@ Quản lý chuyên khoa | Admin | ClinicCare
                         <div class="table-responsive">
 
                             <table
-                                class="table
+                                    class="table
                                        align-middle
                                        mb-0">
 
                                 <thead>
 
-                                    <tr>
+                                <tr>
 
-                                        <th>
-                                            Tên
-                                        </th>
+                                    <th>
+                                        Tên
+                                    </th>
 
-                                        <th>
-                                            Mô tả
-                                        </th>
+                                    <th>
+                                        Mô tả
+                                    </th>
 
-                                        <th class="text-end">
-                                            Thao tác
-                                        </th>
+                                    <th class="text-end">
+                                        Thao tác
+                                    </th>
 
-                                    </tr>
+                                </tr>
 
                                 </thead>
 
 
                                 <tbody
-                                    id="specialtyList">
+                                        id="specialtyList">
 
-                                    <tr>
+                                <tr>
 
-                                        <td
-                                            colspan="3"
+                                    <td
                                             class="text-center
                                                    py-5
-                                                   text-secondary">
+                                                   text-secondary"
+                                            colspan="3">
 
-                                            Đang tải...
+                                        Đang tải...
 
-                                        </td>
+                                    </td>
 
-                                    </tr>
+                                </tr>
 
                                 </tbody>
 
@@ -215,7 +215,7 @@ Quản lý chuyên khoa | Admin | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/admin-specialties.js'
     ) }}">

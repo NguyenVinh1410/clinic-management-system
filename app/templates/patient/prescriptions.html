@@ -36,18 +36,18 @@
 
 
             <div
-                id="prescriptionAlert"
-                class="alert d-none">
+                    class="alert d-none"
+                    id="prescriptionAlert">
             </div>
 
 
             <div id="prescriptionList">
 
                 <div
-                    class="content-card">
+                        class="content-card">
 
                     <div
-                        class="text-center
+                            class="text-center
                                py-5
                                text-secondary">
 
@@ -71,7 +71,7 @@
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/patient-prescriptions.js'
     ) }}">

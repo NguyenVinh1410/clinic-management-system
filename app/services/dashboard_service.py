@@ -7,9 +7,9 @@ from sqlalchemy.orm import Session
 from app.models.appointment import Appointment
 from app.models.enums import AppointmentStatus, InvoiceStatus
 from app.models.invoice import Invoice
+from app.models.specialty import Specialty
 from app.models.user import Doctor, Patient
 from app.models.working_schedule import WorkingSchedule
-from app.models.specialty import Specialty
 
 
 class DashboardService:
@@ -114,18 +114,8 @@ class DashboardService:
                 Invoice.status == InvoiceStatus.PAID,
                 Invoice.paid_at.is_not(None),
             )
-            .group_by(
-                func.date_format(
-                    Invoice.paid_at,
-                    "%Y-%m",
-                )
-            )
-            .order_by(
-                func.date_format(
-                    Invoice.paid_at,
-                    "%Y-%m",
-                )
-            )
+            .group_by(func.date_format(Invoice.paid_at, "%Y-%m"))
+            .order_by(func.date_format(Invoice.paid_at, "%Y-%m"))
         )
 
         rows = db.execute(stmt).all()
@@ -164,9 +154,7 @@ class DashboardService:
                 Specialty.specialty_id,
                 Specialty.name,
             )
-            .order_by(
-                func.count(Appointment.appointment_id).desc()
-            )
+            .order_by(func.count(Appointment.appointment_id).desc())
         )
 
         rows = db.execute(stmt).all()
@@ -179,6 +167,7 @@ class DashboardService:
             }
             for row in rows
         ]
+
     @staticmethod
     def get_top_doctors(db: Session):
         stmt = (
@@ -195,16 +184,12 @@ class DashboardService:
                 Appointment,
                 Appointment.schedule_id == WorkingSchedule.schedule_id,
             )
-            .where(
-                Appointment.status == AppointmentStatus.COMPLETED,
-            )
+            .where(Appointment.status == AppointmentStatus.COMPLETED)
             .group_by(
                 Doctor.user_id,
                 Doctor.full_name,
             )
-            .order_by(
-                func.count(Appointment.appointment_id).desc()
-            )
+            .order_by(func.count(Appointment.appointment_id).desc())
             .limit(10)
         )
 
@@ -226,12 +211,8 @@ class DashboardService:
                 Appointment.status.label("status"),
                 func.count(Appointment.appointment_id).label("total"),
             )
-            .group_by(
-                Appointment.status
-            )
-            .order_by(
-                Appointment.status
-            )
+            .group_by(Appointment.status)
+            .order_by(Appointment.status)
         )
 
         rows = db.execute(stmt).all()

@@ -39,13 +39,7 @@ from app.models.enums import (
     WorkingScheduleStatus,
 )
 
-
-# ============================================================
-# CONFIG
-# ============================================================
-
 CONSULTATION_FEE = Decimal("100000.00")
-
 
 PASSWORDS = {
     "admin": "Admin123",
@@ -76,15 +70,10 @@ PASSWORDS = {
 }
 
 
-# ============================================================
-# BASIC HELPERS
-# ============================================================
-
 def get_user(
-    db: Session,
-    username: str,
+        db: Session,
+        username: str,
 ) -> User | None:
-
     return db.execute(
         select(User).where(
             User.username == username
@@ -93,12 +82,11 @@ def get_user(
 
 
 def get_or_create_specialty(
-    db: Session,
-    *,
-    name: str,
-    description: str,
+        db: Session,
+        *,
+        name: str,
+        description: str,
 ) -> tuple[Specialty, bool]:
-
     specialty = db.execute(
         select(Specialty).where(
             Specialty.name == name
@@ -120,15 +108,14 @@ def get_or_create_specialty(
 
 
 def get_or_create_medicine(
-    db: Session,
-    *,
-    name: str,
-    unit: str,
-    price: Decimal,
-    stock_qty: int,
-    status: MedicineStatus = MedicineStatus.ACTIVE,
+        db: Session,
+        *,
+        name: str,
+        unit: str,
+        price: Decimal,
+        stock_qty: int,
+        status: MedicineStatus = MedicineStatus.ACTIVE,
 ) -> tuple[Medicine, bool]:
-
     medicine = db.execute(
         select(Medicine).where(
             Medicine.name == name
@@ -152,21 +139,16 @@ def get_or_create_medicine(
     return medicine, True
 
 
-# ============================================================
-# USERS
-# ============================================================
-
 def get_or_create_admin(
-    db: Session,
-    *,
-    username: str,
-    full_name: str,
-    email: str,
-    phone: str,
-    gender: Gender,
-    status: UserStatus = UserStatus.ACTIVE,
+        db: Session,
+        *,
+        username: str,
+        full_name: str,
+        email: str,
+        phone: str,
+        gender: Gender,
+        status: UserStatus = UserStatus.ACTIVE,
 ) -> Admin:
-
     existing = get_user(
         db,
         username,
@@ -201,16 +183,15 @@ def get_or_create_admin(
 
 
 def get_or_create_receptionist(
-    db: Session,
-    *,
-    username: str,
-    full_name: str,
-    email: str,
-    phone: str,
-    gender: Gender,
-    status: UserStatus = UserStatus.ACTIVE,
+        db: Session,
+        *,
+        username: str,
+        full_name: str,
+        email: str,
+        phone: str,
+        gender: Gender,
+        status: UserStatus = UserStatus.ACTIVE,
 ) -> Receptionist:
-
     existing = get_user(
         db,
         username,
@@ -245,19 +226,18 @@ def get_or_create_receptionist(
 
 
 def get_or_create_doctor(
-    db: Session,
-    *,
-    username: str,
-    full_name: str,
-    email: str,
-    phone: str,
-    gender: Gender,
-    specialty_id: int,
-    qualification: str,
-    bio: str,
-    status: UserStatus = UserStatus.ACTIVE,
+        db: Session,
+        *,
+        username: str,
+        full_name: str,
+        email: str,
+        phone: str,
+        gender: Gender,
+        specialty_id: int,
+        qualification: str,
+        bio: str,
+        status: UserStatus = UserStatus.ACTIVE,
 ) -> Doctor:
-
     existing = get_user(
         db,
         username,
@@ -295,18 +275,17 @@ def get_or_create_doctor(
 
 
 def get_or_create_patient(
-    db: Session,
-    *,
-    username: str,
-    full_name: str,
-    email: str,
-    phone: str,
-    gender: Gender,
-    dob: date,
-    address: str,
-    status: UserStatus = UserStatus.ACTIVE,
+        db: Session,
+        *,
+        username: str,
+        full_name: str,
+        email: str,
+        phone: str,
+        gender: Gender,
+        dob: date,
+        address: str,
+        status: UserStatus = UserStatus.ACTIVE,
 ) -> Patient:
-
     existing = get_user(
         db,
         username,
@@ -342,20 +321,15 @@ def get_or_create_patient(
     return patient
 
 
-# ============================================================
-# WORKING SCHEDULE
-# ============================================================
-
 def get_or_create_schedule(
-    db: Session,
-    *,
-    doctor_id: int,
-    work_date: date,
-    start_time: time,
-    end_time: time,
-    status: WorkingScheduleStatus = WorkingScheduleStatus.ACTIVE,
+        db: Session,
+        *,
+        doctor_id: int,
+        work_date: date,
+        start_time: time,
+        end_time: time,
+        status: WorkingScheduleStatus = WorkingScheduleStatus.ACTIVE,
 ) -> WorkingSchedule:
-
     schedule = db.execute(
         select(WorkingSchedule).where(
             WorkingSchedule.doctor_id == doctor_id,
@@ -382,21 +356,16 @@ def get_or_create_schedule(
     return schedule
 
 
-# ============================================================
-# APPOINTMENT
-# ============================================================
-
 def get_or_create_appointment(
-    db: Session,
-    *,
-    schedule_id: int,
-    patient_id: int,
-    appointment_time: datetime,
-    status: AppointmentStatus,
-    created_by: AppointmentCreatedBy,
-    note: str | None = None,
+        db: Session,
+        *,
+        schedule_id: int,
+        patient_id: int,
+        appointment_time: datetime,
+        status: AppointmentStatus,
+        created_by: AppointmentCreatedBy,
+        note: str | None = None,
 ) -> Appointment:
-
     appointment = db.execute(
         select(Appointment).where(
             Appointment.schedule_id == schedule_id,
@@ -423,20 +392,15 @@ def get_or_create_appointment(
     return appointment
 
 
-# ============================================================
-# MEDICAL RECORD
-# ============================================================
-
 def get_or_create_record(
-    db: Session,
-    *,
-    appointment_id: int,
-    symptoms: str,
-    diagnosis: str,
-    note: str | None,
-    examined_at: datetime,
+        db: Session,
+        *,
+        appointment_id: int,
+        symptoms: str,
+        diagnosis: str,
+        note: str | None,
+        examined_at: datetime,
 ) -> MedicalRecord:
-
     record = db.execute(
         select(MedicalRecord).where(
             MedicalRecord.appointment_id == appointment_id
@@ -460,17 +424,12 @@ def get_or_create_record(
     return record
 
 
-# ============================================================
-# PRESCRIPTION
-# ============================================================
-
 def get_or_create_prescription(
-    db: Session,
-    *,
-    record_id: int,
-    details: list[dict],
+        db: Session,
+        *,
+        record_id: int,
+        details: list[dict],
 ) -> tuple[Prescription, bool]:
-
     prescription = db.execute(
         select(Prescription).where(
             Prescription.record_id == record_id
@@ -488,7 +447,6 @@ def get_or_create_prescription(
     db.flush()
 
     for item in details:
-
         detail = PrescriptionDetail(
             prescription_id=prescription.prescription_id,
             medicine_id=item["medicine_id"],
@@ -504,35 +462,29 @@ def get_or_create_prescription(
     return prescription, True
 
 
-# ============================================================
-# INVOICE
-# ============================================================
-
 def calculate_medicine_total(
-    details: list[dict],
+        details: list[dict],
 ) -> Decimal:
-
     total = Decimal("0.00")
 
     for item in details:
         total += (
-            item["price"]
-            * item["quantity"]
+                item["price"]
+                * item["quantity"]
         )
 
     return total
 
 
 def get_or_create_invoice(
-    db: Session,
-    *,
-    appointment_id: int,
-    total_amount: Decimal,
-    status: InvoiceStatus,
-    payment_method: PaymentMethod | None,
-    paid_at: datetime | None,
+        db: Session,
+        *,
+        appointment_id: int,
+        total_amount: Decimal,
+        status: InvoiceStatus,
+        payment_method: PaymentMethod | None,
+        paid_at: datetime | None,
 ) -> tuple[Invoice, bool]:
-
     invoice = db.execute(
         select(Invoice).where(
             Invoice.appointment_id == appointment_id
@@ -557,26 +509,20 @@ def get_or_create_invoice(
 
 
 def decrease_stock(
-    details: list[dict],
+        details: list[dict],
 ) -> None:
-
     for item in details:
         medicine = item["medicine"]
 
         medicine.stock_qty -= item["quantity"]
 
 
-# ============================================================
-# CHAT
-# ============================================================
-
 def get_or_create_chat_session(
-    db: Session,
-    *,
-    patient_id: int,
-    appointment_id: int,
+        db: Session,
+        *,
+        patient_id: int,
+        appointment_id: int,
 ) -> ChatSession:
-
     appointment = db.get(
         Appointment,
         appointment_id,
@@ -613,15 +559,14 @@ def get_or_create_chat_session(
 
 
 def seed_chat_messages(
-    db: Session,
-    *,
-    session_id: int,
-    patient_content: str,
-    patient_intent: str,
-    ai_content: str,
-    ai_intent: str,
+        db: Session,
+        *,
+        session_id: int,
+        patient_content: str,
+        patient_intent: str,
+        ai_content: str,
+        ai_intent: str,
 ) -> None:
-
     existing = db.execute(
         select(ChatMessage).where(
             ChatMessage.session_id == session_id
@@ -649,17 +594,11 @@ def seed_chat_messages(
     )
 
 
-# ============================================================
-# RESET DATABASE
-# ============================================================
-
 def reset_seed_data(
-    db: Session,
+        db: Session,
 ) -> None:
-
     print("Dang xoa du lieu cu...")
 
-    # Child tables
     db.execute(
         delete(ChatMessage)
     )
@@ -692,7 +631,6 @@ def reset_seed_data(
         delete(WorkingSchedule)
     )
 
-    # Inheritance child tables
     db.execute(
         delete(Doctor)
     )
@@ -709,7 +647,6 @@ def reset_seed_data(
         delete(Admin)
     )
 
-    # Parent / catalog
     db.execute(
         delete(User)
     )
@@ -727,14 +664,9 @@ def reset_seed_data(
     print("Da xoa du lieu seed cu.")
 
 
-# ============================================================
-# SEED SPECIALTIES
-# ============================================================
-
 def seed_specialties(
-    db: Session,
+        db: Session,
 ) -> dict:
-
     specialties = {}
 
     rows = [
@@ -765,7 +697,6 @@ def seed_specialties(
     ]
 
     for name, description in rows:
-
         specialty, _ = get_or_create_specialty(
             db,
             name=name,
@@ -777,14 +708,9 @@ def seed_specialties(
     return specialties
 
 
-# ============================================================
-# SEED MEDICINES
-# ============================================================
-
 def seed_medicines(
-    db: Session,
+        db: Session,
 ) -> dict:
-
     medicines = {}
 
     rows = [
@@ -855,7 +781,6 @@ def seed_medicines(
     ]
 
     for item in rows:
-
         medicine, _ = get_or_create_medicine(
             db,
             name=item["name"],
@@ -870,20 +795,11 @@ def seed_medicines(
     return medicines
 
 
-# ============================================================
-# SEED USERS
-# ============================================================
-
 def seed_users(
-    db: Session,
-    specialties: dict,
+        db: Session,
+        specialties: dict,
 ) -> dict:
-
     users = {}
-
-    # --------------------------------------------------------
-    # Admin
-    # --------------------------------------------------------
 
     users["admin"] = get_or_create_admin(
         db,
@@ -903,10 +819,6 @@ def seed_users(
         gender=Gender.MALE,
     )
 
-    # --------------------------------------------------------
-    # Receptionist
-    # --------------------------------------------------------
-
     users["receptionist01"] = get_or_create_receptionist(
         db,
         username="receptionist01",
@@ -924,10 +836,6 @@ def seed_users(
         phone="0900000004",
         gender=Gender.FEMALE,
     )
-
-    # --------------------------------------------------------
-    # Doctors
-    # --------------------------------------------------------
 
     doctor_rows = [
         (
@@ -999,17 +907,16 @@ def seed_users(
     ]
 
     for (
-        username,
-        full_name,
-        email,
-        phone,
-        gender,
-        specialty,
-        qualification,
-        bio,
-        status,
+            username,
+            full_name,
+            email,
+            phone,
+            gender,
+            specialty,
+            qualification,
+            bio,
+            status,
     ) in doctor_rows:
-
         users[username] = get_or_create_doctor(
             db,
             username=username,
@@ -1022,10 +929,6 @@ def seed_users(
             bio=bio,
             status=status,
         )
-
-    # --------------------------------------------------------
-    # Patients
-    # --------------------------------------------------------
 
     patient_rows = [
         (
@@ -1151,16 +1054,15 @@ def seed_users(
     ]
 
     for (
-        username,
-        full_name,
-        email,
-        phone,
-        gender,
-        dob,
-        address,
-        status,
+            username,
+            full_name,
+            email,
+            phone,
+            gender,
+            dob,
+            address,
+            status,
     ) in patient_rows:
-
         users[username] = get_or_create_patient(
             db,
             username=username,
@@ -1176,15 +1078,10 @@ def seed_users(
     return users
 
 
-# ============================================================
-# SEED SCHEDULES
-# ============================================================
-
 def seed_schedules(
-    db: Session,
-    users: dict,
+        db: Session,
+        users: dict,
 ) -> dict:
-
     today = date.today()
     yesterday = today - timedelta(days=1)
     two_days_ago = today - timedelta(days=2)
@@ -1205,10 +1102,6 @@ def seed_schedules(
     d6 = users["doctor06"].user_id
 
     schedules = {}
-
-    # --------------------------------------------------------
-    # Doctor 1 - Tim mach
-    # --------------------------------------------------------
 
     schedules["d1_today"] = get_or_create_schedule(
         db,
@@ -1242,10 +1135,6 @@ def seed_schedules(
         end_time=time(12, 0),
     )
 
-    # --------------------------------------------------------
-    # Doctor 2 - Nhi khoa
-    # --------------------------------------------------------
-
     schedules["d2_today"] = get_or_create_schedule(
         db,
         doctor_id=d2,
@@ -1269,10 +1158,6 @@ def seed_schedules(
         start_time=time(13, 0),
         end_time=time(17, 0),
     )
-
-    # --------------------------------------------------------
-    # Doctor 3 - Da lieu
-    # --------------------------------------------------------
 
     schedules["d3_today"] = get_or_create_schedule(
         db,
@@ -1298,10 +1183,6 @@ def seed_schedules(
         end_time=time(18, 0),
     )
 
-    # --------------------------------------------------------
-    # Doctor 4 - Noi tong quat
-    # --------------------------------------------------------
-
     schedules["d4_yesterday"] = get_or_create_schedule(
         db,
         doctor_id=d4,
@@ -1317,10 +1198,6 @@ def seed_schedules(
         start_time=time(8, 0),
         end_time=time(12, 0),
     )
-
-    # --------------------------------------------------------
-    # Doctor 5 - Tai Mui Hong
-    # --------------------------------------------------------
 
     schedules["d5_two_days"] = get_or_create_schedule(
         db,
@@ -1338,10 +1215,6 @@ def seed_schedules(
         end_time=time(17, 0),
     )
 
-    # --------------------------------------------------------
-    # Doctor 6 - Locked
-    # --------------------------------------------------------
-
     schedules["d6_off"] = get_or_create_schedule(
         db,
         doctor_id=d6,
@@ -1354,16 +1227,11 @@ def seed_schedules(
     return schedules
 
 
-# ============================================================
-# SEED APPOINTMENTS
-# ============================================================
-
 def seed_appointments(
-    db: Session,
-    users: dict,
-    schedules: dict,
+        db: Session,
+        users: dict,
+        schedules: dict,
 ) -> dict:
-
     p1 = users["patient01"].user_id
     p2 = users["patient02"].user_id
     p3 = users["patient03"].user_id
@@ -1389,10 +1257,6 @@ def seed_appointments(
     day_7_future = today + timedelta(days=7)
 
     appointments = {}
-
-    # ========================================================
-    # TODAY
-    # ========================================================
 
     appointments["today_completed_1"] = get_or_create_appointment(
         db,
@@ -1459,10 +1323,6 @@ def seed_appointments(
         note="Cho kham da lieu.",
     )
 
-    # ========================================================
-    # YESTERDAY
-    # ========================================================
-
     appointments["yesterday_completed_1"] = get_or_create_appointment(
         db,
         schedule_id=schedules["d1_yesterday"].schedule_id,
@@ -1489,10 +1349,6 @@ def seed_appointments(
         note="Benh nhan huy lich.",
     )
 
-    # ========================================================
-    # 7 DAYS AGO
-    # ========================================================
-
     appointments["day7_completed"] = get_or_create_appointment(
         db,
         schedule_id=schedules["d2_7days"].schedule_id,
@@ -1505,10 +1361,6 @@ def seed_appointments(
         created_by=AppointmentCreatedBy.RECEPTIONIST,
         note="Kham nhi.",
     )
-
-    # ========================================================
-    # 30 DAYS AGO
-    # ========================================================
 
     appointments["day30_completed"] = get_or_create_appointment(
         db,
@@ -1536,10 +1388,6 @@ def seed_appointments(
         note="Tai kham tim mach.",
     )
 
-    # ========================================================
-    # 60 DAYS AGO
-    # ========================================================
-
     appointments["day60_completed"] = get_or_create_appointment(
         db,
         schedule_id=schedules["d3_60days"].schedule_id,
@@ -1553,10 +1401,6 @@ def seed_appointments(
         note="Appointment duoc tao boi AI Assistant.",
     )
 
-    # ========================================================
-    # 2 DAYS AGO
-    # ========================================================
-
     appointments["two_days_completed"] = get_or_create_appointment(
         db,
         schedule_id=schedules["d5_two_days"].schedule_id,
@@ -1569,10 +1413,6 @@ def seed_appointments(
         created_by=AppointmentCreatedBy.AI,
         note="Tao boi AI Assistant.",
     )
-
-    # ========================================================
-    # TOMORROW
-    # ========================================================
 
     appointments["tomorrow_pending"] = get_or_create_appointment(
         db,
@@ -1613,10 +1453,6 @@ def seed_appointments(
         note="Test Cancelled.",
     )
 
-    # ========================================================
-    # DAY 2 FUTURE
-    # ========================================================
-
     appointments["day2_pending"] = get_or_create_appointment(
         db,
         schedule_id=schedules["d3_day2"].schedule_id,
@@ -1643,10 +1479,6 @@ def seed_appointments(
         note="Lich da xac nhan.",
     )
 
-    # ========================================================
-    # 7 DAYS FUTURE
-    # ========================================================
-
     appointments["day7future_confirmed"] = get_or_create_appointment(
         db,
         schedule_id=schedules["d4_day7future"].schedule_id,
@@ -1663,24 +1495,15 @@ def seed_appointments(
     return appointments
 
 
-# ============================================================
-# MEDICAL RECORDS + PRESCRIPTIONS + INVOICES
-# ============================================================
-
 def seed_records_prescriptions_invoices(
-    db: Session,
-    users: dict,
-    medicines: dict,
-    appointments: dict,
+        db: Session,
+        users: dict,
+        medicines: dict,
+        appointments: dict,
 ) -> None:
-
     now = datetime.now()
 
     p = medicines
-
-    # ========================================================
-    # 1. Today completed - Patient 1
-    # ========================================================
 
     appt = appointments["today_completed_1"]
 
@@ -1721,10 +1544,10 @@ def seed_records_prescriptions_invoices(
     )
 
     invoice_total = (
-        CONSULTATION_FEE
-        + calculate_medicine_total(
-            prescription_details
-        )
+            CONSULTATION_FEE
+            + calculate_medicine_total(
+        prescription_details
+    )
     )
 
     invoice, invoice_created = get_or_create_invoice(
@@ -1740,10 +1563,6 @@ def seed_records_prescriptions_invoices(
         decrease_stock(
             prescription_details
         )
-
-    # ========================================================
-    # 2. Today completed - Patient 2
-    # ========================================================
 
     appt = appointments["today_completed_2"]
 
@@ -1784,10 +1603,10 @@ def seed_records_prescriptions_invoices(
     )
 
     invoice_total = (
-        CONSULTATION_FEE
-        + calculate_medicine_total(
-            prescription_details
-        )
+            CONSULTATION_FEE
+            + calculate_medicine_total(
+        prescription_details
+    )
     )
 
     _, invoice_created = get_or_create_invoice(
@@ -1803,10 +1622,6 @@ def seed_records_prescriptions_invoices(
         decrease_stock(
             prescription_details
         )
-
-    # ========================================================
-    # 3. Yesterday completed
-    # ========================================================
 
     appt = appointments["yesterday_completed_1"]
 
@@ -1839,10 +1654,10 @@ def seed_records_prescriptions_invoices(
     )
 
     invoice_total = (
-        CONSULTATION_FEE
-        + calculate_medicine_total(
-            prescription_details
-        )
+            CONSULTATION_FEE
+            + calculate_medicine_total(
+        prescription_details
+    )
     )
 
     _, invoice_created = get_or_create_invoice(
@@ -1858,10 +1673,6 @@ def seed_records_prescriptions_invoices(
         decrease_stock(
             prescription_details
         )
-
-    # ========================================================
-    # 4. 7 days completed - No prescription
-    # ========================================================
 
     appt = appointments["day7_completed"]
 
@@ -1884,10 +1695,6 @@ def seed_records_prescriptions_invoices(
         payment_method=PaymentMethod.ONLINE,
         paid_at=now - timedelta(days=7),
     )
-
-    # ========================================================
-    # 5. 30 days completed - UNPAID
-    # ========================================================
 
     appt = appointments["day30_completed"]
 
@@ -1928,13 +1735,12 @@ def seed_records_prescriptions_invoices(
     )
 
     invoice_total = (
-        CONSULTATION_FEE
-        + calculate_medicine_total(
-            prescription_details
-        )
+            CONSULTATION_FEE
+            + calculate_medicine_total(
+        prescription_details
+    )
     )
 
-    # Unpaid -> KHONG tru kho
     get_or_create_invoice(
         db,
         appointment_id=appt.appointment_id,
@@ -1943,10 +1749,6 @@ def seed_records_prescriptions_invoices(
         payment_method=None,
         paid_at=None,
     )
-
-    # ========================================================
-    # 6. 30 days completed - PAID
-    # ========================================================
 
     appt = appointments["day30_completed_2"]
 
@@ -1979,10 +1781,10 @@ def seed_records_prescriptions_invoices(
     )
 
     invoice_total = (
-        CONSULTATION_FEE
-        + calculate_medicine_total(
-            prescription_details
-        )
+            CONSULTATION_FEE
+            + calculate_medicine_total(
+        prescription_details
+    )
     )
 
     _, invoice_created = get_or_create_invoice(
@@ -1998,10 +1800,6 @@ def seed_records_prescriptions_invoices(
         decrease_stock(
             prescription_details
         )
-
-    # ========================================================
-    # 7. 60 days completed - no prescription
-    # ========================================================
 
     appt = appointments["day60_completed"]
 
@@ -2024,10 +1822,6 @@ def seed_records_prescriptions_invoices(
         payment_method=None,
         paid_at=None,
     )
-
-    # ========================================================
-    # 8. Two days ago - AI appointment
-    # ========================================================
 
     appt = appointments["two_days_completed"]
 
@@ -2060,10 +1854,10 @@ def seed_records_prescriptions_invoices(
     )
 
     invoice_total = (
-        CONSULTATION_FEE
-        + calculate_medicine_total(
-            prescription_details
-        )
+            CONSULTATION_FEE
+            + calculate_medicine_total(
+        prescription_details
+    )
     )
 
     _, invoice_created = get_or_create_invoice(
@@ -2081,17 +1875,11 @@ def seed_records_prescriptions_invoices(
         )
 
 
-# ============================================================
-# SEED CHAT
-# ============================================================
-
 def seed_chats(
-    db: Session,
-    users: dict,
-    appointments: dict,
+        db: Session,
+        users: dict,
+        appointments: dict,
 ) -> None:
-
-    # AI booking
     appt = appointments["day2_pending"]
 
     session = get_or_create_chat_session(
@@ -2115,7 +1903,6 @@ def seed_chats(
         ai_intent="book_appointment",
     )
 
-    # AI appointment completed
     appt = appointments["two_days_completed"]
 
     session = get_or_create_chat_session(
@@ -2139,14 +1926,9 @@ def seed_chats(
     )
 
 
-# ============================================================
-# SUMMARY
-# ============================================================
-
 def print_summary(
-    db: Session,
+        db: Session,
 ) -> None:
-
     print()
     print("=" * 60)
     print("SEED COMPLETED")
@@ -2171,7 +1953,6 @@ def print_summary(
     ]
 
     for label, model in tables:
-
         count = db.execute(
             select(model)
         ).scalars().all()
@@ -2221,12 +2002,7 @@ def print_summary(
     print("=" * 60)
 
 
-# ============================================================
-# MAIN
-# ============================================================
-
 def main() -> None:
-
     parser = argparse.ArgumentParser(
         description=(
             "Seed du lieu cho Clinic Management System"

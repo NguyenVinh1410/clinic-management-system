@@ -1,6 +1,5 @@
 let appointments = [];
 
-
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
@@ -142,14 +141,7 @@ function renderAppointments(
                         ).slice(0, 10);
 
 
-                    /*
-                     * =====================================
-                     * PENDING
-                     * =====================================
-                     *
-                     * Chỉ cho phép Tiếp nhận
-                     * khi lịch khám là HÔM NAY.
-                     */
+
 
                     if (
                         appointment.status === "Pending"
@@ -174,9 +166,6 @@ function renderAppointments(
 
                     }
 
-                    /*
-                     * Pending nhưng chưa đến ngày khám
-                     */
 
                     else if (
                         appointment.status === "Pending"
@@ -193,11 +182,7 @@ function renderAppointments(
 
                     }
 
-                    /*
-                     * =====================================
-                     * CONFIRMED
-                     * =====================================
-                     */
+
 
                     else if (
                         appointment.status === "Confirmed"
@@ -216,11 +201,7 @@ function renderAppointments(
 
                     }
 
-                    /*
-                     * =====================================
-                     * COMPLETED / CANCELLED
-                     * =====================================
-                     */
+
 
                     else {
 

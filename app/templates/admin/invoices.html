@@ -36,8 +36,8 @@ Quản lý hóa đơn | Admin | ClinicCare
 
 
             <div
-                id="invoiceAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="invoiceAlert">
             </div>
 
 
@@ -50,10 +50,10 @@ Quản lý hóa đơn | Admin | ClinicCare
                         <div class="col-12 col-md-5">
 
                             <input
-                                id="invoiceSearch"
-                                type="text"
-                                class="form-control"
-                                placeholder="Tìm bệnh nhân, bác sĩ...">
+                                    class="form-control"
+                                    id="invoiceSearch"
+                                    placeholder="Tìm bệnh nhân, bác sĩ..."
+                                    type="text">
 
                         </div>
 
@@ -61,8 +61,8 @@ Quản lý hóa đơn | Admin | ClinicCare
                         <div class="col-12 col-md-3">
 
                             <select
-                                id="invoiceStatus"
-                                class="form-select">
+                                    class="form-select"
+                                    id="invoiceStatus">
 
                                 <option value="">
                                     Tất cả trạng thái
@@ -84,10 +84,10 @@ Quản lý hóa đơn | Admin | ClinicCare
                         <div class="col-12 col-md-2">
 
                             <button
-                                id="refreshInvoices"
-                                class="btn
+                                    class="btn
                                        btn-outline-primary
-                                       w-100">
+                                       w-100"
+                                    id="refreshInvoices">
 
                                 Làm mới
 
@@ -103,66 +103,66 @@ Quản lý hóa đơn | Admin | ClinicCare
                 <div class="table-responsive">
 
                     <table
-                        class="table
+                            class="table
                                align-middle
                                mb-0">
 
                         <thead>
 
-                            <tr>
+                        <tr>
 
-                                <th>
-                                    Hóa đơn
-                                </th>
+                            <th>
+                                Hóa đơn
+                            </th>
 
-                                <th>
-                                    Bệnh nhân
-                                </th>
+                            <th>
+                                Bệnh nhân
+                            </th>
 
-                                <th>
-                                    Bác sĩ
-                                </th>
+                            <th>
+                                Bác sĩ
+                            </th>
 
-                                <th>
-                                    Ngày khám
-                                </th>
+                            <th>
+                                Ngày khám
+                            </th>
 
-                                <th>
-                                    Tổng tiền
-                                </th>
+                            <th>
+                                Tổng tiền
+                            </th>
 
-                                <th>
-                                    Trạng thái
-                                </th>
+                            <th>
+                                Trạng thái
+                            </th>
 
-                                <th
+                            <th
                                     class="text-end">
 
-                                    Thao tác
+                                Thao tác
 
-                                </th>
+                            </th>
 
-                            </tr>
+                        </tr>
 
                         </thead>
 
 
                         <tbody
-                            id="invoiceList">
+                                id="invoiceList">
 
-                            <tr>
+                        <tr>
 
-                                <td
-                                    colspan="7"
+                            <td
                                     class="text-center
                                            py-5
-                                           text-secondary">
+                                           text-secondary"
+                                    colspan="7">
 
-                                    Đang tải...
+                                Đang tải...
 
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
                         </tbody>
 
@@ -179,15 +179,13 @@ Quản lý hóa đơn | Admin | ClinicCare
 </div>
 
 
-<!-- PAYMENT MODAL -->
-
 <div
-    class="modal fade"
-    id="paymentModal"
-    tabindex="-1">
+        class="modal fade"
+        id="paymentModal"
+        tabindex="-1">
 
     <div
-        class="modal-dialog
+            class="modal-dialog
                modal-dialog-centered">
 
         <div class="modal-content">
@@ -195,16 +193,16 @@ Quản lý hóa đơn | Admin | ClinicCare
             <div class="modal-header">
 
                 <h5
-                    class="modal-title fw-bold">
+                        class="modal-title fw-bold">
 
                     Thanh toán hóa đơn
 
                 </h5>
 
                 <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal">
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        type="button">
                 </button>
 
             </div>
@@ -213,15 +211,15 @@ Quản lý hóa đơn | Admin | ClinicCare
             <div class="modal-body">
 
                 <input
-                    type="hidden"
-                    id="paymentInvoiceId">
+                        id="paymentInvoiceId"
+                        type="hidden">
 
 
                 <div
-                    class="mb-3">
+                        class="mb-3">
 
                     <label
-                        class="form-label fw-semibold">
+                            class="form-label fw-semibold">
 
                         Phương thức thanh toán
 
@@ -229,8 +227,8 @@ Quản lý hóa đơn | Admin | ClinicCare
 
 
                     <select
-                        id="paymentMethod"
-                        class="form-select">
+                            class="form-select"
+                            id="paymentMethod">
 
                         <option value="Cash">
                             Tiền mặt
@@ -250,9 +248,9 @@ Quản lý hóa đơn | Admin | ClinicCare
             <div class="modal-footer">
 
                 <button
-                    type="button"
-                    class="btn btn-light"
-                    data-bs-dismiss="modal">
+                        class="btn btn-light"
+                        data-bs-dismiss="modal"
+                        type="button">
 
                     Hủy
 
@@ -260,9 +258,9 @@ Quản lý hóa đơn | Admin | ClinicCare
 
 
                 <button
-                    type="button"
-                    id="confirmPaymentButton"
-                    class="btn btn-primary">
+                        class="btn btn-primary"
+                        id="confirmPaymentButton"
+                        type="button">
 
                     Xác nhận thanh toán
 
@@ -282,7 +280,7 @@ Quản lý hóa đơn | Admin | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/admin-invoices.js'
     ) }}">

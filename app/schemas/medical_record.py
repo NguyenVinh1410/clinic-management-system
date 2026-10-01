@@ -2,6 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
+
 class MedicalRecordCreate(BaseModel):
     appointment_id: int = Field(gt=0)
 
@@ -22,6 +23,7 @@ class MedicalRecordCreate(BaseModel):
 
     examined_at: datetime
 
+
 class MedicalRecordUpdate(BaseModel):
     symptoms: str | None = Field(
         default=None,
@@ -38,6 +40,7 @@ class MedicalRecordUpdate(BaseModel):
         default=None,
         max_length=5000,
     )
+
 
 class MedicalRecordResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -63,5 +66,3 @@ class MedicalRecordResponse(BaseModel):
     note: str | None
 
     examined_at: datetime
-
-

@@ -1,14 +1,14 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
+from app.core.exceptions import NotFoundException, ForbiddenException, BusinessException
 from app.models.appointment import Appointment
 from app.models.enums import AppointmentStatus
-from app.models.working_schedule import WorkingSchedule
-from app.models.prescription_detail import PrescriptionDetail
 from app.models.medical_record import MedicalRecord
 from app.models.prescription import Prescription
-from app.core.exceptions import NotFoundException, ForbiddenException, BusinessException
+from app.models.prescription_detail import PrescriptionDetail
 from app.models.user import Doctor
+from app.models.working_schedule import WorkingSchedule
 
 
 class MedicalHistoryService:
@@ -202,4 +202,3 @@ class MedicalHistoryService:
         return {
             "items": items,
         }
-

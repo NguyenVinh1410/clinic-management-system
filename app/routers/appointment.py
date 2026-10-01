@@ -105,7 +105,6 @@ def get_doctor_appointments(
     if current_user.role == UserRole.DOCTOR:
         if current_user.user_id != doctor_id:
             from app.core.exceptions import ForbiddenException
-
             raise ForbiddenException("Bac si chi duoc xem lich cua chinh minh")
 
     elif current_user.role not in (
@@ -113,7 +112,6 @@ def get_doctor_appointments(
             UserRole.RECEPTIONIST,
     ):
         from app.core.exceptions import ForbiddenException
-
         raise ForbiddenException("Ban khong co quyen xem lich cua bac si")
 
     return AppointmentService.get_appointments_by_doctor(
@@ -134,25 +132,21 @@ def get_appointment(
         ],
         db: Annotated[Session, Depends(get_db)],
 ):
-    appointment = (
-        AppointmentService.get_appointment_by_id(
-            db=db,
-            appointment_id=appointment_id,
-        )
+    appointment = AppointmentService.get_appointment_by_id(
+        db=db,
+        appointment_id=appointment_id,
     )
 
     if current_user.role == UserRole.PATIENT:
-
         if appointment.patient_id != current_user.user_id:
             from app.core.exceptions import ForbiddenException
-
             raise ForbiddenException("Ban chi duoc xem lich hen cua chinh minh")
 
     elif current_user.role == UserRole.DOCTOR:
         if not AppointmentService.belong_to_doctor(
-            db=db,
-            appointment=appointment,
-            doctor_id=current_user.user_id
+                db=db,
+                appointment=appointment,
+                doctor_id=current_user.user_id
         ):
             from app.core.exceptions import ForbiddenException
             raise ForbiddenException("Bac si chi duoc xem lich hen cua minh")
@@ -176,11 +170,9 @@ def update_appointment(
         ],
         db: Annotated[Session, Depends(get_db)],
 ):
-    appointment = (
-        AppointmentService.get_appointment_by_id(
-            db=db,
-            appointment_id=appointment_id,
-        )
+    appointment = AppointmentService.get_appointment_by_id(
+        db=db,
+        appointment_id=appointment_id,
     )
 
     return AppointmentService.update_appointment(
@@ -218,7 +210,6 @@ def update_appointment_status(
     if current_user.role == UserRole.DOCTOR:
         if data.status != AppointmentStatus.COMPLETED:
             from app.core.exceptions import ForbiddenException
-
             raise ForbiddenException("Bac si chi duoc chuyen lich sang Completed")
 
         if not AppointmentService.belong_to_doctor(
@@ -227,7 +218,6 @@ def update_appointment_status(
                 doctor_id=current_user.user_id,
         ):
             from app.core.exceptions import ForbiddenException
-
             raise ForbiddenException("Lich hen khong thuoc bac si hien tai")
 
         return AppointmentService.update_status(
@@ -238,6 +228,7 @@ def update_appointment_status(
 
     from app.core.exceptions import ForbiddenException
     raise ForbiddenException("Ban khong co quyen thay doi trang thai lich hen")
+
 
 @router.post(
     "/{appointment_id}/checkin",
@@ -265,6 +256,7 @@ def check_in_appointment(
         appointment=appointment,
     )
 
+
 @router.post(
     "/{appointment_id}/cancel",
     response_model=AppointmentResponse,
@@ -285,16 +277,13 @@ def cancel_appointment(
     if current_user.role == UserRole.PATIENT:
         if appointment.patient_id != current_user.user_id:
             from app.core.exceptions import ForbiddenException
-
             raise ForbiddenException("Ban chi duoc huy lich cua chinh minh")
 
     elif current_user.role not in (
             UserRole.ADMIN,
             UserRole.RECEPTIONIST,
     ):
-
         from app.core.exceptions import ForbiddenException
-
         raise ForbiddenException("Ban khong co quyen huy lich")
 
     return AppointmentService.cancel_appointment(

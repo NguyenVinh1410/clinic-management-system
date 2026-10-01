@@ -5,11 +5,14 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.enums import InvoiceStatus, PaymentMethod
 
+
 class InvoiceCreate(BaseModel):
     appointment_id: int = Field(gt=0)
 
+
 class InvoicePaymentRequest(BaseModel):
     payment_method: PaymentMethod
+
 
 class InvoicePatientInfo(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -18,17 +21,20 @@ class InvoicePatientInfo(BaseModel):
     full_name: str
     phone: str | None = None
 
+
 class InvoiceDoctorInfo(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     doctor_id: int
     full_name: str
 
+
 class InvoiceSpecialtyInfo(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     specialty_id: int
     name: str
+
 
 class InvoiceMedicineItem(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -41,6 +47,7 @@ class InvoiceMedicineItem(BaseModel):
     line_total: Decimal
     dosage: str
     usage_note: str | None = None
+
 
 class InvoiceResponse(BaseModel):
     invoice_id: int

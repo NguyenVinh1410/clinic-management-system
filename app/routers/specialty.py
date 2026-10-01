@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
-from sqlalchemy.orm import Session, deferred
+from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, requires_role
 from app.models.enums import UserRole
@@ -14,12 +14,12 @@ router = APIRouter(
     tags=["specialty"],
 )
 
+
 @router.post(
     "",
     response_model=SpecialtyResponse,
     status_code=status.HTTP_201_CREATED,
 )
-
 def create_specialty(
         data: SpecialtyCreate,
         _: Annotated[
@@ -28,18 +28,17 @@ def create_specialty(
         ],
         db: Annotated[Session, Depends(get_db)],
 ):
-
     return SpecialtyService.create_specialty(
         db=db,
         name=data.name,
         description=data.description,
     )
 
+
 @router.get(
     "",
     response_model=list[SpecialtyResponse],
 )
-
 def get_specialties(
         _: Annotated[
             User,
@@ -52,10 +51,8 @@ def get_specialties(
         ],
         db: Annotated[Session, Depends(get_db)],
 ):
+    return SpecialtyService.get_all_specialties(db=db)
 
-    return SpecialtyService.get_all_specialties(
-        db=db
-    )
 
 @router.get(
     "/{specialty_id}",
@@ -74,11 +71,11 @@ def get_specialty(
         ],
         db: Annotated[Session, Depends(get_db)],
 ):
-
     return SpecialtyService.get_specialty_by_id(
         db=db,
         specialty_id=specialty_id,
     )
+
 
 @router.patch(
     "/{specialty_id}",
@@ -93,7 +90,6 @@ def update_specialty(
         ],
         db: Annotated[Session, Depends(get_db)],
 ):
-
     specialty = (
         SpecialtyService.get_specialty_by_id(
             db=db,
@@ -109,6 +105,7 @@ def update_specialty(
         data=update_data,
     )
 
+
 @router.delete(
     "/{specialty_id}",
     status_code=status.HTTP_204_NO_CONTENT,
@@ -121,7 +118,6 @@ def delete_specialty(
         ],
         db: Annotated[Session, Depends(get_db)],
 ):
-
     SpecialtyService.delete_specialty(
         db=db,
         specialty_id=specialty_id,

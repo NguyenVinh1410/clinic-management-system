@@ -38,8 +38,8 @@ Check-in | Receptionist | ClinicCare
 
 
             <div
-                id="checkinAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="checkinAlert">
             </div>
 
 
@@ -59,8 +59,8 @@ Check-in | Receptionist | ClinicCare
                                 </div>
 
                                 <div
-                                    id="todayTotal"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="todayTotal">
 
                                     --
 
@@ -70,7 +70,7 @@ Check-in | Receptionist | ClinicCare
 
 
                             <div
-                                class="quick-icon bg-primary-subtle text-primary">
+                                    class="quick-icon bg-primary-subtle text-primary">
 
                                 <i class="bi bi-calendar-day"></i>
 
@@ -96,8 +96,8 @@ Check-in | Receptionist | ClinicCare
                                 </div>
 
                                 <div
-                                    id="pendingCount"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="pendingCount">
 
                                     --
 
@@ -107,7 +107,7 @@ Check-in | Receptionist | ClinicCare
 
 
                             <div
-                                class="quick-icon bg-warning-subtle text-warning">
+                                    class="quick-icon bg-warning-subtle text-warning">
 
                                 <i class="bi bi-hourglass-split"></i>
 
@@ -133,8 +133,8 @@ Check-in | Receptionist | ClinicCare
                                 </div>
 
                                 <div
-                                    id="checkedInCount"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="checkedInCount">
 
                                     --
 
@@ -144,7 +144,7 @@ Check-in | Receptionist | ClinicCare
 
 
                             <div
-                                class="quick-icon bg-success-subtle text-success">
+                                    class="quick-icon bg-success-subtle text-success">
 
                                 <i class="bi bi-person-check"></i>
 
@@ -170,8 +170,8 @@ Check-in | Receptionist | ClinicCare
                                 </div>
 
                                 <div
-                                    id="cancelledCount"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="cancelledCount">
 
                                     --
 
@@ -181,7 +181,7 @@ Check-in | Receptionist | ClinicCare
 
 
                             <div
-                                class="quick-icon bg-danger-subtle text-danger">
+                                    class="quick-icon bg-danger-subtle text-danger">
 
                                 <i class="bi bi-x-circle"></i>
 
@@ -201,7 +201,7 @@ Check-in | Receptionist | ClinicCare
                 <div class="p-4 border-bottom">
 
                     <div
-                        class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                            class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
 
                         <div>
 
@@ -219,11 +219,11 @@ Check-in | Receptionist | ClinicCare
                         <div>
 
                             <input
-                                type="text"
-                                id="checkinSearch"
-                                class="form-control"
-                                placeholder="Tên, SĐT, mã BN hoặc bác sĩ..."
-                                style="min-width: 280px;">
+                                    class="form-control"
+                                    id="checkinSearch"
+                                    placeholder="Tên, SĐT, mã BN hoặc bác sĩ..."
+                                    style="min-width: 280px;"
+                                    type="text">
 
                         </div>
 
@@ -238,55 +238,55 @@ Check-in | Receptionist | ClinicCare
 
                         <thead>
 
-                            <tr>
+                        <tr>
 
-                                <th>
-                                    Thời gian
-                                </th>
+                            <th>
+                                Thời gian
+                            </th>
 
-                                <th>
-                                    Bệnh nhân
-                                </th>
+                            <th>
+                                Bệnh nhân
+                            </th>
 
-                                <th>
-                                    Mã BN
-                                </th>
+                            <th>
+                                Mã BN
+                            </th>
 
-                                <th>
-                                    Bác sĩ
-                                </th>
+                            <th>
+                                Bác sĩ
+                            </th>
 
-                                <th>
-                                    Chuyên khoa
-                                </th>
+                            <th>
+                                Chuyên khoa
+                            </th>
 
-                                <th>
-                                    Trạng thái
-                                </th>
+                            <th>
+                                Trạng thái
+                            </th>
 
-                                <th class="text-end">
-                                    Thao tác
-                                </th>
+                            <th class="text-end">
+                                Thao tác
+                            </th>
 
-                            </tr>
+                        </tr>
 
                         </thead>
 
 
                         <tbody
-                            id="checkinList">
+                                id="checkinList">
 
-                            <tr>
+                        <tr>
 
-                                <td
-                                    colspan="7"
-                                    class="text-center py-5 text-secondary">
+                            <td
+                                    class="text-center py-5 text-secondary"
+                                    colspan="7">
 
-                                    Đang tải...
+                                Đang tải...
 
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
                         </tbody>
 
@@ -308,7 +308,7 @@ Check-in | Receptionist | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/receptionist-checkin.js'
     ) }}">

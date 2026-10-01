@@ -242,5 +242,3 @@ class WorkingScheduleService:
         except IntegrityError as exc:
             db.rollback()
             raise ConflictException("Khong the xoa lich lam viec") from exc
-
-        

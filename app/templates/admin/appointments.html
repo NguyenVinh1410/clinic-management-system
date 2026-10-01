@@ -36,8 +36,8 @@ Quản lý lịch khám | Admin | ClinicCare
 
 
             <div
-                id="appointmentAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="appointmentAlert">
             </div>
 
 
@@ -50,10 +50,10 @@ Quản lý lịch khám | Admin | ClinicCare
                         <div class="col-12 col-md-4">
 
                             <input
-                                id="appointmentSearch"
-                                type="text"
-                                class="form-control"
-                                placeholder="Tìm bệnh nhân hoặc bác sĩ...">
+                                    class="form-control"
+                                    id="appointmentSearch"
+                                    placeholder="Tìm bệnh nhân hoặc bác sĩ..."
+                                    type="text">
 
                         </div>
 
@@ -61,8 +61,8 @@ Quản lý lịch khám | Admin | ClinicCare
                         <div class="col-12 col-md-3">
 
                             <select
-                                id="appointmentStatus"
-                                class="form-select">
+                                    class="form-select"
+                                    id="appointmentStatus">
 
                                 <option value="">
                                     Tất cả trạng thái
@@ -92,9 +92,9 @@ Quản lý lịch khám | Admin | ClinicCare
                         <div class="col-12 col-md-3">
 
                             <input
-                                id="appointmentDate"
-                                type="date"
-                                class="form-control">
+                                    class="form-control"
+                                    id="appointmentDate"
+                                    type="date">
 
                         </div>
 
@@ -102,10 +102,10 @@ Quản lý lịch khám | Admin | ClinicCare
                         <div class="col-12 col-md-2">
 
                             <button
-                                id="refreshAppointments"
-                                class="btn
+                                    class="btn
                                        btn-outline-primary
-                                       w-100">
+                                       w-100"
+                                    id="refreshAppointments">
 
                                 Làm mới
 
@@ -121,59 +121,59 @@ Quản lý lịch khám | Admin | ClinicCare
                 <div class="table-responsive">
 
                     <table
-                        class="table
+                            class="table
                                align-middle
                                mb-0">
 
                         <thead>
 
-                            <tr>
+                        <tr>
 
-                                <th>
-                                    Thời gian
-                                </th>
+                            <th>
+                                Thời gian
+                            </th>
 
-                                <th>
-                                    Bệnh nhân
-                                </th>
+                            <th>
+                                Bệnh nhân
+                            </th>
 
-                                <th>
-                                    Bác sĩ
-                                </th>
+                            <th>
+                                Bác sĩ
+                            </th>
 
-                                <th>
-                                    Chuyên khoa
-                                </th>
+                            <th>
+                                Chuyên khoa
+                            </th>
 
-                                <th>
-                                    Trạng thái
-                                </th>
+                            <th>
+                                Trạng thái
+                            </th>
 
-                                <th class="text-end">
-                                    Thao tác
-                                </th>
+                            <th class="text-end">
+                                Thao tác
+                            </th>
 
-                            </tr>
+                        </tr>
 
                         </thead>
 
 
                         <tbody
-                            id="appointmentList">
+                                id="appointmentList">
 
-                            <tr>
+                        <tr>
 
-                                <td
-                                    colspan="6"
+                            <td
                                     class="text-center
                                            py-5
-                                           text-secondary">
+                                           text-secondary"
+                                    colspan="6">
 
-                                    Đang tải...
+                                Đang tải...
 
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
                         </tbody>
 
@@ -195,7 +195,7 @@ Quản lý lịch khám | Admin | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/admin-appointments.js'
     ) }}">

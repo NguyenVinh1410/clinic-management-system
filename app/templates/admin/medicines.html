@@ -36,14 +36,13 @@ Quản lý thuốc | Admin | ClinicCare
 
 
             <div
-                id="medicineAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="medicineAlert">
             </div>
 
 
             <div class="row g-4">
 
-                <!-- FORM -->
 
                 <div class="col-12 col-xl-4">
 
@@ -52,15 +51,15 @@ Quản lý thuốc | Admin | ClinicCare
                         <div class="p-4 border-bottom">
 
                             <h5
-                                class="fw-bold mb-1"
-                                id="medicineFormTitle">
+                                    class="fw-bold mb-1"
+                                    id="medicineFormTitle">
 
                                 Thêm thuốc
 
                             </h5>
 
                             <p
-                                class="text-secondary
+                                    class="text-secondary
                                        small
                                        mb-0">
 
@@ -74,17 +73,17 @@ Quản lý thuốc | Admin | ClinicCare
                         <div class="p-4">
 
                             <form
-                                id="medicineForm">
+                                    id="medicineForm">
 
                                 <input
-                                    type="hidden"
-                                    id="medicineId">
+                                        id="medicineId"
+                                        type="hidden">
 
 
                                 <div class="mb-3">
 
                                     <label
-                                        class="form-label
+                                            class="form-label
                                                fw-semibold">
 
                                         Tên thuốc
@@ -92,11 +91,11 @@ Quản lý thuốc | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        type="text"
-                                        id="medicineName"
-                                        class="form-control"
-                                        maxlength="100"
-                                        required>
+                                            class="form-control"
+                                            id="medicineName"
+                                            maxlength="100"
+                                            required
+                                            type="text">
 
                                 </div>
 
@@ -104,7 +103,7 @@ Quản lý thuốc | Admin | ClinicCare
                                 <div class="mb-3">
 
                                     <label
-                                        class="form-label
+                                            class="form-label
                                                fw-semibold">
 
                                         Đơn vị
@@ -112,12 +111,12 @@ Quản lý thuốc | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        type="text"
-                                        id="medicineUnit"
-                                        class="form-control"
-                                        maxlength="50"
-                                        placeholder="Viên, chai, ống..."
-                                        required>
+                                            class="form-control"
+                                            id="medicineUnit"
+                                            maxlength="50"
+                                            placeholder="Viên, chai, ống..."
+                                            required
+                                            type="text">
 
                                 </div>
 
@@ -125,7 +124,7 @@ Quản lý thuốc | Admin | ClinicCare
                                 <div class="mb-3">
 
                                     <label
-                                        class="form-label
+                                            class="form-label
                                                fw-semibold">
 
                                         Đơn giá
@@ -133,12 +132,12 @@ Quản lý thuốc | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        type="number"
-                                        id="medicinePrice"
-                                        class="form-control"
-                                        min="0"
-                                        step="0.01"
-                                        required>
+                                            class="form-control"
+                                            id="medicinePrice"
+                                            min="0"
+                                            required
+                                            step="0.01"
+                                            type="number">
 
                                 </div>
 
@@ -146,7 +145,7 @@ Quản lý thuốc | Admin | ClinicCare
                                 <div class="mb-3">
 
                                     <label
-                                        class="form-label
+                                            class="form-label
                                                fw-semibold">
 
                                         Tồn kho
@@ -154,12 +153,12 @@ Quản lý thuốc | Admin | ClinicCare
                                     </label>
 
                                     <input
-                                        type="number"
-                                        id="medicineStock"
-                                        class="form-control"
-                                        min="0"
-                                        step="1"
-                                        required>
+                                            class="form-control"
+                                            id="medicineStock"
+                                            min="0"
+                                            required
+                                            step="1"
+                                            type="number">
 
                                 </div>
 
@@ -167,7 +166,7 @@ Quản lý thuốc | Admin | ClinicCare
                                 <div class="mb-4">
 
                                     <label
-                                        class="form-label
+                                            class="form-label
                                                fw-semibold">
 
                                         Trạng thái
@@ -175,8 +174,8 @@ Quản lý thuốc | Admin | ClinicCare
                                     </label>
 
                                     <select
-                                        id="medicineStatus"
-                                        class="form-select">
+                                            class="form-select"
+                                            id="medicineStatus">
 
                                         <option value="Active">
                                             Đang sử dụng
@@ -194,14 +193,14 @@ Quản lý thuốc | Admin | ClinicCare
                                 <div class="d-flex gap-2">
 
                                     <button
-                                        type="submit"
-                                        id="medicineSubmitButton"
-                                        class="btn
+                                            class="btn
                                                btn-primary
-                                               flex-grow-1">
+                                               flex-grow-1"
+                                            id="medicineSubmitButton"
+                                            type="submit">
 
                                         <i
-                                            class="bi bi-plus-lg me-1">
+                                                class="bi bi-plus-lg me-1">
                                         </i>
 
                                         Thêm thuốc
@@ -210,11 +209,11 @@ Quản lý thuốc | Admin | ClinicCare
 
 
                                     <button
-                                        type="button"
-                                        id="cancelMedicineEdit"
-                                        class="btn
+                                            class="btn
                                                btn-outline-secondary
-                                               d-none">
+                                               d-none"
+                                            id="cancelMedicineEdit"
+                                            type="button">
 
                                         Hủy
 
@@ -231,14 +230,12 @@ Quản lý thuốc | Admin | ClinicCare
                 </div>
 
 
-                <!-- LIST -->
-
                 <div class="col-12 col-xl-8">
 
                     <div class="content-card">
 
                         <div
-                            class="p-4 border-bottom
+                                class="p-4 border-bottom
                                    d-flex
                                    justify-content-between
                                    align-items-center
@@ -248,14 +245,14 @@ Quản lý thuốc | Admin | ClinicCare
                             <div>
 
                                 <h5
-                                    class="fw-bold mb-1">
+                                        class="fw-bold mb-1">
 
                                     Danh sách thuốc
 
                                 </h5>
 
                                 <p
-                                    class="text-secondary
+                                        class="text-secondary
                                            small
                                            mb-0">
 
@@ -268,13 +265,13 @@ Quản lý thuốc | Admin | ClinicCare
 
 
                             <button
-                                type="button"
-                                id="refreshMedicines"
-                                class="btn
-                                       btn-outline-primary">
+                                    class="btn
+                                       btn-outline-primary"
+                                    id="refreshMedicines"
+                                    type="button">
 
                                 <i
-                                    class="bi
+                                        class="bi
                                            bi-arrow-clockwise
                                            me-1">
                                 </i>
@@ -293,10 +290,10 @@ Quản lý thuốc | Admin | ClinicCare
                                 <div class="input-group">
 
                                     <span
-                                        class="input-group-text">
+                                            class="input-group-text">
 
                                         <i
-                                            class="bi
+                                                class="bi
                                                    bi-search">
                                         </i>
 
@@ -304,10 +301,10 @@ Quản lý thuốc | Admin | ClinicCare
 
 
                                     <input
-                                        type="text"
-                                        id="medicineSearch"
-                                        class="form-control"
-                                        placeholder="Tìm theo tên thuốc...">
+                                            class="form-control"
+                                            id="medicineSearch"
+                                            placeholder="Tìm theo tên thuốc..."
+                                            type="text">
 
                                 </div>
 
@@ -317,62 +314,62 @@ Quản lý thuốc | Admin | ClinicCare
                             <div class="table-responsive">
 
                                 <table
-                                    class="table
+                                        class="table
                                            align-middle
                                            mb-0">
 
                                     <thead>
 
-                                        <tr>
+                                    <tr>
 
-                                            <th>
-                                                Thuốc
-                                            </th>
+                                        <th>
+                                            Thuốc
+                                        </th>
 
-                                            <th>
-                                                Đơn vị
-                                            </th>
+                                        <th>
+                                            Đơn vị
+                                        </th>
 
-                                            <th>
-                                                Đơn giá
-                                            </th>
+                                        <th>
+                                            Đơn giá
+                                        </th>
 
-                                            <th>
-                                                Tồn kho
-                                            </th>
+                                        <th>
+                                            Tồn kho
+                                        </th>
 
-                                            <th>
-                                                Trạng thái
-                                            </th>
+                                        <th>
+                                            Trạng thái
+                                        </th>
 
-                                            <th
+                                        <th
                                                 class="text-end">
 
-                                                Thao tác
+                                            Thao tác
 
-                                            </th>
+                                        </th>
 
-                                        </tr>
+                                    </tr>
 
                                     </thead>
 
 
                                     <tbody
-                                        id="medicineList">
+                                            id="medicineList">
 
-                                        <tr>
+                                    <tr>
 
-                                            <td
-                                                colspan="6"
+                                        <td
                                                 class="text-center
                                                        py-5
-                                                       text-secondary">
+                                                       text-secondary"
+                                                colspan="6">
 
-                                                Đang tải...
+                                            Đang tải...
 
-                                            </td>
+                                        </td>
 
-                                        </tr>
+                                    </tr>
 
                                     </tbody>
 
@@ -400,7 +397,7 @@ Quản lý thuốc | Admin | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/admin-medicines.js'
     ) }}">

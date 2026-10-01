@@ -36,15 +36,15 @@ Quản lý bác sĩ | Admin | ClinicCare
 
 
             <div
-                id="doctorAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="doctorAlert">
             </div>
 
 
             <div class="content-card">
 
                 <div
-                    class="p-4 border-bottom
+                        class="p-4 border-bottom
                            d-flex
                            justify-content-between
                            align-items-center
@@ -65,9 +65,9 @@ Quản lý bác sĩ | Admin | ClinicCare
 
 
                     <button
-                        type="button"
-                        id="refreshDoctors"
-                        class="btn btn-outline-primary">
+                            class="btn btn-outline-primary"
+                            id="refreshDoctors"
+                            type="button">
 
                         <i class="bi bi-arrow-clockwise me-1"></i>
 
@@ -76,10 +76,10 @@ Quản lý bác sĩ | Admin | ClinicCare
                     </button>
 
                     <button
-                        type="button"
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#doctorCreateModal">
+                            class="btn btn-primary"
+                            data-bs-target="#doctorCreateModal"
+                            data-bs-toggle="modal"
+                            type="button">
 
                         <i class="bi bi-person-plus me-1"></i>
 
@@ -103,10 +103,10 @@ Quản lý bác sĩ | Admin | ClinicCare
                                 </span>
 
                                 <input
-                                    type="text"
-                                    id="doctorSearch"
-                                    class="form-control"
-                                    placeholder="Tìm theo tên bác sĩ...">
+                                        class="form-control"
+                                        id="doctorSearch"
+                                        placeholder="Tìm theo tên bác sĩ..."
+                                        type="text">
 
                             </div>
 
@@ -116,8 +116,8 @@ Quản lý bác sĩ | Admin | ClinicCare
                         <div class="col-12 col-md-5">
 
                             <select
-                                id="specialtyFilter"
-                                class="form-select">
+                                    class="form-select"
+                                    id="specialtyFilter">
 
                                 <option value="">
                                     Tất cả chuyên khoa
@@ -133,54 +133,54 @@ Quản lý bác sĩ | Admin | ClinicCare
                     <div class="table-responsive">
 
                         <table
-                            class="table
+                                class="table
                                    align-middle
                                    mb-0">
 
                             <thead>
 
-                                <tr>
+                            <tr>
 
-                                    <th>
-                                        Bác sĩ
-                                    </th>
+                                <th>
+                                    Bác sĩ
+                                </th>
 
-                                    <th>
-                                        Chuyên khoa
-                                    </th>
+                                <th>
+                                    Chuyên khoa
+                                </th>
 
-                                    <th>
-                                        Bằng cấp
-                                    </th>
+                                <th>
+                                    Bằng cấp
+                                </th>
 
-                                    <th>
-                                        Trạng thái
-                                    </th>
+                                <th>
+                                    Trạng thái
+                                </th>
 
-                                    <th class="text-end">
-                                        Thao tác
-                                    </th>
+                                <th class="text-end">
+                                    Thao tác
+                                </th>
 
-                                </tr>
+                            </tr>
 
                             </thead>
 
 
                             <tbody id="doctorList">
 
-                                <tr>
+                            <tr>
 
-                                    <td
-                                        colspan="5"
+                                <td
                                         class="text-center
                                                py-5
-                                               text-secondary">
+                                               text-secondary"
+                                        colspan="5">
 
-                                        Đang tải...
+                                    Đang tải...
 
-                                    </td>
+                                </td>
 
-                                </tr>
+                            </tr>
 
                             </tbody>
 
@@ -198,16 +198,15 @@ Quản lý bác sĩ | Admin | ClinicCare
 
 </div>
 
-<!-- CREATE DOCTOR MODAL -->
 
 <div
-    class="modal fade"
-    id="doctorCreateModal"
-    tabindex="-1"
-    aria-hidden="true">
+        aria-hidden="true"
+        class="modal fade"
+        id="doctorCreateModal"
+        tabindex="-1">
 
     <div
-        class="modal-dialog
+            class="modal-dialog
                modal-lg
                modal-dialog-centered">
 
@@ -229,9 +228,9 @@ Quản lý bác sĩ | Admin | ClinicCare
 
 
                 <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal">
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        type="button">
                 </button>
 
             </div>
@@ -243,22 +242,21 @@ Quản lý bác sĩ | Admin | ClinicCare
 
                     <div class="row g-3">
 
-                        <!-- USERNAME -->
 
                         <div class="col-12 col-md-6">
 
                             <label
-                                class="form-label fw-semibold">
+                                    class="form-label fw-semibold">
 
                                 Username
 
                             </label>
 
                             <input
-                                type="text"
-                                id="createDoctorUsername"
-                                class="form-control"
-                                required>
+                                    class="form-control"
+                                    id="createDoctorUsername"
+                                    required
+                                    type="text">
 
                             <div class="form-text">
                                 Ít nhất 6 ký tự, có chữ và số.
@@ -267,22 +265,20 @@ Quản lý bác sĩ | Admin | ClinicCare
                         </div>
 
 
-                        <!-- PASSWORD -->
-
                         <div class="col-12 col-md-6">
 
                             <label
-                                class="form-label fw-semibold">
+                                    class="form-label fw-semibold">
 
                                 Mật khẩu
 
                             </label>
 
                             <input
-                                type="password"
-                                id="createDoctorPassword"
-                                class="form-control"
-                                required>
+                                    class="form-control"
+                                    id="createDoctorPassword"
+                                    required
+                                    type="password">
 
                             <div class="form-text">
                                 Ít nhất 6 ký tự và có số.
@@ -291,78 +287,70 @@ Quản lý bác sĩ | Admin | ClinicCare
                         </div>
 
 
-                        <!-- NAME -->
-
                         <div class="col-12">
 
                             <label
-                                class="form-label fw-semibold">
+                                    class="form-label fw-semibold">
 
                                 Họ và tên
 
                             </label>
 
                             <input
-                                type="text"
-                                id="createDoctorFullName"
-                                class="form-control"
-                                required>
+                                    class="form-control"
+                                    id="createDoctorFullName"
+                                    required
+                                    type="text">
 
                         </div>
 
 
-                        <!-- EMAIL -->
-
                         <div class="col-12 col-md-6">
 
                             <label
-                                class="form-label fw-semibold">
+                                    class="form-label fw-semibold">
 
                                 Email
 
                             </label>
 
                             <input
-                                type="email"
-                                id="createDoctorEmail"
-                                class="form-control">
+                                    class="form-control"
+                                    id="createDoctorEmail"
+                                    type="email">
 
                         </div>
 
 
-                        <!-- PHONE -->
-
                         <div class="col-12 col-md-6">
 
                             <label
-                                class="form-label fw-semibold">
+                                    class="form-label fw-semibold">
 
                                 Số điện thoại
 
                             </label>
 
                             <input
-                                type="text"
-                                id="createDoctorPhone"
-                                class="form-control">
+                                    class="form-control"
+                                    id="createDoctorPhone"
+                                    type="text">
 
                         </div>
 
 
-                        <!-- GENDER -->
-
                         <div class="col-12 col-md-6">
 
                             <label
-                                class="form-label fw-semibold">
+                                    class="form-label fw-semibold">
 
                                 Giới tính
 
                             </label>
 
                             <select
-                                id="createDoctorGender"
-                                class="form-select">
+                                    class="form-select"
+                                    id="createDoctorGender">
 
                                 <option value="">
                                     Không chọn
@@ -385,21 +373,19 @@ Quản lý bác sĩ | Admin | ClinicCare
                         </div>
 
 
-                        <!-- SPECIALTY -->
-
                         <div class="col-12 col-md-6">
 
                             <label
-                                class="form-label fw-semibold">
+                                    class="form-label fw-semibold">
 
                                 Chuyên khoa
 
                             </label>
 
                             <select
-                                id="createDoctorSpecialty"
-                                class="form-select"
-                                required>
+                                    class="form-select"
+                                    id="createDoctorSpecialty"
+                                    required>
 
                                 <option value="">
                                     Chọn chuyên khoa
@@ -410,40 +396,36 @@ Quản lý bác sĩ | Admin | ClinicCare
                         </div>
 
 
-                        <!-- QUALIFICATION -->
-
                         <div class="col-12">
 
                             <label
-                                class="form-label fw-semibold">
+                                    class="form-label fw-semibold">
 
                                 Bằng cấp / Chứng chỉ
 
                             </label>
 
                             <input
-                                type="text"
-                                id="createDoctorQualification"
-                                class="form-control">
+                                    class="form-control"
+                                    id="createDoctorQualification"
+                                    type="text">
 
                         </div>
 
 
-                        <!-- BIO -->
-
                         <div class="col-12">
 
                             <label
-                                class="form-label fw-semibold">
+                                    class="form-label fw-semibold">
 
                                 Giới thiệu
 
                             </label>
 
                             <textarea
-                                id="createDoctorBio"
-                                class="form-control"
-                                rows="4">
+                                    class="form-control"
+                                    id="createDoctorBio"
+                                    rows="4">
                             </textarea>
 
                         </div>
@@ -456,9 +438,9 @@ Quản lý bác sĩ | Admin | ClinicCare
                 <div class="modal-footer">
 
                     <button
-                        type="button"
-                        class="btn btn-light"
-                        data-bs-dismiss="modal">
+                            class="btn btn-light"
+                            data-bs-dismiss="modal"
+                            type="button">
 
                         Hủy
 
@@ -466,11 +448,11 @@ Quản lý bác sĩ | Admin | ClinicCare
 
 
                     <button
-                        type="submit"
-                        class="btn btn-primary">
+                            class="btn btn-primary"
+                            type="submit">
 
                         <i
-                            class="bi bi-person-plus me-1">
+                                class="bi bi-person-plus me-1">
                         </i>
 
                         Tạo tài khoản
@@ -493,7 +475,7 @@ Quản lý bác sĩ | Admin | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/admin-doctors.js'
     ) }}">

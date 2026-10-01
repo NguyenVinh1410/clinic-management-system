@@ -18,12 +18,6 @@ document.addEventListener(
 
         try {
 
-            /*
-             * Không chạy song song nữa.
-             *
-             * Phải load Specialty trước
-             * rồi mới render Doctor.
-             */
             await loadCurrentUser();
 
             await loadSpecialties();
@@ -88,11 +82,6 @@ async function loadSpecialties() {
 
     }
 
-
-    /*
-     * Xóa option cũ để tránh duplicate
-     * nếu sau này reload.
-     */
     select.innerHTML = `
         <option value="">
             Tất cả chuyên khoa

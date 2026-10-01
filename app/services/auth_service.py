@@ -1,12 +1,13 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
 from app.core.exceptions import UnauthorizedException, ConflictException
 from app.core.security import create_access_token, verify_password, hash_password
-from app.models.enums import UserStatus, UserRole, Gender
+from app.models.enums import UserStatus, UserRole
 from app.models.user import User, Patient
 from app.schemas.auth import RegisterRequest
+
 
 class AuthService:
     @staticmethod
@@ -27,17 +28,13 @@ class AuthService:
             raise UnauthorizedException("Sai ten dang nhap hoac mat khau!")
 
         if not verify_password(
-            password,
-            user.password,
+                password,
+                user.password,
         ):
-            raise UnauthorizedException(
-                "Sai ten dang nhap hoac mat khau!"
-            )
+            raise UnauthorizedException("Sai ten dang nhap hoac mat khau!")
 
         if user.status != UserStatus.ACTIVE:
-            raise UnauthorizedException(
-                "Tai khoan bi khoa hoac khong hoat dong"
-            )
+            raise UnauthorizedException("Tai khoan bi khoa hoac khong hoat dong")
 
         return user
 
@@ -54,9 +51,7 @@ class AuthService:
             password=password
         )
 
-        return create_access_token(
-            user_id=user.user_id,
-        )
+        return create_access_token(user_id=user.user_id)
 
     @staticmethod
     def register_patient(
@@ -70,9 +65,7 @@ class AuthService:
         )
 
         if db.execute(stmt).scalar_one_or_none():
-            raise ConflictException(
-                "Username da ton tai"
-            )
+            raise ConflictException("Username da ton tai")
 
         if data.email is not None:
 
@@ -82,9 +75,7 @@ class AuthService:
             )
 
             if db.execute(stmt).scalar_one_or_none():
-                raise ConflictException(
-                    "Email da ton tai"
-                )
+                raise ConflictException("Email da ton tai")
 
         if data.phone is not None:
 
@@ -94,9 +85,7 @@ class AuthService:
             )
 
             if db.execute(stmt).scalar_one_or_none():
-                raise ConflictException(
-                    "SĐT da ton tai"
-                )
+                raise ConflictException("SĐT da ton tai")
 
         patient = Patient(
             username=data.username,

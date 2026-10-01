@@ -12,9 +12,7 @@ from app.schemas.doctor import DoctorUpdate
 class DoctorService:
 
     @staticmethod
-    def get_all_doctors(
-            db: Session,
-    ) -> list[Doctor]:
+    def get_all_doctors(db: Session) -> list[Doctor]:
 
         stmt = (
             select(Doctor)

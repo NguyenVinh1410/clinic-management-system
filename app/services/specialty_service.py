@@ -6,6 +6,7 @@ from app.core.exceptions import ConflictException, NotFoundException
 from app.models import Doctor
 from app.models.specialty import Specialty
 
+
 class SpecialtyService:
 
     @staticmethod

@@ -7,17 +7,18 @@ from sqlalchemy.orm import Session, selectinload
 from app.core.exceptions import BusinessException, ConflictException, NotFoundException, ForbiddenException
 from app.models import WorkingSchedule
 from app.models.appointment import Appointment
-from app.models.medical_record import MedicalRecord
-from app.models.prescription import Prescription
-from app.models.prescription_detail import PrescriptionDetail
 from app.models.enums import AppointmentStatus, InvoiceStatus, PaymentMethod, UserRole
 from app.models.invoice import Invoice
+from app.models.medical_record import MedicalRecord
 from app.models.medicine import Medicine
+from app.models.prescription import Prescription
+from app.models.prescription_detail import PrescriptionDetail
 from app.models.user import User, Doctor
-from app.schemas.invoice import InvoiceCreate, InvoicePaymentRequest, InvoiceResponse, InvoicePatientInfo, InvoiceDoctorInfo, InvoiceSpecialtyInfo, InvoiceMedicineItem
+from app.schemas.invoice import InvoiceCreate, InvoicePaymentRequest, InvoiceResponse, InvoicePatientInfo, \
+    InvoiceDoctorInfo, InvoiceSpecialtyInfo, InvoiceMedicineItem
+
 
 class InvoiceService:
-
     CONSULTATION_FEE = Decimal("100000.00")
 
     @staticmethod
@@ -185,7 +186,7 @@ class InvoiceService:
         total = Decimal("0.00")
 
         for detail in prescription.details:
-            medicine =  db.get(Medicine, detail.medicine_id)
+            medicine = db.get(Medicine, detail.medicine_id)
 
             if medicine is None:
                 raise NotFoundException(f"Khong tim thay thuoc ID={detail.medicine_id}")

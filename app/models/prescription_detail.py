@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.database.base import Base
 
+
 class PrescriptionDetail(Base):
     __tablename__ = "prescription_detail"
 

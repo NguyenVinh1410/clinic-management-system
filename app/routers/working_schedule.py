@@ -1,5 +1,6 @@
-from typing import Annotated
 from datetime import datetime
+from typing import Annotated
+
 from fastapi import Depends, APIRouter, status
 from sqlalchemy.orm import Session
 
@@ -7,13 +8,14 @@ from app.dependencies import get_db, requires_role
 from app.models.enums import UserRole
 from app.models.user import User
 from app.schemas.working_schedule import WorkingScheduleCreate, WorkingScheduleResponse, WorkingScheduleUpdate
-from app.services.working_schedule_service import WorkingScheduleService
 from app.services.appointment_service import AppointmentService
+from app.services.working_schedule_service import WorkingScheduleService
 
 router = APIRouter(
     prefix="/api/working_schedule",
     tags=["Working Schedule"],
 )
+
 
 @router.post(
     "",
@@ -21,17 +23,18 @@ router = APIRouter(
     status_code=status.HTTP_201_CREATED,
 )
 def create_schedule(
-    data: WorkingScheduleCreate,
-    _: Annotated[
-        User,
-        Depends(requires_role(UserRole.ADMIN)),
-    ],
-    db: Annotated[Session, Depends(get_db)],
+        data: WorkingScheduleCreate,
+        _: Annotated[
+            User,
+            Depends(requires_role(UserRole.ADMIN)),
+        ],
+        db: Annotated[Session, Depends(get_db)],
 ):
     return WorkingScheduleService.create_schedule(
         db=db,
         data=data,
     )
+
 
 @router.get(
     "",
@@ -51,6 +54,7 @@ def get_schedule(
         db: Annotated[Session, Depends(get_db)],
 ):
     return WorkingScheduleService.get_all_schedules(db=db)
+
 
 @router.get(
     "/doctor/{doctor_id}",
@@ -75,6 +79,7 @@ def get_doctor_schedule(
         doctor_id=doctor_id,
     ))
 
+
 @router.get(
     "/schedule/{schedule_id}/booked-times",
     response_model=list[datetime],
@@ -83,21 +88,15 @@ def get_booked_times_by_schedule(
         schedule_id: int,
         _: Annotated[
             User,
-            Depends(
-                requires_role(
-                    UserRole.PATIENT
-                )
-            ),
+            Depends(requires_role(UserRole.PATIENT)),
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ],
+        db: Annotated[Session, Depends(get_db)]
 ):
     return AppointmentService.get_booked_times_by_schedule(
         db=db,
         schedule_id=schedule_id,
     )
+
 
 @router.get(
     "/{schedule_id}",
@@ -121,6 +120,7 @@ def get_schedule_by_id(
         db=db,
         schedule_id=schedule_id,
     )
+
 
 @router.patch(
     "/{schedule_id}",
@@ -148,6 +148,7 @@ def update_schedule(
         schedule=schedule,
         data=data,
     )
+
 
 @router.delete(
     "/{schedule_id}",

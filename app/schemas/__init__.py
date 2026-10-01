@@ -1,28 +1,19 @@
-from app.schemas.auth import LoginRequest, TokenResponse, UserResponse, RegisterRequest
-
-from app.schemas.patient import PatientResponse, PatientUpdate
-
-from app.schemas.user import UserCreate
-
-from app.schemas.specialty import SpecialtyResponse, SpecialtyUpdate, SpecialtyCreate
-
-from app.schemas.doctor import DoctorResponse, DoctorUpdate
-
-from app.schemas.working_schedule import WorkingScheduleResponse, WorkingScheduleUpdate, WorkingScheduleCreate
-
 from app.schemas.appointment import AppointmentResponse, AppointmentUpdate, AppointmentCreate, AppointmentStatusUpdate
-
-from app.schemas.medical_record import MedicalRecordResponse, MedicalRecordUpdate, MedicalRecordCreate
-
-from app.schemas.medicine import MedicineResponse, MedicineUpdate, MedicineCreate
-
-from app.schemas.prescription import PrescriptionResponse, PrescriptionDetailResponse, PrescriptionDetailCreate, PrescriptionCreate
-
+from app.schemas.auth import LoginRequest, TokenResponse, UserResponse, RegisterRequest
+from app.schemas.dashboard import DashboardResponse, DashboardSummary, DoctorStatistic, MonthlyStatistic, \
+    MonthlyAppointmentStatistic, AppointmentStatusStatistic, SpecialtyStatistic
+from app.schemas.doctor import DoctorResponse, DoctorUpdate
 from app.schemas.invoice import InvoiceResponse, InvoiceCreate, InvoicePaymentRequest
-
-from app.schemas.dashboard import DashboardResponse, DashboardSummary, DoctorStatistic, MonthlyStatistic, MonthlyAppointmentStatistic, AppointmentStatusStatistic, SpecialtyStatistic
-
-from app.schemas.medical_history import MedicalHistoryResponse, MedicalHistoryPrescriptionResponse, MedicalHistoryMedicineResponse, MedicalHistoryItemResponse
+from app.schemas.medical_history import MedicalHistoryResponse, MedicalHistoryPrescriptionResponse, \
+    MedicalHistoryMedicineResponse, MedicalHistoryItemResponse
+from app.schemas.medical_record import MedicalRecordResponse, MedicalRecordUpdate, MedicalRecordCreate
+from app.schemas.medicine import MedicineResponse, MedicineUpdate, MedicineCreate
+from app.schemas.patient import PatientResponse, PatientUpdate
+from app.schemas.prescription import PrescriptionResponse, PrescriptionDetailResponse, PrescriptionDetailCreate, \
+    PrescriptionCreate
+from app.schemas.specialty import SpecialtyResponse, SpecialtyUpdate, SpecialtyCreate
+from app.schemas.user import UserCreate
+from app.schemas.working_schedule import WorkingScheduleResponse, WorkingScheduleUpdate, WorkingScheduleCreate
 
 __all__ = ["LoginRequest",
            "TokenResponse",

@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.enums import Gender, UserStatus, UserRole
 
+
 class PatientResponse(BaseModel):
     model_config = ConfigDict(
         from_attributes=True,
@@ -22,22 +23,23 @@ class PatientResponse(BaseModel):
     dob: date | None
     address: str | None
 
+
 class PatientUpdate(BaseModel):
     full_name: str | None = Field(
         default=None,
-        min_length= 1,
-        max_length= 100,
+        min_length=1,
+        max_length=100,
     )
 
     email: str | None = Field(
         default=None,
-        max_length= 255,
+        max_length=255,
     )
 
     phone: str | None = Field(
         default=None,
-        min_length= 9,
-        max_length= 20,
+        min_length=9,
+        max_length=20,
     )
 
     dob: date | None = None
@@ -46,6 +48,5 @@ class PatientUpdate(BaseModel):
 
     address: str | None = Field(
         default=None,
-        max_length= 255,
+        max_length=255,
     )
-

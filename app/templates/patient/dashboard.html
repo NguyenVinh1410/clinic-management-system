@@ -23,8 +23,8 @@ Trang chủ bệnh nhân | ClinicCare
 
 
                 <h2
-                    class="fw-bold mb-1"
-                    id="patientWelcome">
+                        class="fw-bold mb-1"
+                        id="patientWelcome">
 
                     ...
 
@@ -42,20 +42,18 @@ Trang chủ bệnh nhân | ClinicCare
 
 
             <div
-                id="patientAlert"
-                class="alert d-none">
+                    class="alert d-none"
+                    id="patientAlert">
             </div>
 
-
-            <!-- QUICK ACTION -->
 
             <div class="row g-3 mb-4">
 
                 <div class="col-12 col-md-3">
 
                     <a
-                        href="/patient/book-appointment"
-                        class="quick-card">
+                            class="quick-card"
+                            href="/patient/book-appointment">
 
                         <div class="quick-icon bg-primary-subtle text-primary">
 
@@ -92,8 +90,8 @@ Trang chủ bệnh nhân | ClinicCare
                 <div class="col-12 col-md-3">
 
                     <a
-                        href="/patient/appointments"
-                        class="quick-card">
+                            class="quick-card"
+                            href="/patient/appointments">
 
                         <div class="quick-icon bg-success-subtle text-success">
 
@@ -128,10 +126,10 @@ Trang chủ bệnh nhân | ClinicCare
 
                 <div class="col-12 col-md-3">
                     <a
-                        href="/patient/prescriptions"
-                        class="quick-card">
+                            class="quick-card"
+                            href="/patient/prescriptions">
                         <div
-                            class="quick-icon
+                                class="quick-icon
                                    bg-success-subtle
                                    text-success">
                             <i class="bi bi-capsule"></i>
@@ -144,7 +142,7 @@ Trang chủ bệnh nhân | ClinicCare
                             </h6>
 
                             <p
-                                class="small
+                                    class="small
                                        text-secondary
                                        mb-0">
                                 Xem đơn thuốc bác sĩ đã kê.
@@ -152,7 +150,7 @@ Trang chủ bệnh nhân | ClinicCare
 
                         </div>
                         <i
-                            class="bi
+                                class="bi
                                    bi-arrow-right
                                    ms-auto">
 
@@ -165,8 +163,8 @@ Trang chủ bệnh nhân | ClinicCare
                 <div class="col-12 col-md-3">
 
                     <a
-                        href="/patient/invoices"
-                        class="quick-card">
+                            class="quick-card"
+                            href="/patient/invoices">
 
                         <div class="quick-icon bg-warning-subtle text-warning">
 
@@ -202,8 +200,6 @@ Trang chủ bệnh nhân | ClinicCare
             </div>
 
 
-            <!-- UPCOMING -->
-
             <div class="content-card mb-4">
 
                 <div class="card-header-simple d-flex justify-content-between align-items-center">
@@ -227,8 +223,8 @@ Trang chủ bệnh nhân | ClinicCare
 
 
                     <a
-                        href="/patient/appointments"
-                        class="btn btn-sm btn-outline-primary">
+                            class="btn btn-sm btn-outline-primary"
+                            href="/patient/appointments">
 
                         Xem tất cả
 
@@ -243,43 +239,43 @@ Trang chủ bệnh nhân | ClinicCare
 
                         <thead>
 
-                            <tr>
+                        <tr>
 
-                                <th>
-                                    Thời gian
-                                </th>
+                            <th>
+                                Thời gian
+                            </th>
 
-                                <th>
-                                    Bác sĩ
-                                </th>
+                            <th>
+                                Bác sĩ
+                            </th>
 
-                                <th>
-                                    Trạng thái
-                                </th>
+                            <th>
+                                Trạng thái
+                            </th>
 
-                                <th class="text-end">
-                                    #
-                                </th>
+                            <th class="text-end">
+                                #
+                            </th>
 
-                            </tr>
+                        </tr>
 
                         </thead>
 
 
                         <tbody
-                            id="upcomingAppointments">
+                                id="upcomingAppointments">
 
-                            <tr>
+                        <tr>
 
-                                <td
-                                    colspan="4"
-                                    class="text-center py-5 text-secondary">
+                            <td
+                                    class="text-center py-5 text-secondary"
+                                    colspan="4">
 
-                                    Đang tải...
+                                Đang tải...
 
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
                         </tbody>
 
@@ -289,8 +285,6 @@ Trang chủ bệnh nhân | ClinicCare
 
             </div>
 
-
-            <!-- INVOICES -->
 
             <div class="content-card">
 
@@ -315,8 +309,8 @@ Trang chủ bệnh nhân | ClinicCare
 
 
                     <a
-                        href="/patient/invoices"
-                        class="btn btn-sm btn-outline-primary">
+                            class="btn btn-sm btn-outline-primary"
+                            href="/patient/invoices">
 
                         Xem tất cả
 
@@ -326,8 +320,8 @@ Trang chủ bệnh nhân | ClinicCare
 
 
                 <div
-                    id="recentInvoices"
-                    class="p-3">
+                        class="p-3"
+                        id="recentInvoices">
 
                     <div class="text-center py-4 text-secondary">
 
@@ -351,7 +345,7 @@ Trang chủ bệnh nhân | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for('static', path='js/patient-dashboard.js') }}">
+        src="{{ url_for('static', path='js/patient-dashboard.js') }}">
 </script>
 
 {% endblock %}

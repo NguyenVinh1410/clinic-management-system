@@ -2,15 +2,10 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from openai import (
-    APIConnectionError,
-    APIError,
-    APITimeoutError,
-    OpenAI,
-)
+    APIConnectionError, APIError, APITimeoutError, OpenAI)
 
 from app.config.settings import settings
 from app.schemas.ai import AICommand
-
 
 VIETNAM_TZ = ZoneInfo(
     "Asia/Ho_Chi_Minh"
@@ -18,7 +13,6 @@ VIETNAM_TZ = ZoneInfo(
 
 
 class LLMService:
-
     _client = OpenAI(
         base_url=settings.ollama_base_url,
         api_key="ollama",
@@ -58,9 +52,9 @@ class LLMService:
 
     @classmethod
     def parse_message(
-        cls,
-        message: str,
-        history: list[dict],
+            cls,
+            message: str,
+            history: list[dict],
     ) -> AICommand:
 
         now = datetime.now(
@@ -74,7 +68,6 @@ class LLMService:
         history_text = ""
 
         for item in history[-6:]:
-
             history_text += (
                 f"{item['role']}: "
                 f"{item['content']}\n"
@@ -118,9 +111,9 @@ Tin nhắn mới:
             )
 
         except (
-            APITimeoutError,
-            APIConnectionError,
-            APIError,
+                APITimeoutError,
+                APIConnectionError,
+                APIError,
         ) as exc:
 
             print("=" * 70)
@@ -151,7 +144,6 @@ Tin nhắn mới:
         )
 
         if parsed is None:
-
             raise RuntimeError(
                 "Ollama không trả về dữ liệu "
                 "đúng cấu trúc."

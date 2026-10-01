@@ -1153,7 +1153,7 @@ function renderMedicalHistory(
                     <div
                         class="border rounded p-3 mb-3">
 
-                        <!-- DATE -->
+
 
                         <div
                             class="small text-secondary mb-2">
@@ -1169,7 +1169,7 @@ function renderMedicalHistory(
                         </div>
 
 
-                        <!-- DOCTOR -->
+
 
                         <div
                             class="fw-semibold">
@@ -1185,7 +1185,7 @@ function renderMedicalHistory(
                         </div>
 
 
-                        <!-- SPECIALTY -->
+
 
                         <div
                             class="small text-secondary mb-3">
@@ -1198,7 +1198,7 @@ function renderMedicalHistory(
                         </div>
 
 
-                        <!-- SYMPTOMS -->
+
 
                         <div
                             class="small mb-2">
@@ -1220,7 +1220,7 @@ function renderMedicalHistory(
                         </div>
 
 
-                        <!-- DIAGNOSIS -->
+
 
                         <div
                             class="small mb-2">
@@ -1242,7 +1242,7 @@ function renderMedicalHistory(
                         </div>
 
 
-                        <!-- NOTE -->
+
 
                         <div
                             class="small mb-2">
@@ -1264,7 +1264,7 @@ function renderMedicalHistory(
                         </div>
 
 
-                        <!-- PRESCRIPTION -->
+
 
                         ${prescriptionHtml}
 

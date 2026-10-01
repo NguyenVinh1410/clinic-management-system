@@ -55,10 +55,10 @@ Bác sĩ | ClinicCare
                                 </span>
 
                                 <input
-                                    type="text"
-                                    id="doctorSearch"
-                                    class="form-control"
-                                    placeholder="Nhập tên bác sĩ..."
+                                        class="form-control"
+                                        id="doctorSearch"
+                                        placeholder="Nhập tên bác sĩ..."
+                                        type="text"
                                 >
 
                             </div>
@@ -73,8 +73,8 @@ Bác sĩ | ClinicCare
                             </label>
 
                             <select
-                                id="specialtyFilter"
-                                class="form-select">
+                                    class="form-select"
+                                    id="specialtyFilter">
 
                                 <option value="">
                                     Tất cả chuyên khoa
@@ -92,8 +92,8 @@ Bác sĩ | ClinicCare
 
 
             <div
-                id="doctorList"
-                class="row g-3">
+                    class="row g-3"
+                    id="doctorList">
 
             </div>
 
@@ -109,7 +109,7 @@ Bác sĩ | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for('static', path='js/patient-doctors.js') }}">
+        src="{{ url_for('static', path='js/patient-doctors.js') }}">
 </script>
 
 {% endblock %}

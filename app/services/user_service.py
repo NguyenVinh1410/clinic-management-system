@@ -2,33 +2,20 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.core.exceptions import (
-    BusinessException,
-    ConflictException,
-    NotFoundException,
-)
+from app.core.exceptions import BusinessException, ConflictException, NotFoundException
 from app.core.security import hash_password
 from app.models.enums import UserRole, UserStatus
 from app.models.specialty import Specialty
-from app.models.user import (
-    Admin,
-    Doctor,
-    Patient,
-    Receptionist,
-    User,
-)
-from app.schemas.user import (
-    UserCreate,
-    UserUpdate,
-)
+from app.models.user import Doctor, Patient, Receptionist, User
+from app.schemas.user import UserCreate, UserUpdate
 
 
 class UserService:
 
     @staticmethod
     def create_user(
-        db: Session,
-        data: UserCreate,
+            db: Session,
+            data: UserCreate,
     ) -> User:
 
         if data.role == UserRole.ADMIN:
@@ -158,8 +145,8 @@ class UserService:
 
     @staticmethod
     def get_all_users(
-        db: Session,
-        role: UserRole | None = None,
+            db: Session,
+            role: UserRole | None = None,
     ) -> list[User]:
 
         stmt = (
@@ -181,14 +168,12 @@ class UserService:
                 User.role == role
             )
 
-        return db.execute(
-            stmt
-        ).scalars().all()
+        return db.execute(stmt).scalars().all()
 
     @staticmethod
     def get_user_by_id(
-        db: Session,
-        user_id: int,
+            db: Session,
+            user_id: int,
     ) -> User:
 
         user = db.get(
@@ -210,9 +195,9 @@ class UserService:
 
     @staticmethod
     def update_user(
-        db: Session,
-        user: User,
-        data: UserUpdate,
+            db: Session,
+            user: User,
+            data: UserUpdate,
     ) -> User:
 
         update_data = data.model_dump(
@@ -267,8 +252,8 @@ class UserService:
                 )
 
         if (
-            user.role == UserRole.DOCTOR
-            and "specialty_id" in update_data
+                user.role == UserRole.DOCTOR
+                and "specialty_id" in update_data
         ):
 
             specialty_id = update_data[
@@ -314,20 +299,18 @@ class UserService:
 
     @staticmethod
     def update_status(
-        db: Session,
-        user: User,
-        status: UserStatus,
-        current_user_id: int,
+            db: Session,
+            user: User,
+            status: UserStatus,
+            current_user_id: int,
     ) -> User:
 
         if user.user_id == current_user_id:
-
             raise BusinessException(
                 "Khong the tu khoa hoac thay doi trang thai tai khoan cua minh"
             )
 
         if user.role == UserRole.ADMIN:
-
             raise BusinessException(
                 "Khong the thay doi trang thai tai khoan Admin"
             )

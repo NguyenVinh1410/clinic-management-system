@@ -2,13 +2,14 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-from app.database.connection import SessionLocal
 from app.core.exceptions import UnauthorizedException, ForbiddenException
 from app.core.security import decode_access_token
+from app.database.connection import SessionLocal
 from app.models import User
 from app.models.enums import UserRole, UserStatus
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+
 
 def get_db():
     db: Session = SessionLocal()
@@ -16,6 +17,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 def get_current_user(token: str = Depends(oauth2_scheme),
                      db: Session = Depends(get_db)) -> User:
@@ -36,9 +38,11 @@ def get_current_user(token: str = Depends(oauth2_scheme),
 
     return user
 
+
 def requires_role(*allowed_roles: UserRole):
     def dependency(current_user: User = Depends(get_current_user)) -> User:
         if current_user.role not in allowed_roles:
             raise ForbiddenException("Khong co quyen truy cap")
         return current_user
+
     return dependency

@@ -19,10 +19,6 @@ document.addEventListener(
             setupEvents();
 
 
-            /*
-             * Trường hợp:
-             * /patient/book-appointment
-             */
             if (!initialDoctorId) {
 
                 updateSummary();
@@ -32,10 +28,6 @@ document.addEventListener(
             }
 
 
-            /*
-             * Trường hợp:
-             * /patient/book-appointment?doctor_id=3
-             */
             const doctorId =
                 Number(initialDoctorId);
 
@@ -69,20 +61,11 @@ document.addEventListener(
             updateSummary();
 
 
-            /*
-             * Load ca làm việc của bác sĩ
-             */
             await loadSchedules(
                 doctorId
             );
 
 
-            /*
-             * Trường hợp:
-             * /patient/book-appointment
-             * ?doctor_id=3
-             * &schedule_id=4
-             */
             if (initialScheduleId) {
 
                 const scheduleId =
@@ -944,24 +927,3 @@ function formatTime(
     );
 
 }
-
-//function getLocalDateString() {
-//
-//    const now =
-//        new Date();
-//
-//    const year =
-//        now.getFullYear();
-//
-//    const month =
-//        String(
-//            now.getMonth() + 1
-//        ).padStart(2, "0");
-//
-//    const day =
-//        String(
-//            now.getDate()
-//        ).padStart(2, "0");
-//
-//    return `${year}-${month}-${day}`;
-//}

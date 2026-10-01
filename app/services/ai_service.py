@@ -4,16 +4,15 @@ from datetime import datetime, date, time, timedelta
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
-from app.schemas.ai import AICommand
-from app.services.llm_service import LLMService
-
-from app.models.enums import AppointmentStatus, UserStatus, WorkingScheduleStatus
-from app.models.user import Doctor
-from app.models.appointment import Appointment
-from app.models.specialty import Specialty
-from app.models.working_schedule import WorkingSchedule
-from app.services.appointment_service import AppointmentService
 from app.core.exceptions import BusinessException, ConflictException, NotFoundException
+from app.models.appointment import Appointment
+from app.models.enums import AppointmentStatus, UserStatus, WorkingScheduleStatus
+from app.models.specialty import Specialty
+from app.models.user import Doctor
+from app.models.working_schedule import WorkingSchedule
+from app.schemas.ai import AICommand
+from app.services.appointment_service import AppointmentService
+from app.services.llm_service import LLMService
 
 
 class AIIntent:
@@ -113,13 +112,7 @@ class AIService:
             message: str,
     ) -> str:
 
-        text = AIService.normalize_text(
-            message
-        )
-
-        # =========================
-        # GREETING
-        # =========================
+        text = AIService.normalize_text(message)
 
         if any(
                 keyword in text
@@ -133,10 +126,6 @@ class AIService:
         ):
             return AIIntent.GREETING
 
-        # =========================
-        # CANCEL APPOINTMENT
-        # =========================
-
         if any(
                 keyword in text
                 for keyword in [
@@ -149,10 +138,6 @@ class AIService:
                 ]
         ):
             return AIIntent.CANCEL_APPOINTMENT
-
-        # =========================
-        # BOOK APPOINTMENT
-        # =========================
 
         if any(
                 keyword in text
@@ -169,10 +154,6 @@ class AIService:
         ):
             return AIIntent.BOOK_APPOINTMENT
 
-        # =========================
-        # MY APPOINTMENTS
-        # =========================
-
         if any(
                 keyword in text
                 for keyword in [
@@ -185,10 +166,6 @@ class AIService:
                 ]
         ):
             return AIIntent.MY_APPOINTMENTS
-
-        # =========================
-        # AVAILABLE SLOTS
-        # =========================
 
         if any(
                 keyword in text
@@ -204,10 +181,6 @@ class AIService:
         ):
             return AIIntent.FIND_AVAILABLE_SLOTS
 
-        # =========================
-        # WORKING HOURS
-        # =========================
-
         if any(
                 keyword in text
                 for keyword in [
@@ -220,10 +193,6 @@ class AIService:
         ):
             return AIIntent.WORKING_HOURS
 
-        # =========================
-        # SPECIALTY
-        # =========================
-
         if any(
                 keyword in text
                 for keyword in [
@@ -233,10 +202,6 @@ class AIService:
                 ]
         ):
             return AIIntent.FIND_SPECIALTY
-
-        # =========================
-        # DOCTOR
-        # =========================
 
         if any(
                 keyword in text
@@ -249,10 +214,6 @@ class AIService:
                 ]
         ):
             return AIIntent.FIND_DOCTOR
-
-        # =========================
-        # PROCESS
-        # =========================
 
         if any(
                 keyword in text
@@ -276,25 +237,13 @@ class AIService:
             message: str,
     ) -> tuple[str, str]:
 
-        # =========================
-        # GIBBERISH
-        # =========================
-
-        if AIService.is_gibberish(
-                message
-        ):
+        if AIService.is_gibberish(message):
             return (
                 AIIntent.UNKNOWN,
                 AIService.unknown_reply(),
             )
 
-        intent = AIService.detect_intent(
-            message
-        )
-
-        # =========================
-        # GREETING
-        # =========================
+        intent = AIService.detect_intent(message)
 
         if intent == AIIntent.GREETING:
 
@@ -312,138 +261,60 @@ class AIService:
                 "- Hướng dẫn quy trình khám"
             )
 
-        # =========================
-        # FIND SPECIALTY
-        # =========================
-
         elif intent == AIIntent.FIND_SPECIALTY:
-
-            reply = (
-                AIService.find_specialties(
-                    db
-                )
-            )
-
-        # =========================
-        # FIND DOCTOR
-        # =========================
+            reply = AIService.find_specialties(db)
 
         elif intent == AIIntent.FIND_DOCTOR:
-
-            reply = (
-                AIService.find_doctors(
-                    db,
-                    message,
-                )
-            )
-
-        # =========================
-        # WORKING HOURS
-        # =========================
+            reply = AIService.find_doctors(db, message)
 
         elif intent == AIIntent.WORKING_HOURS:
-
-            reply = (
-                AIService.find_working_hours(
-                    db,
-                    message,
-                )
-            )
-
-        # =========================
-        # AVAILABLE SLOTS
-        # =========================
+            reply = AIService.find_working_hours(db, message)
 
         elif intent == AIIntent.FIND_AVAILABLE_SLOTS:
-
-            reply = (
-                AIService.find_available_slots(
-                    db=db,
-                    message=message,
-                )
-            )
-
-        # =========================
-        # BOOK APPOINTMENT
-        # =========================
+            reply = AIService.find_available_slots(db=db, message=message)
 
         elif intent == AIIntent.BOOK_APPOINTMENT:
 
-            reply = (
-                AIService.book_appointment(
-                    db=db,
-                    patient_id=patient_id,
-                    chat_session_id=chat_session_id,
-                    message=message,
-                )
+            reply = AIService.book_appointment(
+                db=db,
+                patient_id=patient_id,
+                chat_session_id=chat_session_id,
+                message=message,
             )
-
-        # =========================
-        # CANCEL APPOINTMENT
-        # =========================
 
         elif intent == AIIntent.CANCEL_APPOINTMENT:
 
-            reply = (
-                AIService.cancel_appointment(
-                    db=db,
-                    patient_id=patient_id,
-                    message=message,
-                )
+            reply = AIService.cancel_appointment(
+                db=db,
+                patient_id=patient_id,
+                message=message,
             )
-
-        # =========================
-        # MY APPOINTMENTS
-        # =========================
 
         elif intent == AIIntent.MY_APPOINTMENTS:
 
-            reply = (
-                AIService.get_my_appointments(
-                    db=db,
-                    patient_id=patient_id,
-                )
+            reply = AIService.get_my_appointments(
+                db=db,
+                patient_id=patient_id,
             )
-
-        # =========================
-        # PROCESS GUIDANCE
-        # =========================
 
         elif intent == AIIntent.PROCESS_GUIDANCE:
-
-            reply = (
-                AIService.process_guidance()
-            )
-
-        # =========================
-        # UNKNOWN
-        # =========================
+            reply = AIService.process_guidance()
 
         else:
-
             intent = AIIntent.UNKNOWN
-
-            reply = (
-                AIService.unknown_reply()
-            )
+            reply = AIService.unknown_reply()
 
         return intent, reply
 
     @staticmethod
-    def find_specialties(
-        db: Session,
-    ) -> str:
+    def find_specialties(db: Session) -> str:
 
         stmt = (
             select(Specialty)
             .order_by(Specialty.name)
         )
 
-        specialties = (
-            db.execute(stmt)
-            .scalars()
-            .all()
-        )
+        specialties = db.execute(stmt).scalars().all()
 
         if not specialties:
             return "Hiện chưa có thông tin chuyên khoa."
@@ -454,16 +325,15 @@ class AIService:
         ]
 
         return (
-            "Hiện phòng khám có các chuyên khoa: "
-            + ", ".join(names)
-            + "."
+                "Hiện phòng khám có các chuyên khoa: "
+                + ", ".join(names)
+                + "."
         )
-
 
     @staticmethod
     def find_doctors(
-        db: Session,
-        message: str,
+            db: Session,
+            message: str,
     ) -> str:
 
         text = AIService.normalize_text(message)
@@ -479,11 +349,7 @@ class AIService:
             .order_by(Doctor.full_name)
         )
 
-        doctors = (
-            db.execute(stmt)
-            .scalars()
-            .all()
-        )
+        doctors = db.execute(stmt).scalars().all()
 
         if not doctors:
             return "Hiện chưa có bác sĩ đang hoạt động."
@@ -492,21 +358,17 @@ class AIService:
 
         for doctor in doctors:
 
-            doctor_name = AIService.normalize_text(
-                doctor.full_name
-            )
+            doctor_name = AIService.normalize_text(doctor.full_name)
 
             specialty_name = (
-                AIService.normalize_text(
-                    doctor.specialty.name
-                )
+                AIService.normalize_text(doctor.specialty.name)
                 if doctor.specialty
                 else ""
             )
 
             if (
-                doctor_name in text
-                or specialty_name in text
+                    doctor_name in text
+                    or specialty_name in text
             ):
                 matched_doctors.append(doctor)
 
@@ -516,20 +378,17 @@ class AIService:
         lines = []
 
         for doctor in doctors[:10]:
-
             specialty = (
                 doctor.specialty.name
                 if doctor.specialty
                 else "Chưa cập nhật"
             )
 
-            lines.append(
-                f"- {doctor.full_name} - {specialty}"
-            )
+            lines.append(f"- {doctor.full_name} - {specialty}")
 
         return (
-            "Tôi tìm thấy các bác sĩ sau:\n"
-            + "\n".join(lines)
+                "Tôi tìm thấy các bác sĩ sau:\n"
+                + "\n".join(lines)
         )
 
     @staticmethod
@@ -538,33 +397,19 @@ class AIService:
             message: str,
     ) -> Doctor | None:
 
-        text = AIService.normalize_text(
-            message
-        )
+        text = AIService.normalize_text(message)
 
         stmt = (
             select(Doctor)
-            .options(
-                joinedload(
-                    Doctor.specialty
-                )
-            )
-            .where(
-                Doctor.status == UserStatus.ACTIVE
-            )
+            .options(joinedload(Doctor.specialty))
+            .where(Doctor.status == UserStatus.ACTIVE)
         )
 
-        doctors = (
-            db.execute(stmt)
-            .scalars()
-            .all()
-        )
+        doctors = db.execute(stmt).scalars().all()
 
         for doctor in doctors:
 
-            doctor_name = AIService.normalize_text(
-                doctor.full_name
-            )
+            doctor_name = AIService.normalize_text(doctor.full_name)
 
             name_parts = doctor_name.split()
 
@@ -581,36 +426,25 @@ class AIService:
 
     @staticmethod
     def find_working_hours(
-        db: Session,
-        message: str,
+            db: Session,
+            message: str,
     ) -> str:
 
         text = AIService.normalize_text(message)
 
         stmt = (
             select(WorkingSchedule)
-            .options(
-                joinedload(
-                    WorkingSchedule.doctor
-                )
-                .joinedload(
-                    Doctor.specialty
-                )
-            )
-            .where(
-                WorkingSchedule.status == WorkingScheduleStatus.ACTIVE
-            )
+            .options(joinedload(WorkingSchedule.doctor)
+                     .joinedload(Doctor.specialty)
+                     )
+            .where(WorkingSchedule.status == WorkingScheduleStatus.ACTIVE)
             .order_by(
                 WorkingSchedule.work_date,
                 WorkingSchedule.start_time,
             )
         )
 
-        schedules = (
-            db.execute(stmt)
-            .scalars()
-            .all()
-        )
+        schedules = db.execute(stmt).scalars().all()
 
         if not schedules:
             return "Hiện chưa có lịch làm việc."
@@ -621,21 +455,17 @@ class AIService:
 
             doctor = schedule.doctor
 
-            doctor_name = AIService.normalize_text(
-                doctor.full_name
-            )
+            doctor_name = AIService.normalize_text(doctor.full_name)
 
             specialty_name = (
-                AIService.normalize_text(
-                    doctor.specialty.name
-                )
+                AIService.normalize_text(doctor.specialty.name)
                 if doctor.specialty
                 else ""
             )
 
             if (
-                doctor_name in text
-                or specialty_name in text
+                    doctor_name in text
+                    or specialty_name in text
             ):
                 matched.append(schedule)
 
@@ -645,10 +475,7 @@ class AIService:
         lines = []
 
         for schedule in schedules[:10]:
-
-            doctor_name = (
-                schedule.doctor.full_name
-            )
+            doctor_name = schedule.doctor.full_name
 
             lines.append(
                 f"- {doctor_name}: "
@@ -658,8 +485,8 @@ class AIService:
             )
 
         return (
-            "Lịch làm việc tôi tìm thấy:\n"
-            + "\n".join(lines)
+                "Lịch làm việc tôi tìm thấy:\n"
+                + "\n".join(lines)
         )
 
     @staticmethod
@@ -681,11 +508,7 @@ class AIService:
                 "mà bạn muốn xem lịch."
             )
 
-        work_date = (
-            AIService.extract_date(
-                message
-            )
-        )
+        work_date = AIService.extract_date(message)
 
         if work_date is None:
             return (
@@ -726,8 +549,8 @@ class AIService:
 
     @staticmethod
     def get_my_appointments(
-        db: Session,
-        patient_id: int,
+            db: Session,
+            patient_id: int,
     ) -> str:
 
         appointments = (
@@ -742,10 +565,10 @@ class AIService:
             appointment
             for appointment in appointments
             if appointment["status"]
-            in (
-                AppointmentStatus.PENDING,
-                AppointmentStatus.CONFIRMED,
-            )
+               in (
+                   AppointmentStatus.PENDING,
+                   AppointmentStatus.CONFIRMED,
+               )
         ]
 
         if not active_appointments:
@@ -754,9 +577,7 @@ class AIService:
         lines = []
 
         for appointment in active_appointments[:10]:
-            appointment_time = (
-                appointment["appointment_time"]
-            )
+            appointment_time = appointment["appointment_time"]
 
             lines.append(
                 f"- Mã lịch: "
@@ -772,8 +593,8 @@ class AIService:
             )
 
         return (
-            "Lịch khám sắp tới của bạn:\n\n"
-            + "\n\n".join(lines)
+                "Lịch khám sắp tới của bạn:\n\n"
+                + "\n\n".join(lines)
         )
 
     @staticmethod
@@ -791,15 +612,9 @@ class AIService:
         )
 
     @staticmethod
-    def is_gibberish(
-            message: str,
-    ) -> bool:
+    def is_gibberish(message: str) -> bool:
 
-        text = (
-            AIService.normalize_text(
-                message
-            )
-        )
+        text = AIService.normalize_text(message)
 
         if not text:
             return True
@@ -849,16 +664,10 @@ class AIService:
                 WorkingSchedule.status
                 == WorkingScheduleStatus.ACTIVE,
             )
-            .order_by(
-                WorkingSchedule.start_time
-            )
+            .order_by(WorkingSchedule.start_time)
         )
 
-        schedules = (
-            db.execute(schedule_stmt)
-            .scalars()
-            .all()
-        )
+        schedules = db.execute(schedule_stmt).scalars().all()
 
         if not schedules:
             return []
@@ -882,11 +691,7 @@ class AIService:
             )
         )
 
-        appointments = (
-            db.execute(appointment_stmt)
-            .scalars()
-            .all()
-        )
+        appointments = db.execute(appointment_stmt).scalars().all()
 
         booked_times = {
             appointment.appointment_time
@@ -949,13 +754,9 @@ class AIService:
         return available_slots
 
     @staticmethod
-    def extract_date(
-            message: str,
-    ) -> date | None:
+    def extract_date(message: str) -> date | None:
 
-        text = AIService.normalize_text(
-            message
-        )
+        text = AIService.normalize_text(message)
 
         today = date.today()
 
@@ -987,13 +788,9 @@ class AIService:
         return None
 
     @staticmethod
-    def extract_time(
-            message: str,
-    ) -> time | None:
+    def extract_time(message: str) -> time | None:
 
-        text = AIService.normalize_text(
-            message
-        )
+        text = AIService.normalize_text(message)
 
         patterns = [
             r"\b(\d{1,2})[:h](\d{2})\b",
@@ -1010,9 +807,7 @@ class AIService:
             if not match:
                 continue
 
-            hour = int(
-                match.group(1)
-            )
+            hour = int(match.group(1))
 
             minute = (
                 int(match.group(2))
@@ -1039,11 +834,9 @@ class AIService:
             message: str,
     ) -> str:
 
-        doctor = (
-            AIService.find_doctor_from_message(
-                db,
-                message,
-            )
+        doctor = AIService.find_doctor_from_message(
+            db,
+            message,
         )
 
         if doctor is None:
@@ -1052,11 +845,7 @@ class AIService:
                 "muốn đặt lịch."
             )
 
-        work_date = (
-            AIService.extract_date(
-                message
-            )
-        )
+        work_date = AIService.extract_date(message)
 
         if work_date is None:
             return (
@@ -1070,11 +859,7 @@ class AIService:
                 "Bạn vui lòng chọn ngày khác."
             )
 
-        appointment_time = (
-            AIService.extract_time(
-                message
-            )
-        )
+        appointment_time = AIService.extract_time(message)
 
         if appointment_time is None:
             return (
@@ -1100,16 +885,10 @@ class AIService:
                 WorkingSchedule.status
                 == WorkingScheduleStatus.ACTIVE,
             )
-            .order_by(
-                WorkingSchedule.start_time
-            )
+            .order_by(WorkingSchedule.start_time)
         )
 
-        schedules = (
-            db.execute(schedule_stmt)
-            .scalars()
-            .all()
-        )
+        schedules = db.execute(schedule_stmt).scalars().all()
 
         if not schedules:
             return (
@@ -1180,9 +959,7 @@ class AIService:
         )
 
     @staticmethod
-    def extract_appointment_id(
-            message: str,
-    ) -> int | None:
+    def extract_appointment_id(message: str) -> int | None:
 
         match = re.search(
             r"(?:lich|hen)?\s*(?:so|#)?\s*(\d+)",
@@ -1203,11 +980,7 @@ class AIService:
             message: str,
     ) -> str:
 
-        appointment_id = (
-            AIService.extract_appointment_id(
-                message
-            )
-        )
+        appointment_id = AIService.extract_appointment_id(message)
 
         if appointment_id is None:
             return (
@@ -1276,9 +1049,7 @@ class AIService:
         if intent == AIIntent.FIND_SPECIALTY:
             return (
                 intent,
-                AIService.find_specialties(
-                    db
-                ),
+                AIService.find_specialties(db),
             )
 
         if intent == AIIntent.FIND_DOCTOR:
@@ -1374,39 +1145,23 @@ class AIService:
 
         if command.specialty_name:
 
-            text = AIService.normalize_text(
-                command.specialty_name
-            )
+            text = AIService.normalize_text(command.specialty_name)
 
             stmt = (
                 select(Doctor)
-                .options(
-                    joinedload(
-                        Doctor.specialty
-                    )
-                )
-                .where(
-                    Doctor.status == UserStatus.ACTIVE
-                )
+                .options(joinedload(Doctor.specialty))
+                .where(Doctor.status == UserStatus.ACTIVE)
             )
-
-            doctors = (
-                db.execute(stmt)
-                .scalars()
-                .all()
-            )
+            doctors = db.execute(stmt).scalars().all()
 
             matched = []
 
             for doctor in doctors:
 
-                specialty_name = (
-                    AIService.normalize_text(
-                        doctor.specialty.name
-                    )
-                    if doctor.specialty
-                    else ""
-                )
+                specialty_name = (AIService.normalize_text(doctor.specialty.name)
+                                  if doctor.specialty
+                                  else ""
+                                  )
 
                 if text in specialty_name:
                     matched.append(doctor)
@@ -1475,11 +1230,7 @@ class AIService:
             )
         )
 
-        schedules = (
-            db.execute(stmt)
-            .scalars()
-            .all()
-        )
+        schedules = db.execute(stmt).scalars().all()
 
         if not schedules:
             return (
@@ -1510,35 +1261,19 @@ class AIService:
             doctor_name: str,
     ) -> Doctor | None:
 
-        text = AIService.normalize_text(
-            doctor_name
-        )
+        text = AIService.normalize_text(doctor_name)
 
         stmt = (
             select(Doctor)
-            .options(
-                joinedload(
-                    Doctor.specialty
-                )
-            )
-            .where(
-                Doctor.status == UserStatus.ACTIVE
-            )
+            .options(joinedload(Doctor.specialty))
+            .where(Doctor.status == UserStatus.ACTIVE)
         )
 
-        doctors = (
-            db.execute(stmt)
-            .scalars()
-            .all()
-        )
+        doctors = db.execute(stmt).scalars().all()
 
         for doctor in doctors:
 
-            normalized_name = (
-                AIService.normalize_text(
-                    doctor.full_name
-                )
-            )
+            normalized_name = AIService.normalize_text(doctor.full_name)
 
             if text in normalized_name:
                 return doctor
@@ -1572,9 +1307,7 @@ class AIService:
                 command.appointment_date
                 < date.today()
         ):
-            return (
-                "Ngày khám không được ở trong quá khứ."
-            )
+            return "Ngày khám không được ở trong quá khứ."
 
         doctor = (
             AIService.find_doctor_from_text(
@@ -1645,9 +1378,7 @@ class AIService:
                 command.appointment_date
                 < date.today()
         ):
-            return (
-                "Ngày khám không được ở trong quá khứ."
-            )
+            return "Ngày khám không được ở trong quá khứ."
 
         if command.appointment_time.minute not in (
                 0,
@@ -1683,18 +1414,10 @@ class AIService:
                 WorkingSchedule.status
                 == WorkingScheduleStatus.ACTIVE,
             )
-            .order_by(
-                WorkingSchedule.start_time
-            )
+            .order_by(WorkingSchedule.start_time)
         )
 
-        schedules = (
-            db.execute(
-                schedule_stmt
-            )
-            .scalars()
-            .all()
-        )
+        schedules = db.execute(schedule_stmt).scalars().all()
 
         if not schedules:
             return (
@@ -1749,12 +1472,8 @@ class AIService:
                 .create_appointment_by_ai(
                     db=db,
                     patient_id=patient_id,
-                    schedule_id=(
-                        selected_schedule.schedule_id
-                    ),
-                    appointment_time=(
-                        appointment_datetime
-                    ),
+                    schedule_id=selected_schedule.schedule_id,
+                    appointment_time=appointment_datetime,
                     chat_session_id=chat_session_id,
                 )
             )
@@ -1797,9 +1516,7 @@ class AIService:
                 AppointmentService
                 .cancel_appointment_by_ai(
                     db=db,
-                    appointment_id=(
-                        command.appointment_id
-                    ),
+                    appointment_id=command.appointment_id,
                     patient_id=patient_id,
                 )
             )
@@ -1812,9 +1529,7 @@ class AIService:
 
             return str(exc)
 
-        doctor = (
-            appointment.schedule.doctor
-        )
+        doctor = appointment.schedule.doctor
 
         return (
             "Đã hủy lịch khám thành công.\n"

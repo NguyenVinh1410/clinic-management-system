@@ -15,6 +15,7 @@ router = APIRouter(
     tags=["prescription"],
 )
 
+
 @router.post(
     "",
     response_model=PrescriptionResponse,
@@ -26,16 +27,14 @@ def create_prescription(
             User,
             Depends(requires_role(UserRole.DOCTOR))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     return PrescriptionService.create_prescription(
         db=db,
         data=data,
         doctor_id=current_user.user_id
     )
+
 
 @router.get(
     "/my",
@@ -46,15 +45,13 @@ def get_my_prescriptions(
             User,
             Depends(requires_role(UserRole.PATIENT))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     return PrescriptionService.get_patient_prescriptions(
         db=db,
         patient_id=current_user.user_id,
     )
+
 
 @router.get(
     "/record/{record_id}",
@@ -67,11 +64,7 @@ def get_prescription_by_record(
             User,
             Depends(get_current_user)
         ],
-
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     record = PrescriptionService.get_record(
         db=db,
@@ -96,6 +89,7 @@ def get_prescription_by_record(
         record_id=record_id,
     )
 
+
 @router.get(
     "/{prescription_id}",
     response_model=PrescriptionResponse,
@@ -107,11 +101,7 @@ def get_prescription(
             User,
             Depends(get_current_user)
         ],
-
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     prescription = PrescriptionService.get_prescription_by_id(
         db=db,
@@ -132,6 +122,7 @@ def get_prescription(
 
     raise ForbiddenException("Ban khong co quyen xem don thuoc")
 
+
 @router.patch(
     "/{prescription_id}",
     response_model=PrescriptionResponse,
@@ -144,10 +135,7 @@ def update_prescription(
             User,
             Depends(requires_role(UserRole.DOCTOR))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     prescription = PrescriptionService.get_prescription_by_id(
         db=db,

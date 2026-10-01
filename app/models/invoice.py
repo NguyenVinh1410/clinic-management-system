@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.database.base import Base
 from app.models.enums import InvoiceStatus, PaymentMethod
 
+
 class Invoice(Base):
     __tablename__ = "invoice"
 
@@ -57,5 +58,3 @@ class Invoice(Base):
         "Appointment",
         back_populates="invoice",
     )
-
-    

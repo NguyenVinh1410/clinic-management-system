@@ -4,12 +4,12 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
 from app.core.exceptions import BusinessException, ConflictException, NotFoundException
+from app.models.appointment import Appointment
+from app.models.chat import ChatSession
 from app.models.enums import AppointmentStatus, AppointmentCreatedBy, UserRole, UserStatus, WorkingScheduleStatus
 from app.models.user import User, Doctor, Patient
 from app.models.working_schedule import WorkingSchedule
-from app.models.appointment import Appointment
 from app.schemas.appointment import AppointmentCreate, AppointmentUpdate
-from app.models.chat import ChatSession
 
 
 class AppointmentService:
@@ -154,12 +154,10 @@ class AppointmentService:
             select(Appointment.appointment_time)
             .join(
                 WorkingSchedule,
-                Appointment.schedule_id
-                == WorkingSchedule.schedule_id,
+                Appointment.schedule_id == WorkingSchedule.schedule_id,
             )
             .where(
-                WorkingSchedule.doctor_id
-                == schedule.doctor_id,
+                WorkingSchedule.doctor_id == schedule.doctor_id,
 
                 Appointment.status.in_(
                     [
@@ -168,26 +166,15 @@ class AppointmentService:
                     ]
                 ),
 
-                Appointment.appointment_time
-                < schedule_end,
+                Appointment.appointment_time < schedule_end,
 
-                Appointment.appointment_time >= (
-                        schedule_start
-                        - timedelta(
-                    minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES
-                )
-                ),
+                Appointment.appointment_time >= schedule_start - timedelta(
+                    minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES)
             )
-            .order_by(
-                Appointment.appointment_time
-            )
+            .order_by(Appointment.appointment_time)
         )
 
-        return list(
-            db.execute(stmt)
-            .scalars()
-            .all()
-        )
+        return list(db.execute(stmt).scalars().all())
 
     @staticmethod
     def validate_patient(
@@ -269,34 +256,18 @@ class AppointmentService:
             exclude_appointment_id: int | None = None,
     ) -> None:
 
-        appointment_end = (
-                appointment_time
-                + timedelta(
-            minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES
-        )
-        )
+        appointment_end = appointment_time + timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES)
 
-        appointment_start_limit = (
-                appointment_time
-                - timedelta(
-            minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES
-        )
-        )
-
-        # ==========================================
-        # 1. Kiểm tra bác sĩ có bị trùng lịch không
-        # ==========================================
+        appointment_start_limit = appointment_time - timedelta(minutes=AppointmentService.APPOINTMENT_DURATION_MINUTES)
 
         doctor_stmt = (
             select(Appointment)
             .join(
                 WorkingSchedule,
-                Appointment.schedule_id
-                == WorkingSchedule.schedule_id,
+                Appointment.schedule_id == WorkingSchedule.schedule_id,
             )
             .where(
-                WorkingSchedule.doctor_id
-                == schedule.doctor_id,
+                WorkingSchedule.doctor_id == schedule.doctor_id,
 
                 Appointment.status.in_(
                     [
@@ -305,42 +276,26 @@ class AppointmentService:
                     ]
                 ),
 
-                Appointment.appointment_time
-                < appointment_end,
+                Appointment.appointment_time < appointment_end,
 
-                Appointment.appointment_time
-                >= appointment_start_limit,
+                Appointment.appointment_time >= appointment_start_limit,
             )
         )
 
         if exclude_appointment_id is not None:
-            doctor_stmt = doctor_stmt.where(
-                Appointment.appointment_id
-                != exclude_appointment_id
-            )
+            doctor_stmt = doctor_stmt.where(Appointment.appointment_id != exclude_appointment_id)
 
-        existing_doctor_appointment = (
-            db.execute(
-                doctor_stmt
-            )
-            .scalars()
-            .first()
-        )
+        existing_doctor_appointment = db.execute(doctor_stmt).scalars().first()
 
         if existing_doctor_appointment is not None:
             raise ConflictException(
                 "Bac si da co lich hen vao thoi gian nay"
             )
 
-        # ==========================================
-        # 2. Kiểm tra bệnh nhân có trùng lịch không
-        # ==========================================
-
         patient_stmt = (
             select(Appointment)
             .where(
-                Appointment.patient_id
-                == patient_id,
+                Appointment.patient_id == patient_id,
 
                 Appointment.status.in_(
                     [
@@ -349,32 +304,19 @@ class AppointmentService:
                     ]
                 ),
 
-                Appointment.appointment_time
-                < appointment_end,
+                Appointment.appointment_time < appointment_end,
 
-                Appointment.appointment_time
-                >= appointment_start_limit,
+                Appointment.appointment_time >= appointment_start_limit,
             )
         )
 
         if exclude_appointment_id is not None:
-            patient_stmt = patient_stmt.where(
-                Appointment.appointment_id
-                != exclude_appointment_id
-            )
+            patient_stmt = patient_stmt.where(Appointment.appointment_id != exclude_appointment_id)
 
-        existing_patient_appointment = (
-            db.execute(
-                patient_stmt
-            )
-            .scalars()
-            .first()
-        )
+        existing_patient_appointment = db.execute(patient_stmt).scalars().first()
 
         if existing_patient_appointment is not None:
-            raise ConflictException(
-                "Benh nhan da co lich hen vao thoi gian nay"
-            )
+            raise ConflictException("Benh nhan da co lich hen vao thoi gian nay")
 
     @staticmethod
     def create_appointment(
@@ -466,9 +408,7 @@ class AppointmentService:
         )
 
         if doctor is None:
-            raise NotFoundException(
-                "Khong tim thay bac si cua ca lam viec"
-            )
+            raise NotFoundException("Khong tim thay bac si cua ca lam viec")
 
         chat_session = db.get(
             ChatSession,
@@ -476,19 +416,13 @@ class AppointmentService:
         )
 
         if chat_session is None:
-            raise NotFoundException(
-                "Khong tim thay phien tro chuyen"
-            )
+            raise NotFoundException("Khong tim thay phien tro chuyen")
 
         if chat_session.patient_id != patient_id:
-            raise BusinessException(
-                "Phien tro chuyen khong thuoc benh nhan hien tai"
-            )
+            raise BusinessException("Phien tro chuyen khong thuoc benh nhan hien tai")
 
         if chat_session.appointment is not None:
-            raise ConflictException(
-                "Phien tro chuyen nay da duoc gan voi lich hen"
-            )
+            raise ConflictException("Phien tro chuyen nay da duoc gan voi lich hen")
 
         AppointmentService.validate_appointment_time(
             schedule=schedule,
@@ -647,19 +581,13 @@ class AppointmentService:
         )
 
         if appointment.patient_id != patient_id:
-            raise BusinessException(
-                "Lich hen nay khong thuoc benh nhan hien tai"
-            )
+            raise BusinessException("Lich hen nay khong thuoc benh nhan hien tai")
 
         if appointment.status == AppointmentStatus.COMPLETED:
-            raise BusinessException(
-                "Khong the huy lich da hoan tat"
-            )
+            raise BusinessException("Khong the huy lich da hoan tat")
 
         if appointment.status == AppointmentStatus.CANCELLED:
-            raise BusinessException(
-                "Lich hen nay da duoc huy"
-            )
+            raise BusinessException("Lich hen nay da duoc huy")
 
         appointment.status = AppointmentStatus.CANCELLED
 
@@ -720,9 +648,7 @@ class AppointmentService:
         return AppointmentService._appointment_to_response(appointment)
 
     @staticmethod
-    def _appointment_to_response(
-            appointment: Appointment,
-    ) -> dict:
+    def _appointment_to_response(appointment: Appointment) -> dict:
 
         schedule = appointment.schedule
         doctor = schedule.doctor

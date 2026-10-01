@@ -36,13 +36,13 @@ Hóa đơn | ClinicCare
 
 
             <div
-                id="invoiceAlert"
-                class="alert d-none">
+                    class="alert d-none"
+                    id="invoiceAlert">
             </div>
 
 
             <div
-                id="invoiceList">
+                    id="invoiceList">
 
                 <div class="content-card">
 
@@ -68,7 +68,7 @@ Hóa đơn | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for('static', path='js/patient-invoices.js') }}">
+        src="{{ url_for('static', path='js/patient-invoices.js') }}">
 </script>
 
 {% endblock %}

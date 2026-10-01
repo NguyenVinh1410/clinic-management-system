@@ -6,6 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base
 from app.models.enums import WorkingScheduleStatus
 
+
 class WorkingSchedule(Base):
     __tablename__ = 'working_schedule'
 
@@ -14,7 +15,10 @@ class WorkingSchedule(Base):
         autoincrement=True,
     )
     doctor_id: Mapped[int] = mapped_column(
-        ForeignKey("doctor.user_id", ondelete="RESTRICT"),
+        ForeignKey(
+            "doctor.user_id",
+            ondelete="RESTRICT"
+        ),
         nullable=False,
         index=True,
     )
@@ -44,9 +48,15 @@ class WorkingSchedule(Base):
         server_default=WorkingScheduleStatus.ACTIVE.value,
     )
 
-    doctor = relationship("Doctor", back_populates="working_schedule")
+    doctor = relationship(
+        "Doctor",
+        back_populates="working_schedule"
+    )
 
-    appointment = relationship("Appointment", back_populates="schedule")
+    appointment = relationship(
+        "Appointment",
+        back_populates="schedule"
+    )
 
     __table_args__ = (
         UniqueConstraint(

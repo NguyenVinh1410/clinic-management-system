@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.enums import Gender, UserRole, UserStatus
 
+
 class DoctorResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -21,6 +22,7 @@ class DoctorResponse(BaseModel):
     bio: str | None
 
     specialty_id: int
+
 
 class DoctorUpdate(BaseModel):
     full_name: str | None = Field(

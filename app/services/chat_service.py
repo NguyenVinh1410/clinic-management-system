@@ -11,13 +11,11 @@ class ChatService:
 
     @staticmethod
     def create_session(
-        db: Session,
-        patient_id: int,
+            db: Session,
+            patient_id: int,
     ) -> ChatSession:
 
-        session = ChatSession(
-            patient_id=patient_id,
-        )
+        session = ChatSession(patient_id=patient_id, )
 
         db.add(session)
         db.commit()
@@ -25,12 +23,11 @@ class ChatService:
 
         return session
 
-
     @staticmethod
     def get_session(
-        db: Session,
-        session_id: int,
-        patient_id: int,
+            db: Session,
+            session_id: int,
+            patient_id: int,
     ) -> ChatSession:
 
         stmt = (
@@ -41,41 +38,25 @@ class ChatService:
             )
         )
 
-        session = (
-            db.execute(stmt)
-            .scalar_one_or_none()
-        )
+        session = db.execute(stmt).scalar_one_or_none()
 
         if session is None:
-            raise NotFoundException(
-                "Khong tim thay phien tro chuyen"
-            )
+            raise NotFoundException("Khong tim thay phien tro chuyen")
 
         return session
 
-
     @staticmethod
     def get_messages(
-        db: Session,
-        session: ChatSession,
+            db: Session,
+            session: ChatSession,
     ) -> list[ChatMessage]:
 
         stmt = (
             select(ChatMessage)
-            .where(
-                ChatMessage.session_id
-                == session.session_id
-            )
-            .order_by(
-                ChatMessage.created_at
-            )
+            .where(ChatMessage.session_id == session.session_id)
+            .order_by(ChatMessage.created_at)
         )
-
-        return (
-            db.execute(stmt)
-            .scalars()
-            .all()
-        )
+        return db.execute(stmt).scalars().all()
 
     @staticmethod
     def send_message(
@@ -88,14 +69,10 @@ class ChatService:
         content = content.strip()
 
         if not content:
-            raise BusinessException(
-                "Noi dung tin nhan khong duoc de trong"
-            )
+            raise BusinessException("Noi dung tin nhan khong duoc de trong")
 
         if len(content) > 2000:
-            raise BusinessException(
-                "Tin nhan khong duoc vuot qua 2000 ky tu"
-            )
+            raise BusinessException("Tin nhan khong duoc vuot qua 2000 ky tu")
 
         history_messages = (
             ChatService.get_messages(

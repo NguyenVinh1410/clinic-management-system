@@ -34,8 +34,8 @@ Hồ sơ cá nhân | ClinicCare
 
 
             <div
-                id="profileAlert"
-                class="alert d-none">
+                    class="alert d-none"
+                    id="profileAlert">
             </div>
 
 
@@ -48,8 +48,8 @@ Hồ sơ cá nhân | ClinicCare
                         <div class="patient-profile-cover">
 
                             <div
-                                id="profileAvatar"
-                                class="patient-profile-avatar">
+                                    class="patient-profile-avatar"
+                                    id="profileAvatar">
 
                                 U
 
@@ -61,8 +61,8 @@ Hồ sơ cá nhân | ClinicCare
                         <div class="p-4 text-center">
 
                             <h4
-                                id="profileName"
-                                class="fw-bold mb-1">
+                                    class="fw-bold mb-1"
+                                    id="profileName">
 
                                 ...
 
@@ -70,8 +70,8 @@ Hồ sơ cá nhân | ClinicCare
 
 
                             <div
-                                id="profileUsername"
-                                class="text-secondary mb-3">
+                                    class="text-secondary mb-3"
+                                    id="profileUsername">
 
                                 ...
 
@@ -125,11 +125,11 @@ Hồ sơ cá nhân | ClinicCare
                                         </label>
 
                                         <input
-                                            type="text"
-                                            id="fullName"
-                                            class="form-control"
-                                            maxlength="100"
-                                            required
+                                                class="form-control"
+                                                id="fullName"
+                                                maxlength="100"
+                                                required
+                                                type="text"
                                         >
 
                                     </div>
@@ -142,9 +142,9 @@ Hồ sơ cá nhân | ClinicCare
                                         </label>
 
                                         <input
-                                            type="email"
-                                            id="email"
-                                            class="form-control"
+                                                class="form-control"
+                                                id="email"
+                                                type="email"
                                         >
 
                                     </div>
@@ -157,10 +157,10 @@ Hồ sơ cá nhân | ClinicCare
                                         </label>
 
                                         <input
-                                            type="text"
-                                            id="phone"
-                                            class="form-control"
-                                            maxlength="20"
+                                                class="form-control"
+                                                id="phone"
+                                                maxlength="20"
+                                                type="text"
                                         >
 
                                     </div>
@@ -173,9 +173,9 @@ Hồ sơ cá nhân | ClinicCare
                                         </label>
 
                                         <input
-                                            type="date"
-                                            id="dob"
-                                            class="form-control"
+                                                class="form-control"
+                                                id="dob"
+                                                type="date"
                                         >
 
                                     </div>
@@ -188,8 +188,8 @@ Hồ sơ cá nhân | ClinicCare
                                         </label>
 
                                         <select
-                                            id="gender"
-                                            class="form-select">
+                                                class="form-select"
+                                                id="gender">
 
                                             <option value="">
                                                 -- Chọn giới tính --
@@ -215,10 +215,10 @@ Hồ sơ cá nhân | ClinicCare
                                         </label>
 
                                         <input
-                                            type="text"
-                                            id="address"
-                                            class="form-control"
-                                            maxlength="255"
+                                                class="form-control"
+                                                id="address"
+                                                maxlength="255"
+                                                type="text"
                                         >
 
                                     </div>
@@ -229,9 +229,9 @@ Hồ sơ cá nhân | ClinicCare
                                 <div class="d-flex justify-content-end mt-4">
 
                                     <button
-                                        type="submit"
-                                        id="saveProfileButton"
-                                        class="btn btn-primary">
+                                            class="btn btn-primary"
+                                            id="saveProfileButton"
+                                            type="submit">
 
                                         <i class="bi bi-check2-circle me-2"></i>
 
@@ -263,7 +263,7 @@ Hồ sơ cá nhân | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for('static', path='js/patient-profile.js') }}">
+        src="{{ url_for('static', path='js/patient-profile.js') }}">
 </script>
 
 {% endblock %}

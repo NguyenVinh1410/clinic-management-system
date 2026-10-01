@@ -2,13 +2,10 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from sqlalchemy import select
 
 from app.dependencies import get_db, requires_role
-from app.models import Appointment
 from app.models.enums import UserRole
 from app.models.user import User
-from app.models.invoice import Invoice
 from app.schemas.invoice import InvoiceCreate, InvoicePaymentRequest, InvoiceResponse
 from app.services.invoice_service import InvoiceService
 
@@ -16,6 +13,7 @@ router = APIRouter(
     prefix="/api/invoice",
     tags=["invoice"],
 )
+
 
 @router.post(
     "",
@@ -43,6 +41,7 @@ def create_invoice(
 
     return InvoiceService.build_invoice_response(invoice)
 
+
 @router.get(
     "",
     response_model=list[InvoiceResponse],
@@ -64,6 +63,7 @@ def get_invoices(
 ):
     return InvoiceService.get_all_invoices(db=db)
 
+
 @router.get(
     "/my",
     response_model=list[InvoiceResponse],
@@ -79,11 +79,11 @@ def get_my_invoices(
             Depends(get_db),
         ]
 ):
-
     return InvoiceService.get_patient_invoices(
         db=db,
         patient_id=current_user.user_id
     )
+
 
 @router.get(
     "/appointment/{appointment_id}",
@@ -105,7 +105,6 @@ def get_invoice_by_appointment(
             Depends(get_db),
         ]
 ):
-
     invoice = InvoiceService.get_invoice_by_appointment(
         db=db,
         appointment_id=appointment_id,
@@ -117,6 +116,7 @@ def get_invoice_by_appointment(
     )
 
     return InvoiceService.build_invoice_response(invoice)
+
 
 @router.get(
     "/{invoice_id}",
@@ -149,6 +149,7 @@ def get_invoice(
     )
 
     return InvoiceService.build_invoice_response(invoice)
+
 
 @router.patch(
     "/{invoice_id}/pay",

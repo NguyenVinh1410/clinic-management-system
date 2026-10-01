@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
     app_name: str = "Clinic Management System"
@@ -28,10 +29,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        #tem bien mtr kh phan biet in hoa hay thuong APP__NAME HAY app__name deu duoc
         case_sensitive=False,
-        #bo qua bien mtr khong khai bao trong class
         extra="ignore",
     )
+
 
 settings = Settings()

@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.enums import AppointmentStatus, AppointmentCreatedBy
 
+
 class AppointmentCreate(BaseModel):
     schedule_id: int = Field(gt=0)
 
@@ -19,6 +20,7 @@ class AppointmentCreate(BaseModel):
         max_length=1000,
     )
 
+
 class AppointmentUpdate(BaseModel):
     appointment_time: datetime | None = None
 
@@ -27,8 +29,10 @@ class AppointmentUpdate(BaseModel):
         max_length=1000,
     )
 
+
 class AppointmentStatusUpdate(BaseModel):
     status: AppointmentStatus
+
 
 class AppointmentResponse(BaseModel):
     model_config = ConfigDict(

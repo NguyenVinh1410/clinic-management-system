@@ -14,6 +14,7 @@ router = APIRouter(
     tags=["dashboard"],
 )
 
+
 @router.get(
     "",
     response_model=DashboardResponse,
@@ -23,9 +24,6 @@ def get_dashboard(
             User,
             Depends(requires_role(UserRole.ADMIN)),
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db)
-        ],
+        db: Annotated[Session, Depends(get_db)],
 ):
     return DashboardService.get_dashboard(db=db)

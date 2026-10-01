@@ -3,7 +3,6 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-
 AIIntentName = Literal[
     "greeting",
     "find_doctor",
@@ -19,7 +18,6 @@ AIIntentName = Literal[
 
 
 class AICommand(BaseModel):
-
     intent: AIIntentName = Field(
         description="Intent cua nguoi dung"
     )

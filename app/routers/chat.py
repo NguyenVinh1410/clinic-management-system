@@ -6,14 +6,8 @@ from sqlalchemy.orm import Session
 from app.dependencies import get_db, requires_role
 from app.models.enums import UserRole
 from app.models.user import User
-from app.schemas.chat import (
-    ChatMessageCreate,
-    ChatMessageResponse,
-    ChatResponse,
-    ChatSessionResponse,
-)
+from app.schemas.chat import ChatMessageCreate, ChatMessageResponse, ChatResponse, ChatSessionResponse
 from app.services.chat_service import ChatService
-
 
 router = APIRouter(
     prefix="/api/chat",
@@ -27,18 +21,12 @@ router = APIRouter(
     status_code=status.HTTP_201_CREATED,
 )
 def create_session(
-    current_user: Annotated[
-        User,
-        Depends(
-            requires_role(UserRole.PATIENT)
-        ),
-    ],
-    db: Annotated[
-        Session,
-        Depends(get_db),
-    ],
+        current_user: Annotated[
+            User,
+            Depends(requires_role(UserRole.PATIENT)),
+        ],
+        db: Annotated[Session, Depends(get_db)],
 ):
-
     return ChatService.create_session(
         db=db,
         patient_id=current_user.user_id,
@@ -50,19 +38,13 @@ def create_session(
     response_model=list[ChatMessageResponse],
 )
 def get_messages(
-    session_id: int,
-    current_user: Annotated[
-        User,
-        Depends(
-            requires_role(UserRole.PATIENT)
-        ),
-    ],
-    db: Annotated[
-        Session,
-        Depends(get_db),
-    ],
+        session_id: int,
+        current_user: Annotated[
+            User,
+            Depends(requires_role(UserRole.PATIENT)),
+        ],
+        db: Annotated[Session, Depends(get_db)],
 ):
-
     session = ChatService.get_session(
         db=db,
         session_id=session_id,
@@ -81,20 +63,14 @@ def get_messages(
     status_code=status.HTTP_201_CREATED,
 )
 def send_message(
-    session_id: int,
-    data: ChatMessageCreate,
-    current_user: Annotated[
-        User,
-        Depends(
-            requires_role(UserRole.PATIENT)
-        ),
-    ],
-    db: Annotated[
-        Session,
-        Depends(get_db),
-    ],
+        session_id: int,
+        data: ChatMessageCreate,
+        current_user: Annotated[
+            User,
+            Depends(requires_role(UserRole.PATIENT)),
+        ],
+        db: Annotated[Session, Depends(get_db)],
 ):
-
     session = ChatService.get_session(
         db=db,
         session_id=session_id,

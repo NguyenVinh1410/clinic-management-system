@@ -14,6 +14,7 @@ router = APIRouter(
     tags=["medical record"],
 )
 
+
 @router.post(
     "",
     response_model=MedicalRecordResponse,
@@ -25,17 +26,14 @@ def create_medical_record(
             User,
             Depends(requires_role(UserRole.DOCTOR))
         ],
-
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     return MedicalRecordService.create_record(
         db=db,
         data=data,
         doctor_id=current_user.user_id
     )
+
 
 @router.get(
     "",
@@ -50,12 +48,10 @@ def get_medical_records(
                 UserRole.DOCTOR
             ))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     return MedicalRecordService.get_all_records(db=db)
+
 
 @router.get(
     "/appointment/{appointment_id}",
@@ -67,11 +63,7 @@ def get_record_by_appointment(
             User,
             Depends(get_current_user)
         ],
-
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     record = MedicalRecordService.get_record_by_appointment(
         db=db,
@@ -89,14 +81,14 @@ def get_record_by_appointment(
         )
 
     elif current_user.role not in (
-        UserRole.ADMIN,
-        UserRole.RECEPTIONIST,
+            UserRole.ADMIN,
+            UserRole.RECEPTIONIST,
     ):
         from app.core.exceptions import ForbiddenException
-
         raise ForbiddenException("Ban khong co quyen xem ho so benh an")
 
     return record
+
 
 @router.get(
     "/my",
@@ -107,15 +99,13 @@ def get_my_medical_records(
             User,
             Depends(requires_role(UserRole.PATIENT))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     return MedicalRecordService.get_patient_records(
         db=db,
         patient_id=current_user.user_id
     )
+
 
 @router.get(
     "/{record_id}",
@@ -127,11 +117,7 @@ def get_medical_record(
             User,
             Depends(get_current_user)
         ],
-
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     record = MedicalRecordService.get_record_by_id(db=db, record_id=record_id)
 
@@ -148,14 +134,14 @@ def get_medical_record(
         )
 
     elif current_user.role not in (
-        UserRole.ADMIN,
-        UserRole.RECEPTIONIST,
+            UserRole.ADMIN,
+            UserRole.RECEPTIONIST,
     ):
         from app.core.exceptions import ForbiddenException
-
         raise ForbiddenException("Ban khong co quyen xem ho so benh an")
 
     return record
+
 
 @router.patch(
     "/{record_id}",
@@ -168,11 +154,7 @@ def update_medical_record(
             User,
             Depends(requires_role(UserRole.DOCTOR))
         ],
-
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
     record = MedicalRecordService.get_record_by_id(db=db, record_id=record_id)
 

@@ -38,8 +38,8 @@ Receptionist Dashboard | ClinicCare
 
 
             <div
-                id="receptionistAlert"
-                class="alert d-none">
+                    class="alert d-none"
+                    id="receptionistAlert">
             </div>
 
 
@@ -59,8 +59,8 @@ Receptionist Dashboard | ClinicCare
                                 </div>
 
                                 <div
-                                    id="totalPatients"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="totalPatients">
 
                                     --
 
@@ -95,8 +95,8 @@ Receptionist Dashboard | ClinicCare
                                 </div>
 
                                 <div
-                                    id="todayAppointments"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="todayAppointments">
 
                                     --
 
@@ -131,8 +131,8 @@ Receptionist Dashboard | ClinicCare
                                 </div>
 
                                 <div
-                                    id="pendingCheckins"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="pendingCheckins">
 
                                     --
 
@@ -167,8 +167,8 @@ Receptionist Dashboard | ClinicCare
                                 </div>
 
                                 <div
-                                    id="unpaidInvoices"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="unpaidInvoices">
 
                                     --
 
@@ -198,14 +198,14 @@ Receptionist Dashboard | ClinicCare
                                 </div>
 
                                 <div
-                                    id="confirmedAppointments"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="confirmedAppointments">
                                     --
                                 </div>
                             </div>
 
                             <div
-                                class="quick-icon
+                                    class="quick-icon
                                 bg-success-subtle
                                 text-success">
                                 <i class="bi bi-person-check"></i>
@@ -223,14 +223,14 @@ Receptionist Dashboard | ClinicCare
                                 </div>
 
                                 <div
-                                    id="todayRevenue"
-                                    class="fs-3 fw-bold">
+                                        class="fs-3 fw-bold"
+                                        id="todayRevenue">
                                     --
                                 </div>
                             </div>
 
                             <div
-                                class="quick-icon
+                                    class="quick-icon
                                 bg-primary-subtle
                                 text-primary">
                                 <i class="bi bi-cash-stack"></i>
@@ -238,7 +238,6 @@ Receptionist Dashboard | ClinicCare
                         </div>
                     </div>
                 </div>
-
 
 
             </div>
@@ -264,8 +263,8 @@ Receptionist Dashboard | ClinicCare
 
 
                         <a
-                            href="/receptionist/appointments"
-                            class="btn btn-sm btn-outline-primary">
+                                class="btn btn-sm btn-outline-primary"
+                                href="/receptionist/appointments">
 
                             Xem tất cả
 
@@ -282,47 +281,47 @@ Receptionist Dashboard | ClinicCare
 
                         <thead>
 
-                            <tr>
+                        <tr>
 
-                                <th>
-                                    Thời gian
-                                </th>
+                            <th>
+                                Thời gian
+                            </th>
 
-                                <th>
-                                    Bệnh nhân
-                                </th>
+                            <th>
+                                Bệnh nhân
+                            </th>
 
-                                <th>
-                                    Bác sĩ
-                                </th>
+                            <th>
+                                Bác sĩ
+                            </th>
 
-                                <th>
-                                    Trạng thái
-                                </th>
+                            <th>
+                                Trạng thái
+                            </th>
 
-                                <th class="text-end">
-                                    #
-                                </th>
+                            <th class="text-end">
+                                #
+                            </th>
 
-                            </tr>
+                        </tr>
 
                         </thead>
 
 
                         <tbody
-                            id="todayAppointmentList">
+                                id="todayAppointmentList">
 
-                            <tr>
+                        <tr>
 
-                                <td
-                                    colspan="5"
-                                    class="text-center py-5 text-secondary">
+                            <td
+                                    class="text-center py-5 text-secondary"
+                                    colspan="5">
 
-                                    Đang tải...
+                                Đang tải...
 
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
                         </tbody>
 
@@ -344,7 +343,7 @@ Receptionist Dashboard | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for('static', path='js/receptionist-dashboard.js') }}">
+        src="{{ url_for('static', path='js/receptionist-dashboard.js') }}">
 </script>
 
 {% endblock %}

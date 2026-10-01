@@ -32,8 +32,8 @@
 
 
             <div
-                id="bookingAlert"
-                class="alert d-none">
+                    class="alert d-none"
+                    id="bookingAlert">
             </div>
 
 
@@ -67,8 +67,8 @@
 
 
                             <select
-                                id="doctorSelect"
-                                class="form-select mb-4">
+                                    class="form-select mb-4"
+                                    id="doctorSelect">
 
                                 <option value="">
                                     -- Chọn bác sĩ --
@@ -99,9 +99,9 @@
 
 
                             <select
-                                id="scheduleSelect"
-                                class="form-select mb-4"
-                                disabled>
+                                    class="form-select mb-4"
+                                    disabled
+                                    id="scheduleSelect">
 
                                 <option value="">
                                     -- Chọn ca làm việc --
@@ -132,8 +132,8 @@
 
 
                             <div
-                                id="slotGrid"
-                                class="slot-grid mb-4">
+                                    class="slot-grid mb-4"
+                                    id="slotGrid">
 
                                 <div class="text-secondary small">
                                     Vui lòng chọn ca làm việc trước.
@@ -164,11 +164,11 @@
 
 
                             <textarea
-                                id="appointmentNote"
-                                rows="4"
-                                maxlength="1000"
-                                class="form-control"
-                                placeholder="Nhập ghi chú nếu cần...">
+                                    class="form-control"
+                                    id="appointmentNote"
+                                    maxlength="1000"
+                                    placeholder="Nhập ghi chú nếu cần..."
+                                    rows="4">
                             </textarea>
 
                         </div>
@@ -181,8 +181,8 @@
                 <div class="col-12 col-xl-4">
 
                     <div
-                        class="content-card sticky-xl-top"
-                        style="top: 95px;">
+                            class="content-card sticky-xl-top"
+                            style="top: 95px;">
 
                         <div class="p-4">
 
@@ -200,8 +200,8 @@
                                 </div>
 
                                 <div
-                                    id="summaryDoctor"
-                                    class="fw-semibold">
+                                        class="fw-semibold"
+                                        id="summaryDoctor">
                                     Chưa chọn
                                 </div>
 
@@ -215,8 +215,8 @@
                                 </div>
 
                                 <div
-                                    id="summaryDate"
-                                    class="fw-semibold">
+                                        class="fw-semibold"
+                                        id="summaryDate">
                                     Chưa chọn
                                 </div>
 
@@ -230,8 +230,8 @@
                                 </div>
 
                                 <div
-                                    id="summaryTime"
-                                    class="fw-semibold">
+                                        class="fw-semibold"
+                                        id="summaryTime">
                                     Chưa chọn
                                 </div>
 
@@ -239,10 +239,10 @@
 
 
                             <button
-                                id="confirmBookingButton"
-                                type="button"
-                                class="btn btn-primary w-100"
-                                disabled>
+                                    class="btn btn-primary w-100"
+                                    disabled
+                                    id="confirmBookingButton"
+                                    type="button">
 
                                 <i class="bi bi-calendar-check me-2"></i>
 
@@ -284,7 +284,7 @@
 
 
 <script
-    src="{{ url_for('static', path='js/patient-booking.js') }}">
+        src="{{ url_for('static', path='js/patient-booking.js') }}">
 </script>
 
 {% endblock %}

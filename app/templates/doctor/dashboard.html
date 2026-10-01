@@ -38,8 +38,8 @@ Doctor Dashboard | ClinicCare
 
 
             <div
-                id="doctorAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="doctorAlert">
             </div>
 
 
@@ -54,8 +54,8 @@ Doctor Dashboard | ClinicCare
                         </div>
 
                         <div
-                            id="todayTotal"
-                            class="fs-2 fw-bold mt-1">
+                                class="fs-2 fw-bold mt-1"
+                                id="todayTotal">
 
                             --
 
@@ -75,8 +75,8 @@ Doctor Dashboard | ClinicCare
                         </div>
 
                         <div
-                            id="confirmedTotal"
-                            class="fs-2 fw-bold mt-1">
+                                class="fs-2 fw-bold mt-1"
+                                id="confirmedTotal">
 
                             --
 
@@ -96,8 +96,8 @@ Doctor Dashboard | ClinicCare
                         </div>
 
                         <div
-                            id="completedTotal"
-                            class="fs-2 fw-bold mt-1">
+                                class="fs-2 fw-bold mt-1"
+                                id="completedTotal">
 
                             --
 
@@ -117,8 +117,8 @@ Doctor Dashboard | ClinicCare
                         </div>
 
                         <div
-                            id="upcomingTotal"
-                            class="fs-2 fw-bold mt-1">
+                                class="fs-2 fw-bold mt-1"
+                                id="upcomingTotal">
 
                             --
 
@@ -149,8 +149,8 @@ Doctor Dashboard | ClinicCare
                         </div>
 
                         <div
-                            id="upcomingAppointments"
-                            class="p-4">
+                                class="p-4"
+                                id="upcomingAppointments">
 
                             Đang tải...
 
@@ -160,33 +160,33 @@ Doctor Dashboard | ClinicCare
 
                 </div>
 
-            <div class="col-12 col-xl-5">
+                <div class="col-12 col-xl-5">
 
-                <div class="content-card h-100">
+                    <div class="content-card h-100">
 
-                    <div class="p-4 border-bottom">
+                        <div class="p-4 border-bottom">
 
-                        <h5 class="fw-bold mb-1">
-                            Bệnh nhân gần nhất
-                        </h5>
+                            <h5 class="fw-bold mb-1">
+                                Bệnh nhân gần nhất
+                            </h5>
 
-                        <p class="text-secondary small mb-0">
-                            Những bệnh nhân gần đây bác sĩ đã tiếp nhận.
-                        </p>
+                            <p class="text-secondary small mb-0">
+                                Những bệnh nhân gần đây bác sĩ đã tiếp nhận.
+                            </p>
 
-                    </div>
+                        </div>
 
-                    <div
-                        id="recentPatients"
-                        class="p-4">
+                        <div
+                                class="p-4"
+                                id="recentPatients">
 
-                        Đang tải...
+                            Đang tải...
+
+                        </div>
 
                     </div>
 
                 </div>
-
-            </div>
             </div>
 
             <div class="content-card">
@@ -209,9 +209,9 @@ Doctor Dashboard | ClinicCare
 
 
                         <select
-                            id="appointmentFilter"
-                            class="form-select"
-                            style="width: 190px;">
+                                class="form-select"
+                                id="appointmentFilter"
+                                style="width: 190px;">
 
                             <option value="all">
                                 Tất cả
@@ -242,50 +242,50 @@ Doctor Dashboard | ClinicCare
 
                         <thead>
 
-                            <tr>
+                        <tr>
 
-                                <th>
-                                    Thời gian
-                                </th>
+                            <th>
+                                Thời gian
+                            </th>
 
-                                <th>
-                                    Bệnh nhân
-                                </th>
+                            <th>
+                                Bệnh nhân
+                            </th>
 
-                                <th>
-                                    SĐT
-                                </th>
+                            <th>
+                                SĐT
+                            </th>
 
-                                <th>
-                                    Chuyên khoa
-                                </th>
+                            <th>
+                                Chuyên khoa
+                            </th>
 
-                                <th>
-                                    Trạng thái
-                                </th>
+                            <th>
+                                Trạng thái
+                            </th>
 
-                                <th class="text-end">
-                                    Thao tác
-                                </th>
+                            <th class="text-end">
+                                Thao tác
+                            </th>
 
-                            </tr>
+                        </tr>
 
                         </thead>
 
 
                         <tbody id="doctorAppointmentList">
 
-                            <tr>
+                        <tr>
 
-                                <td
-                                    colspan="6"
-                                    class="text-center py-5 text-secondary">
+                            <td
+                                    class="text-center py-5 text-secondary"
+                                    colspan="6">
 
-                                    Đang tải...
+                                Đang tải...
 
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
                         </tbody>
 
@@ -307,7 +307,7 @@ Doctor Dashboard | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/doctor-dashboard.js'
     ) }}">

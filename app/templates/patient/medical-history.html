@@ -38,16 +38,16 @@ Lịch sử khám | ClinicCare
 
 
             <div
-                id="historyAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="historyAlert">
             </div>
 
 
             <div
-                id="historyList">
+                    id="historyList">
 
                 <div
-                    class="text-center text-secondary py-5">
+                        class="text-center text-secondary py-5">
 
                     Đang tải lịch sử khám...
 
@@ -67,7 +67,7 @@ Lịch sử khám | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/patient-medical-history.js'
     ) }}">

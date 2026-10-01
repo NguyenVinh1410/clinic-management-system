@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.database.base import Base
 from app.models.enums import ChatSenderType
 
+
 class ChatSession(Base):
     __tablename__ = "chat_session"
 
@@ -45,6 +46,7 @@ class ChatSession(Base):
         back_populates="chat_session",
         uselist=False,
     )
+
 
 class ChatMessage(Base):
     __tablename__ = "chat_message"

@@ -14,20 +14,18 @@ router = APIRouter(
     tags=["Patients"],
 )
 
+
 @router.get(
     "/me",
     response_model=PatientResponse,
     status_code=status.HTTP_200_OK,
 )
 def get_my_profile(
-    current_user: Annotated[
-        User,
-        Depends(requires_role(UserRole.PATIENT)),
-    ],
-    db: Annotated[
-        Session,
-        Depends(get_db),
-    ],
+        current_user: Annotated[
+            User,
+            Depends(requires_role(UserRole.PATIENT)),
+        ],
+        db: Annotated[Session, Depends(get_db)]
 ):
     return PatientService.get_patient_by_id(
         db=db,
@@ -41,15 +39,12 @@ def get_my_profile(
     status_code=status.HTTP_200_OK,
 )
 def update_my_profile(
-    data: PatientUpdate,
-    current_user: Annotated[
-        User,
-        Depends(requires_role(UserRole.PATIENT)),
-    ],
-    db: Annotated[
-        Session,
-        Depends(get_db),
-    ],
+        data: PatientUpdate,
+        current_user: Annotated[
+            User,
+            Depends(requires_role(UserRole.PATIENT)),
+        ],
+        db: Annotated[Session, Depends(get_db)]
 ):
     patient = PatientService.get_patient_by_id(
         db=db,
@@ -77,12 +72,10 @@ def get_patients(
                 UserRole.ADMIN,
                 UserRole.RECEPTIONIST)),
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ],
+        db: Annotated[Session, Depends(get_db)]
 ):
     return PatientService.get_all_patients(db=db)
+
 
 @router.get(
     "/{patient_id}",
@@ -97,10 +90,7 @@ def get_patient(
                 UserRole.ADMIN,
                 UserRole.RECEPTIONIST)),
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ],
+        db: Annotated[Session, Depends(get_db)]
 ):
     return PatientService.get_patient_by_id(
         db=db,

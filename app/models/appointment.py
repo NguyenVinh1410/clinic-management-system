@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.database.base import Base
 from app.models.enums import AppointmentCreatedBy, AppointmentStatus
 
+
 class Appointment(Base):
     __tablename__ = "appointment"
 

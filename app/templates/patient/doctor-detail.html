@@ -19,8 +19,8 @@ Thông tin bác sĩ | ClinicCare
         <section class="content-area">
 
             <a
-                href="/patient/doctors"
-                class="btn btn-sm btn-light mb-3">
+                    class="btn btn-sm btn-light mb-3"
+                    href="/patient/doctors">
 
                 <i class="bi bi-arrow-left me-1"></i>
 
@@ -30,15 +30,15 @@ Thông tin bác sĩ | ClinicCare
 
 
             <div
-                id="doctorDetail"
-                class="row g-3">
+                    class="row g-3"
+                    id="doctorDetail">
 
                 <div class="col-12">
 
                     <div class="content-card text-center py-5">
 
                         <div
-                            class="spinner-border text-primary">
+                                class="spinner-border text-primary">
                         </div>
 
                     </div>
@@ -49,8 +49,8 @@ Thông tin bác sĩ | ClinicCare
 
 
             <div
-                id="doctorSchedule"
-                class="content-card mt-3 d-none">
+                    class="content-card mt-3 d-none"
+                    id="doctorSchedule">
 
                 <div class="card-header-simple">
 
@@ -66,8 +66,8 @@ Thông tin bác sĩ | ClinicCare
 
 
                 <div
-                    id="scheduleList"
-                    class="p-3">
+                        class="p-3"
+                        id="scheduleList">
 
                 </div>
 
@@ -91,7 +91,7 @@ Thông tin bác sĩ | ClinicCare
 
 
 <script
-    src="{{ url_for('static', path='js/patient-doctor-detail.js') }}">
+        src="{{ url_for('static', path='js/patient-doctor-detail.js') }}">
 </script>
 
 {% endblock %}

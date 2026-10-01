@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 
+
 class SpecialtyCreate(BaseModel):
     name: str = Field(
         min_length=1,
@@ -10,6 +11,7 @@ class SpecialtyCreate(BaseModel):
         default=None,
         max_length=1000,
     )
+
 
 class SpecialtyUpdate(BaseModel):
     name: str | None = Field(
@@ -22,6 +24,7 @@ class SpecialtyUpdate(BaseModel):
         default=None,
         max_length=1000,
     )
+
 
 class SpecialtyResponse(BaseModel):
     model_config = ConfigDict(

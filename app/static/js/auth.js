@@ -250,10 +250,6 @@ async function protectPrivatePage() {
         );
 
 
-    /*
-     * Route không nằm trong nhóm
-     * private mà mình định nghĩa.
-     */
     if (!requiredRole) {
 
         return;
@@ -261,10 +257,6 @@ async function protectPrivatePage() {
     }
 
 
-    /*
-     * Chưa có token
-     * → về login.
-     */
     if (!isAuthenticated()) {
 
         window.location.href =
@@ -291,10 +283,7 @@ async function protectPrivatePage() {
         }
 
         updateUserInterface(currentUser);
-        /*
-         * Có token nhưng role không
-         * phù hợp với URL hiện tại.
-         */
+
         if (
             currentUser.role !==
             requiredRole
@@ -418,15 +407,8 @@ document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-        /*
-         * Bảo vệ private routes.
-         */
         await protectPrivatePage();
 
-
-        /*
-         * Các nút logout.
-         */
         document
             .querySelectorAll(
                 "#logoutLink, #dropdownLogout"

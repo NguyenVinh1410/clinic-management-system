@@ -1,9 +1,10 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Text, UniqueConstraint
+from sqlalchemy import DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.database.base import Base
+
 
 class MedicalRecord(Base):
     __tablename__ = "medical_record"

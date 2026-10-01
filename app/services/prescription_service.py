@@ -1,19 +1,17 @@
-#from datetime import datetime
-
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload, selectinload
 
-from app.core.exceptions import BusinessException, ConflictException, NotFoundException, ForbiddenException
+from app.core.exceptions import BusinessException, ConflictException, NotFoundException
 from app.models.appointment import Appointment
 from app.models.enums import AppointmentStatus, MedicineStatus, InvoiceStatus
-from app.models.medicine import Medicine
 from app.models.medical_record import MedicalRecord
+from app.models.medicine import Medicine
 from app.models.prescription import Prescription
 from app.models.prescription_detail import PrescriptionDetail
-#from  app.models.user import Doctor
 from app.models.working_schedule import WorkingSchedule
 from app.schemas.prescription import PrescriptionCreate, PrescriptionUpdate
 from app.services.invoice_service import InvoiceService
+
 
 class PrescriptionService:
     @staticmethod
@@ -75,7 +73,7 @@ class PrescriptionService:
 
     @staticmethod
     def get_patient_prescriptions(
-            db:Session,
+            db: Session,
             patient_id: int,
     ) -> list[Prescription]:
         stmt = (
@@ -253,8 +251,8 @@ class PrescriptionService:
             raise NotFoundException("Khong tim thay lich hen")
 
         if appointment.status not in (
-            AppointmentStatus.CONFIRMED,
-            AppointmentStatus.COMPLETED
+                AppointmentStatus.CONFIRMED,
+                AppointmentStatus.COMPLETED
         ):
             raise BusinessException("Khong the sua don thuoc o trang thai hien tai")
 
@@ -295,7 +293,6 @@ class PrescriptionService:
         prescription.details.clear()
 
         for detail in data.details:
-
             prescription.details.append(
                 PrescriptionDetail(
                     medicine_id=detail.medicine_id,
@@ -322,4 +319,3 @@ class PrescriptionService:
             db=db,
             prescription_id=prescription.prescription_id,
         )
-

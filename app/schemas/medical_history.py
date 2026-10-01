@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel
 
+
 class MedicalHistoryMedicineResponse(BaseModel):
     medicine_id: int
 
@@ -18,12 +19,14 @@ class MedicalHistoryMedicineResponse(BaseModel):
 
     usage_note: str | None
 
+
 class MedicalHistoryPrescriptionResponse(BaseModel):
     prescription_id: int
 
     created_at: datetime
 
     medicines: list[MedicalHistoryMedicineResponse]
+
 
 class MedicalHistoryItemResponse(BaseModel):
     appointment_id: int
@@ -47,6 +50,7 @@ class MedicalHistoryItemResponse(BaseModel):
     note: str | None
 
     prescription: MedicalHistoryPrescriptionResponse | None
+
 
 class MedicalHistoryResponse(BaseModel):
     items: list[MedicalHistoryItemResponse]

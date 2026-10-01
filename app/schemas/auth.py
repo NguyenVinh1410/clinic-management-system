@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from app.models.enums import UserRole, UserStatus, Gender
 
+
 class LoginRequest(BaseModel):
     username: str = Field(
         min_length=1,
@@ -13,6 +14,7 @@ class LoginRequest(BaseModel):
         min_length=1,
         max_length=255,
     )
+
 
 class RegisterRequest(BaseModel):
     username: str = Field(
@@ -61,8 +63,8 @@ class RegisterRequest(BaseModel):
         value = value.strip()
 
         if not any(
-            char.isalpha()
-            for char in value
+                char.isalpha()
+                for char in value
         ):
             raise ValueError("Username phai co it nhat 1 chu cai")
 
@@ -142,9 +144,11 @@ class RegisterRequest(BaseModel):
 
         return self
 
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = 'bearer'
+
 
 class UserResponse(BaseModel):
     model_config = ConfigDict(

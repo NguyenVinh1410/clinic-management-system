@@ -6,10 +6,10 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 
 from app.core.exceptions import BusinessException, ConflictException, ForbiddenException, NotFoundException
-from app.models.user import Doctor
 from app.models.appointment import Appointment
 from app.models.enums import AppointmentStatus
 from app.models.medical_record import MedicalRecord
+from app.models.user import Doctor
 from app.models.working_schedule import WorkingSchedule
 from app.schemas.medical_record import MedicalRecordCreate, MedicalRecordUpdate, MedicalRecordResponse
 
@@ -133,7 +133,7 @@ class MedicalRecordService:
 
     @staticmethod
     def get_patient_records(
-            db:Session,
+            db: Session,
             patient_id: int
     ) -> list[MedicalRecordResponse]:
 
@@ -201,7 +201,7 @@ class MedicalRecordService:
                 "Khong the ghi ho so truoc gio hen kham"
             )
 
-        if(appointment.status == AppointmentStatus.CANCELLED):
+        if (appointment.status == AppointmentStatus.CANCELLED):
             raise BusinessException("Khong the tao ho so cho lich hen da huy")
 
         if (appointment.status != AppointmentStatus.CONFIRMED):
@@ -263,8 +263,8 @@ class MedicalRecordService:
         )
 
         if appointment.status not in (
-            AppointmentStatus.CONFIRMED,
-            AppointmentStatus.COMPLETED,
+                AppointmentStatus.CONFIRMED,
+                AppointmentStatus.COMPLETED,
         ):
             raise BusinessException("Khong the sua ho so o trang thai hien tai")
 

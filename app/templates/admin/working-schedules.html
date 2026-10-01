@@ -37,8 +37,8 @@ Lịch làm việc | Admin | ClinicCare
 
 
             <div
-                id="scheduleAlert"
-                class="alert d-none mb-4">
+                    class="alert d-none mb-4"
+                    id="scheduleAlert">
             </div>
 
 
@@ -64,22 +64,22 @@ Lịch làm việc | Admin | ClinicCare
                         <div class="p-4">
 
                             <form
-                                id="scheduleForm">
+                                    id="scheduleForm">
 
                                 <div class="mb-3">
 
                                     <label
-                                        for="doctorId"
-                                        class="form-label fw-semibold">
+                                            class="form-label fw-semibold"
+                                            for="doctorId">
 
                                         Bác sĩ
 
                                     </label>
 
                                     <select
-                                        id="doctorId"
-                                        class="form-select"
-                                        required>
+                                            class="form-select"
+                                            id="doctorId"
+                                            required>
 
                                         <option value="">
                                             Đang tải bác sĩ...
@@ -93,18 +93,18 @@ Lịch làm việc | Admin | ClinicCare
                                 <div class="mb-3">
 
                                     <label
-                                        for="workDate"
-                                        class="form-label fw-semibold">
+                                            class="form-label fw-semibold"
+                                            for="workDate">
 
                                         Ngày làm việc
 
                                     </label>
 
                                     <input
-                                        type="date"
-                                        id="workDate"
-                                        class="form-control"
-                                        required>
+                                            class="form-control"
+                                            id="workDate"
+                                            required
+                                            type="date">
 
                                 </div>
 
@@ -114,18 +114,18 @@ Lịch làm việc | Admin | ClinicCare
                                     <div class="col-6">
 
                                         <label
-                                            for="startTime"
-                                            class="form-label fw-semibold">
+                                                class="form-label fw-semibold"
+                                                for="startTime">
 
                                             Bắt đầu
 
                                         </label>
 
                                         <input
-                                            type="time"
-                                            id="startTime"
-                                            class="form-control"
-                                            required>
+                                                class="form-control"
+                                                id="startTime"
+                                                required
+                                                type="time">
 
                                     </div>
 
@@ -133,18 +133,18 @@ Lịch làm việc | Admin | ClinicCare
                                     <div class="col-6">
 
                                         <label
-                                            for="endTime"
-                                            class="form-label fw-semibold">
+                                                class="form-label fw-semibold"
+                                                for="endTime">
 
                                             Kết thúc
 
                                         </label>
 
                                         <input
-                                            type="time"
-                                            id="endTime"
-                                            class="form-control"
-                                            required>
+                                                class="form-control"
+                                                id="endTime"
+                                                required
+                                                type="time">
 
                                     </div>
 
@@ -154,16 +154,16 @@ Lịch làm việc | Admin | ClinicCare
                                 <div class="mb-4 mt-3">
 
                                     <label
-                                        for="scheduleStatus"
-                                        class="form-label fw-semibold">
+                                            class="form-label fw-semibold"
+                                            for="scheduleStatus">
 
                                         Trạng thái
 
                                     </label>
 
                                     <select
-                                        id="scheduleStatus"
-                                        class="form-select">
+                                            class="form-select"
+                                            id="scheduleStatus">
 
                                         <option value="Active">
                                             Hoạt động
@@ -179,9 +179,9 @@ Lịch làm việc | Admin | ClinicCare
 
 
                                 <button
-                                    type="submit"
-                                    id="saveScheduleButton"
-                                    class="btn btn-primary w-100">
+                                        class="btn btn-primary w-100"
+                                        id="saveScheduleButton"
+                                        type="submit">
 
                                     <i class="bi bi-plus-lg me-1"></i>
 
@@ -203,7 +203,7 @@ Lịch làm việc | Admin | ClinicCare
                     <div class="content-card">
 
                         <div
-                            class="p-4 border-bottom
+                                class="p-4 border-bottom
                                    d-flex
                                    justify-content-between
                                    align-items-center
@@ -217,7 +217,7 @@ Lịch làm việc | Admin | ClinicCare
                                 </h5>
 
                                 <p
-                                    class="text-secondary
+                                        class="text-secondary
                                            small
                                            mb-0">
 
@@ -229,9 +229,9 @@ Lịch làm việc | Admin | ClinicCare
 
 
                             <button
-                                type="button"
-                                id="refreshSchedules"
-                                class="btn btn-outline-primary btn-sm">
+                                    class="btn btn-outline-primary btn-sm"
+                                    id="refreshSchedules"
+                                    type="button">
 
                                 <i class="bi bi-arrow-clockwise me-1"></i>
 
@@ -245,55 +245,55 @@ Lịch làm việc | Admin | ClinicCare
                         <div class="table-responsive">
 
                             <table
-                                class="table
+                                    class="table
                                        align-middle
                                        mb-0">
 
                                 <thead>
 
-                                    <tr>
+                                <tr>
 
-                                        <th>
-                                            Bác sĩ
-                                        </th>
+                                    <th>
+                                        Bác sĩ
+                                    </th>
 
-                                        <th>
-                                            Ngày
-                                        </th>
+                                    <th>
+                                        Ngày
+                                    </th>
 
-                                        <th>
-                                            Thời gian
-                                        </th>
+                                    <th>
+                                        Thời gian
+                                    </th>
 
-                                        <th>
-                                            Trạng thái
-                                        </th>
+                                    <th>
+                                        Trạng thái
+                                    </th>
 
-                                        <th class="text-end">
-                                            #
-                                        </th>
+                                    <th class="text-end">
+                                        #
+                                    </th>
 
-                                    </tr>
+                                </tr>
 
                                 </thead>
 
 
                                 <tbody
-                                    id="scheduleList">
+                                        id="scheduleList">
 
-                                    <tr>
+                                <tr>
 
-                                        <td
-                                            colspan="5"
+                                    <td
                                             class="text-center
                                                    py-5
-                                                   text-secondary">
+                                                   text-secondary"
+                                            colspan="5">
 
-                                            Đang tải...
+                                        Đang tải...
 
-                                        </td>
+                                    </td>
 
-                                    </tr>
+                                </tr>
 
                                 </tbody>
 
@@ -319,7 +319,7 @@ Lịch làm việc | Admin | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for(
+        src="{{ url_for(
         'static',
         path='js/admin-working-schedules.js'
     ) }}">

@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.database.base import Base
 
+
 class Prescription(Base):
     __tablename__ = "prescription"
 

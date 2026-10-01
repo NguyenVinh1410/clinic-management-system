@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.database.base import Base
 from app.models.enums import MedicineStatus
 
+
 class Medicine(Base):
     __tablename__ = "medicine"
 

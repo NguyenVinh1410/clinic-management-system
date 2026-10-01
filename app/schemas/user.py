@@ -36,7 +36,6 @@ class UserCreate(BaseModel):
 
     role: UserRole
 
-    # Doctor
     specialty_id: int | None = Field(
         default=None,
     )
@@ -51,7 +50,6 @@ class UserCreate(BaseModel):
         max_length=5000,
     )
 
-    # Patient
     dob: date | None = None
 
     address: str | None = Field(
@@ -80,8 +78,8 @@ class UserCreate(BaseModel):
             )
 
         if not all(
-            char.isalnum() or char == "_"
-            for char in value
+                char.isalnum() or char == "_"
+                for char in value
         ):
             raise ValueError(
                 "Username chi duoc chua chu, so va dau gach duoi"
@@ -180,7 +178,6 @@ class UserUpdate(BaseModel):
 
     gender: Gender | None = None
 
-    # Doctor
     specialty_id: int | None = Field(
         default=None,
     )
@@ -195,7 +192,6 @@ class UserUpdate(BaseModel):
         max_length=5000,
     )
 
-    # Patient
     dob: date | None = None
 
     address: str | None = Field(

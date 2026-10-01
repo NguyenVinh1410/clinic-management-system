@@ -14,6 +14,7 @@ router = APIRouter(
     tags=["doctor"],
 )
 
+
 @router.get(
     "",
     response_model=list[DoctorResponse],
@@ -29,13 +30,10 @@ def get_doctors(
                 UserRole.PATIENT
             ))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
-
     return DoctorService.get_all_doctors(db=db)
+
 
 @router.get(
     "/{doctor_id}",
@@ -53,13 +51,10 @@ def get_doctor(
                 UserRole.PATIENT
             ))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
-
     return DoctorService.get_doctor_by_id(db=db, doctor_id=doctor_id)
+
 
 @router.patch(
     "/{doctor_id}",
@@ -73,12 +68,8 @@ def update_doctor(
             User,
             Depends(requires_role(UserRole.ADMIN))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
-
     doctor = DoctorService.get_doctor_by_id(db=db, doctor_id=doctor_id)
 
     return DoctorService.update_doctor(
@@ -86,6 +77,7 @@ def update_doctor(
         doctor=doctor,
         data=data,
     )
+
 
 @router.delete(
     "/{doctor_id}",
@@ -98,12 +90,8 @@ def deactivate_doctor(
             User,
             Depends(requires_role(UserRole.ADMIN))
         ],
-        db: Annotated[
-            Session,
-            Depends(get_db),
-        ]
+        db: Annotated[Session, Depends(get_db)]
 ):
-
     doctor = DoctorService.get_doctor_by_id(db=db, doctor_id=doctor_id)
 
     return DoctorService.deactivate_doctor(db=db, doctor=doctor)

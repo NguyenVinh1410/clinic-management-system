@@ -18,8 +18,8 @@ Admin Dashboard | ClinicCare
         <section class="content-area">
 
             <div
-                id="dashboardAlert"
-                class="alert d-none">
+                    class="alert d-none"
+                    id="dashboardAlert">
             </div>
 
 
@@ -31,13 +31,13 @@ Admin Dashboard | ClinicCare
 
 
                 <div
-                    class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2">
+                        class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2">
 
                     <div>
 
                         <h2
-                            class="fw-bold mb-1"
-                            id="welcomeName">
+                                class="fw-bold mb-1"
+                                id="welcomeName">
 
                             ...
 
@@ -45,8 +45,8 @@ Admin Dashboard | ClinicCare
 
 
                         <p
-                            class="text-secondary mb-0"
-                            id="welcomeMessage">
+                                class="text-secondary mb-0"
+                                id="welcomeMessage">
 
                             Đang tải dữ liệu...
 
@@ -70,11 +70,9 @@ Admin Dashboard | ClinicCare
             </div>
 
 
-            <!-- ADMIN -->
-
             <div
-                id="adminDashboard"
-                class="d-none">
+                    class="d-none"
+                    id="adminDashboard">
 
 
                 <div class="row g-3 mb-4">
@@ -87,7 +85,7 @@ Admin Dashboard | ClinicCare
                             <div class="stat-icon icon-primary">
 
                                 <i
-                                    class="bi bi-people-fill">
+                                        class="bi bi-people-fill">
                                 </i>
 
                             </div>
@@ -101,8 +99,8 @@ Admin Dashboard | ClinicCare
 
 
                                 <div
-                                    class="stat-value"
-                                    id="totalPatients">
+                                        class="stat-value"
+                                        id="totalPatients">
 
                                     0
 
@@ -122,7 +120,7 @@ Admin Dashboard | ClinicCare
                             <div class="stat-icon icon-success">
 
                                 <i
-                                    class="bi bi-calendar-check-fill">
+                                        class="bi bi-calendar-check-fill">
                                 </i>
 
                             </div>
@@ -136,8 +134,8 @@ Admin Dashboard | ClinicCare
 
 
                                 <div
-                                    class="stat-value"
-                                    id="todayAppointments">
+                                        class="stat-value"
+                                        id="todayAppointments">
 
                                     0
 
@@ -157,7 +155,7 @@ Admin Dashboard | ClinicCare
                             <div class="stat-icon icon-warning">
 
                                 <i
-                                    class="bi bi-cash-stack">
+                                        class="bi bi-cash-stack">
                                 </i>
 
                             </div>
@@ -171,8 +169,8 @@ Admin Dashboard | ClinicCare
 
 
                                 <div
-                                    class="stat-value"
-                                    id="monthlyRevenue">
+                                        class="stat-value"
+                                        id="monthlyRevenue">
 
                                     0 ₫
 
@@ -192,7 +190,7 @@ Admin Dashboard | ClinicCare
                             <div class="stat-icon icon-danger">
 
                                 <i
-                                    class="bi bi-hourglass-split">
+                                        class="bi bi-hourglass-split">
                                 </i>
 
                             </div>
@@ -206,8 +204,8 @@ Admin Dashboard | ClinicCare
 
 
                                 <div
-                                    class="stat-value"
-                                    id="pendingAppointments">
+                                        class="stat-value"
+                                        id="pendingAppointments">
 
                                     0
 
@@ -245,7 +243,7 @@ Admin Dashboard | ClinicCare
                             <div class="chart-wrap">
 
                                 <canvas
-                                    id="appointmentsChart">
+                                        id="appointmentsChart">
                                 </canvas>
 
                             </div>
@@ -275,7 +273,7 @@ Admin Dashboard | ClinicCare
                             <div class="chart-wrap">
 
                                 <canvas
-                                    id="appointmentStatusChart">
+                                        id="appointmentStatusChart">
                                 </canvas>
 
                             </div>
@@ -305,7 +303,7 @@ Admin Dashboard | ClinicCare
                             <div class="chart-wrap">
 
                                 <canvas
-                                    id="revenueChart">
+                                        id="revenueChart">
                                 </canvas>
 
                             </div>
@@ -331,7 +329,7 @@ Admin Dashboard | ClinicCare
                             <div class="chart-wrap">
 
                                 <canvas
-                                    id="specialtyChart">
+                                        id="specialtyChart">
                                 </canvas>
 
                             </div>
@@ -360,27 +358,27 @@ Admin Dashboard | ClinicCare
 
                                     <thead>
 
-                                        <tr>
+                                    <tr>
 
-                                            <th>
-                                                #
-                                            </th>
+                                        <th>
+                                            #
+                                        </th>
 
-                                            <th>
-                                                Bác sĩ
-                                            </th>
+                                        <th>
+                                            Bác sĩ
+                                        </th>
 
-                                            <th class="text-end">
-                                                Lượt khám
-                                            </th>
+                                        <th class="text-end">
+                                            Lượt khám
+                                        </th>
 
-                                        </tr>
+                                    </tr>
 
                                     </thead>
 
 
                                     <tbody
-                                        id="topDoctorsBody">
+                                            id="topDoctorsBody">
                                     </tbody>
 
                                 </table>
@@ -396,26 +394,24 @@ Admin Dashboard | ClinicCare
             </div>
 
 
-            <!-- OTHER ROLE -->
-
             <div
-                id="roleDashboard"
-                class="d-none">
+                    class="d-none"
+                    id="roleDashboard">
 
                 <div class="row g-3">
 
                     <div class="col-12 col-xl-8">
 
                         <div
-                            class="content-card h-100">
+                                class="content-card h-100">
 
                             <div class="d-flex gap-3">
 
                                 <div
-                                    class="stat-icon icon-primary">
+                                        class="stat-icon icon-primary">
 
                                     <i
-                                        class="bi bi-info-circle-fill">
+                                            class="bi bi-info-circle-fill">
                                     </i>
 
                                 </div>
@@ -424,8 +420,8 @@ Admin Dashboard | ClinicCare
                                 <div>
 
                                     <h5
-                                        id="roleDashboardTitle"
-                                        class="fw-bold">
+                                            class="fw-bold"
+                                            id="roleDashboardTitle">
 
                                         Khu vực làm việc
 
@@ -433,14 +429,14 @@ Admin Dashboard | ClinicCare
 
 
                                     <p
-                                        id="roleDashboardText"
-                                        class="text-secondary">
+                                            class="text-secondary"
+                                            id="roleDashboardText">
                                     </p>
 
 
                                     <div
-                                        id="quickActions"
-                                        class="d-flex flex-wrap gap-2">
+                                            class="d-flex flex-wrap gap-2"
+                                            id="quickActions">
                                     </div>
 
                                 </div>
@@ -455,10 +451,10 @@ Admin Dashboard | ClinicCare
                     <div class="col-12 col-xl-4">
 
                         <div
-                            class="content-card h-100">
+                                class="content-card h-100">
 
                             <h6
-                                class="fw-bold mb-3">
+                                    class="fw-bold mb-3">
 
                                 Thông tin tài khoản
 
@@ -472,7 +468,7 @@ Admin Dashboard | ClinicCare
                                 </span>
 
                                 <strong
-                                    id="profileName">
+                                        id="profileName">
                                     ...
                                 </strong>
 
@@ -486,7 +482,7 @@ Admin Dashboard | ClinicCare
                                 </span>
 
                                 <strong
-                                    id="profileUsername">
+                                        id="profileUsername">
                                     ...
                                 </strong>
 
@@ -500,7 +496,7 @@ Admin Dashboard | ClinicCare
                                 </span>
 
                                 <strong
-                                    id="profileEmail">
+                                        id="profileEmail">
                                     ...
                                 </strong>
 
@@ -514,7 +510,7 @@ Admin Dashboard | ClinicCare
                                 </span>
 
                                 <strong
-                                    id="profileRole">
+                                        id="profileRole">
                                     ...
                                 </strong>
 
@@ -540,7 +536,7 @@ Admin Dashboard | ClinicCare
 {% block scripts %}
 
 <script
-    src="{{ url_for('static', path='js/admin-dashboard.js') }}">
+        src="{{ url_for('static', path='js/admin-dashboard.js') }}">
 </script>
 
 {% endblock %}
