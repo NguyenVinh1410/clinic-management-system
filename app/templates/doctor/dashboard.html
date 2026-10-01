@@ -22,16 +22,12 @@ Doctor Dashboard | ClinicCare
 
             <div class="mb-4">
 
-                <div class="text-secondary small">
-                    Khám bệnh
-                </div>
-
                 <h2 class="fw-bold mb-1">
                     Tổng quan lịch khám
                 </h2>
 
                 <p class="text-secondary mb-0">
-                    Theo dõi lịch khám và bệnh nhân của bạn.
+                    Theo dõi lịch khám và bệnh nhân của bạn
                 </p>
 
             </div>
@@ -92,7 +88,7 @@ Doctor Dashboard | ClinicCare
                     <div class="content-card p-4">
 
                         <div class="text-secondary small">
-                            Đã hoàn thành
+                            Đã khám
                         </div>
 
                         <div
@@ -113,7 +109,7 @@ Doctor Dashboard | ClinicCare
                     <div class="content-card p-4">
 
                         <div class="text-secondary small">
-                            Lịch sắp tới
+                            Lịch khám sắp tới
                         </div>
 
                         <div
@@ -139,11 +135,11 @@ Doctor Dashboard | ClinicCare
                         <div class="p-4 border-bottom">
 
                             <h5 class="fw-bold mb-1">
-                                Lịch sắp tới
+                                Lịch khám sắp tới
                             </h5>
 
                             <p class="text-secondary small mb-0">
-                                Những lượt khám sắp diễn ra.
+                                Những lượt khám sắp diễn ra
                             </p>
 
                         </div>
@@ -171,7 +167,7 @@ Doctor Dashboard | ClinicCare
                             </h5>
 
                             <p class="text-secondary small mb-0">
-                                Những bệnh nhân gần đây bác sĩ đã tiếp nhận.
+                                Những bệnh nhân gần đây bác sĩ đã tiếp nhận
                             </p>
 
                         </div>
@@ -200,10 +196,6 @@ Doctor Dashboard | ClinicCare
                             <h5 class="fw-bold mb-1">
                                 Danh sách bệnh nhân
                             </h5>
-
-                            <p class="text-secondary small mb-0">
-                                Bác sĩ chỉ được xem lịch thuộc mình.
-                            </p>
 
                         </div>
 
@@ -307,10 +299,7 @@ Doctor Dashboard | ClinicCare
 {% block scripts %}
 
 <script
-        src="{{ url_for(
-        'static',
-        path='js/doctor-dashboard.js'
-    ) }}">
+        src="{{ url_for('static', path='js/doctor-dashboard.js') }}">
 </script>
 
 {% endblock %}

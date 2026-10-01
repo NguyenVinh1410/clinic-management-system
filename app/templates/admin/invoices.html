@@ -20,16 +20,12 @@ Quản lý hóa đơn | Admin | ClinicCare
 
             <div class="mb-4">
 
-                <div class="text-secondary small">
-                    Quản lý tài chính
-                </div>
-
                 <h2 class="fw-bold mb-1">
-                    Hóa đơn
+                    Quản lý hóa đơn
                 </h2>
 
                 <p class="text-secondary mb-0">
-                    Theo dõi tình trạng hóa đơn và thanh toán.
+                    Theo dõi tình trạng hóa đơn và thanh toán
                 </p>
 
             </div>
@@ -280,10 +276,7 @@ Quản lý hóa đơn | Admin | ClinicCare
 {% block scripts %}
 
 <script
-        src="{{ url_for(
-        'static',
-        path='js/admin-invoices.js'
-    ) }}">
+        src="{{ url_for('static', path='js/admin-invoices.js') }}">
 </script>
 
 {% endblock %}

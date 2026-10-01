@@ -34,7 +34,7 @@ document.addEventListener(
 
             showSpecialtyAlert(
                 error.message ||
-                "Không thể tải chuyên khoa.",
+                "Không thể tải chuyên khoa!",
                 "danger"
             );
 
@@ -62,7 +62,7 @@ async function loadSpecialties() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải chuyên khoa."
+            "Không thể tải chuyên khoa"
         );
 
     }
@@ -98,7 +98,7 @@ function renderSpecialties() {
                            py-5
                            text-secondary">
 
-                    Chưa có chuyên khoa.
+                    Chưa có chuyên khoa
 
                 </td>
 
@@ -258,7 +258,7 @@ async function createSpecialty(
     if (!name) {
 
         showSpecialtyAlert(
-            "Vui lòng nhập tên chuyên khoa.",
+            "Vui lòng nhập tên chuyên khoa!",
             "danger"
         );
 
@@ -300,7 +300,7 @@ async function createSpecialty(
 
         throw new Error(
             data.detail ||
-            "Không thể tạo chuyên khoa."
+            "Không thể tạo chuyên khoa"
         );
 
     }
@@ -310,7 +310,7 @@ async function createSpecialty(
 
 
     showSpecialtyAlert(
-        "Đã thêm chuyên khoa.",
+        "Đã thêm chuyên khoa",
         "success"
     );
 
@@ -404,14 +404,14 @@ async function editSpecialty(
 
         throw new Error(
             data.detail ||
-            "Không thể cập nhật chuyên khoa."
+            "Không thể cập nhật chuyên khoa"
         );
 
     }
 
 
     showSpecialtyAlert(
-        "Đã cập nhật chuyên khoa.",
+        "Đã cập nhật chuyên khoa",
         "success"
     );
 
@@ -458,14 +458,14 @@ async function deleteSpecialty(
 
         throw new Error(
             data.detail ||
-            "Không thể xóa chuyên khoa."
+            "Không thể xóa chuyên khoa"
         );
 
     }
 
 
     showSpecialtyAlert(
-        "Đã xóa chuyên khoa.",
+        "Đã xóa chuyên khoa",
         "success"
     );
 

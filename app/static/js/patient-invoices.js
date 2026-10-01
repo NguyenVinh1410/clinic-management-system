@@ -135,7 +135,7 @@ function renderInvoices() {
                                mb-3">
                     </i>
 
-                    Bạn chưa có hóa đơn.
+                    Bạn chưa có hóa đơn
 
                 </div>
 
@@ -620,7 +620,7 @@ async function payInvoice(
         if (!response.ok) {
 
             let message =
-                "Thanh toán thất bại.";
+                "Thanh toán thất bại";
 
 
             if (
@@ -674,7 +674,7 @@ async function payInvoice(
 
 
         showInvoiceAlert(
-            "Thanh toán online thành công.",
+            "Thanh toán online thành công",
             "success"
         );
 
@@ -690,7 +690,7 @@ async function payInvoice(
 
 
         showInvoiceAlert(
-            "Không thể kết nối tới máy chủ.",
+            "Không thể kết nối tới máy chủ",
             "danger"
         );
 

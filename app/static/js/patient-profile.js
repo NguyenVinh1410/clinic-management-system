@@ -30,7 +30,7 @@ document.addEventListener(
 
             showProfileAlert(
                 error.message ||
-                "Không thể tải hồ sơ.",
+                "Không thể tải hồ sơ!",
                 "danger"
             );
 
@@ -58,7 +58,7 @@ async function loadProfile() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải hồ sơ."
+            "Không thể tải hồ sơ"
         );
 
     }
@@ -254,7 +254,7 @@ async function saveProfile(
 
             throw new Error(
                 data.detail ||
-                "Cập nhật hồ sơ thất bại."
+                "Cập nhật hồ sơ thất bại"
             );
 
         }
@@ -270,7 +270,7 @@ async function saveProfile(
 
 
         showProfileAlert(
-            "Cập nhật hồ sơ thành công.",
+            "Cập nhật hồ sơ thành công",
             "success"
         );
 
@@ -284,7 +284,7 @@ async function saveProfile(
 
         showProfileAlert(
             error.message ||
-            "Không thể cập nhật hồ sơ.",
+            "Không thể cập nhật hồ sơ!",
             "danger"
         );
 

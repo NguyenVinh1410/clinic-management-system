@@ -31,7 +31,7 @@ document.addEventListener(
 
             showCheckinAlert(
                 error.message ||
-                "Không thể tải dữ liệu tiếp nhận.",
+                "Không thể tải dữ liệu tiếp nhận!",
                 "danger"
             );
 
@@ -75,7 +75,7 @@ async function loadCheckinData() {
 
         throw new Error(
             appointments.detail ||
-            "Không thể tải lịch khám."
+            "Không thể tải lịch khám"
         );
 
     }
@@ -85,7 +85,7 @@ async function loadCheckinData() {
 
         throw new Error(
             patients.detail ||
-            "Không thể tải danh sách bệnh nhân."
+            "Không thể tải danh sách bệnh nhân"
         );
 
     }
@@ -206,7 +206,7 @@ function renderCheckinAppointments(
                     colspan="7"
                     class="text-center py-5 text-secondary">
 
-                    Hôm nay chưa có lịch khám.
+                    Hôm nay chưa có lịch khám
 
                 </td>
 
@@ -233,7 +233,7 @@ function renderCheckinAppointments(
                     colspan="7"
                     class="text-center py-5 text-secondary">
 
-                    Không tìm thấy lịch phù hợp.
+                    Không tìm thấy lịch phù hợp
 
                 </td>
 
@@ -570,14 +570,14 @@ async function checkInAppointment(
 
             throw new Error(
                 data.detail ||
-                "Không thể tiếp nhận bệnh nhân."
+                "Không thể tiếp nhận bệnh nhân"
             );
 
         }
 
 
         showCheckinAlert(
-            "Đã tiếp nhận bệnh nhân thành công.",
+            "Đã tiếp nhận bệnh nhân thành công",
             "success"
         );
 
@@ -592,7 +592,7 @@ async function checkInAppointment(
 
         showCheckinAlert(
             error.message ||
-            "Tiếp nhận bệnh nhân thất bại.",
+            "Tiếp nhận bệnh nhân thất bại!",
             "danger"
         );
 

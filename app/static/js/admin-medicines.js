@@ -41,7 +41,7 @@ document.addEventListener(
 
             showMedicineAlert(
                 error.message ||
-                "Không thể tải dữ liệu thuốc.",
+                "Không thể tải dữ liệu thuốc!",
                 "danger"
             );
 
@@ -68,7 +68,7 @@ async function loadMedicines() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải danh sách thuốc."
+            "Không thể tải danh sách thuốc"
         );
 
     }
@@ -114,7 +114,7 @@ function renderMedicines(
                            py-5
                            text-secondary">
 
-                    Không tìm thấy thuốc.
+                    Không tìm thấy thuốc
 
                 </td>
 
@@ -419,7 +419,7 @@ async function saveMedicine(
     if (!name) {
 
         showMedicineAlert(
-            "Vui lòng nhập tên thuốc.",
+            "Vui lòng nhập tên thuốc!",
             "danger"
         );
 
@@ -431,7 +431,7 @@ async function saveMedicine(
     if (!unit) {
 
         showMedicineAlert(
-            "Vui lòng nhập đơn vị.",
+            "Vui lòng nhập đơn vị!",
             "danger"
         );
 
@@ -446,7 +446,7 @@ async function saveMedicine(
     ) {
 
         showMedicineAlert(
-            "Đơn giá không hợp lệ.",
+            "Đơn giá không hợp lệ!",
             "danger"
         );
 
@@ -461,7 +461,7 @@ async function saveMedicine(
     ) {
 
         showMedicineAlert(
-            "Tồn kho phải là số nguyên không âm.",
+            "Tồn kho phải là số nguyên không âm!",
             "danger"
         );
 
@@ -537,8 +537,8 @@ async function saveMedicine(
             data.detail ||
             (
                 isEditing
-                    ? "Không thể cập nhật thuốc."
-                    : "Không thể tạo thuốc."
+                    ? "Không thể cập nhật thuốc"
+                    : "Không thể tạo thuốc"
             )
         );
 
@@ -547,8 +547,8 @@ async function saveMedicine(
 
     showMedicineAlert(
         isEditing
-            ? "Đã cập nhật thuốc."
-            : "Đã thêm thuốc.",
+            ? "Đã cập nhật thuốc"
+            : "Đã thêm thuốc",
         "success"
     );
 
@@ -579,7 +579,7 @@ function editMedicine(
     if (!medicine) {
 
         showMedicineAlert(
-            "Không tìm thấy thuốc.",
+            "Không tìm thấy thuốc!",
             "danger"
         );
 
@@ -783,14 +783,14 @@ async function discontinueMedicine(
 
         throw new Error(
             data.detail ||
-            "Không thể ngừng sử dụng thuốc."
+            "Không thể ngừng sử dụng thuốc"
         );
 
     }
 
 
     showMedicineAlert(
-        "Đã chuyển thuốc sang trạng thái ngừng sử dụng.",
+        "Đã chuyển thuốc sang trạng thái ngừng sử dụng",
         "success"
     );
 
@@ -872,7 +872,7 @@ function setupMedicineRefresh() {
 
                     showMedicineAlert(
                         error.message ||
-                        "Không thể tải lại thuốc.",
+                        "Không thể tải lại thuốc!",
                         "danger"
                     );
 

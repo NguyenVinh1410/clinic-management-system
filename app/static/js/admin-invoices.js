@@ -38,7 +38,7 @@ document.addEventListener(
 
             showInvoiceAlert(
                 error.message ||
-                "Không thể tải hóa đơn.",
+                "Không thể tải hóa đơn!",
                 "danger"
             );
 
@@ -66,7 +66,7 @@ async function loadInvoices() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải hóa đơn."
+            "Không thể tải hóa đơn"
         );
 
     }
@@ -106,7 +106,7 @@ function renderInvoices(
                            py-5
                            text-secondary">
 
-                    Không có hóa đơn.
+                    Không có hóa đơn
 
                 </td>
 
@@ -401,7 +401,7 @@ async function payInvoice() {
 
         throw new Error(
             data.detail ||
-            "Không thể thanh toán hóa đơn."
+            "Không thể thanh toán hóa đơn"
         );
 
     }
@@ -419,7 +419,7 @@ async function payInvoice() {
 
 
     showInvoiceAlert(
-        "Thanh toán thành công.",
+        "Thanh toán thành công",
         "success"
     );
 

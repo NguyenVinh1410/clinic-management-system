@@ -155,7 +155,7 @@ async function parseApiResponse(
                     }
 
                     return (
-                        "Dữ liệu không hợp lệ."
+                        "Dữ liệu không hợp lệ"
                     );
                 })
                 .join("; ");

@@ -368,7 +368,6 @@ function updateUserInterface(
 
     }
 
-
     const topRole =
         document.getElementById(
             "topUserRole"

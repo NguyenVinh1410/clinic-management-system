@@ -25,7 +25,7 @@
                 </h2>
 
                 <p class="text-secondary">
-                    Chọn bác sĩ, ca làm việc và thời gian khám.
+                    Chọn bác sĩ, ca làm việc và thời gian khám
                 </p>
 
             </div>
@@ -58,7 +58,7 @@
                                     </div>
 
                                     <div class="small text-secondary">
-                                        Chọn bác sĩ bạn muốn khám.
+                                        Chọn bác sĩ bạn muốn khám
                                     </div>
 
                                 </div>
@@ -90,7 +90,7 @@
                                     </div>
 
                                     <div class="small text-secondary">
-                                        Chọn ngày khám.
+                                        Chọn ngày khám
                                     </div>
 
                                 </div>
@@ -123,7 +123,7 @@
                                     </div>
 
                                     <div class="small text-secondary">
-                                        Mỗi lượt khám kéo dài 30 phút.
+                                        Mỗi lượt khám kéo dài 30 phút
                                     </div>
 
                                 </div>
@@ -136,7 +136,7 @@
                                     id="slotGrid">
 
                                 <div class="text-secondary small">
-                                    Vui lòng chọn ca làm việc trước.
+                                    Vui lòng chọn ca làm việc trước
                                 </div>
 
                             </div>
@@ -155,7 +155,7 @@
                                     </div>
 
                                     <div class="small text-secondary">
-                                        Thông tin bổ sung cho buổi khám.
+                                        Thông tin cần thiết cho buổi khám
                                     </div>
 
                                 </div>
@@ -168,8 +168,7 @@
                                     id="appointmentNote"
                                     maxlength="1000"
                                     placeholder="Nhập ghi chú nếu cần..."
-                                    rows="4">
-                            </textarea>
+                                    rows="4"></textarea>
 
                         </div>
 
@@ -270,18 +269,10 @@
 {% block scripts %}
 
 <script>
-    const initialDoctorId =
-        new URLSearchParams(
-            window.location.search
-        ).get("doctor_id");
+    const initialDoctorId = new URLSearchParams(window.location.search).get("doctor_id");
 
-
-    const initialScheduleId =
-        new URLSearchParams(
-            window.location.search
-        ).get("schedule_id");
+    const initialScheduleId = new URLSearchParams(window.location.search).get("schedule_id");
 </script>
-
 
 <script
         src="{{ url_for('static', path='js/patient-booking.js') }}">

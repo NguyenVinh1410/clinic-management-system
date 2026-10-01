@@ -58,7 +58,7 @@ async function loadSpecialties() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải danh sách chuyên khoa."
+            "Không thể tải danh sách chuyên khoa"
         );
 
     }
@@ -134,7 +134,7 @@ async function loadDoctors() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải danh sách bác sĩ."
+            "Không thể tải danh sách bác sĩ"
         );
 
     }
@@ -187,7 +187,7 @@ function renderDoctors(
                             class="bi bi-person-x fs-1 d-block mb-3">
                         </i>
 
-                        Không tìm thấy bác sĩ.
+                        Không tìm thấy bác sĩ
 
                     </div>
 

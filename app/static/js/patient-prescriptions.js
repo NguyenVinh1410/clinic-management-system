@@ -23,7 +23,7 @@ document.addEventListener(
 
             showPrescriptionAlert(
                 error.message ||
-                "Không thể tải đơn thuốc.",
+                "Không thể tải đơn thuốc!",
                 "danger"
             );
 
@@ -51,7 +51,7 @@ async function loadPatientPrescriptions() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải đơn thuốc."
+            "Không thể tải đơn thuốc"
         );
 
     }
@@ -103,7 +103,7 @@ function renderPrescriptions() {
                 <p
                     class="text-secondary mb-0">
 
-                    Bạn chưa có đơn thuốc nào.
+                    Bạn chưa có đơn thuốc nào
 
                 </p>
 

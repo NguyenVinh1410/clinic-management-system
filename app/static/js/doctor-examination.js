@@ -40,7 +40,7 @@ document.addEventListener(
 
             showExaminationAlert(
                 error.message ||
-                "Không thể tải dữ liệu khám.",
+                "Không thể tải dữ liệu khám!",
                 "danger"
             );
 
@@ -68,7 +68,7 @@ async function loadAppointment() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải lịch khám."
+            "Không thể tải lịch khám"
         );
 
     }
@@ -154,7 +154,7 @@ async function loadMedicines() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải danh sách thuốc."
+            "Không thể tải danh sách thuốc"
         );
 
     }
@@ -531,7 +531,7 @@ async function saveMedicalRecord(
     ) {
 
         showExaminationAlert(
-            "Lịch khám chưa ở trạng thái có thể khám.",
+            "Lịch khám chưa ở trạng thái có thể khám!",
             "danger"
         );
 
@@ -549,7 +549,7 @@ async function saveMedicalRecord(
     if (!diagnosis) {
 
         showExaminationAlert(
-            "Chẩn đoán không được để trống.",
+            "Chẩn đoán không được để trống!",
             "danger"
         );
 
@@ -636,7 +636,7 @@ async function saveMedicalRecord(
 
             throw new Error(
                 data.detail ||
-                "Không thể lưu hồ sơ."
+                "Không thể lưu hồ sơ"
             );
 
         }
@@ -647,7 +647,7 @@ async function saveMedicalRecord(
 
 
         showExaminationAlert(
-            "Đã lưu hồ sơ khám.",
+            "Đã lưu hồ sơ khám",
             "success"
         );
 
@@ -658,7 +658,7 @@ async function saveMedicalRecord(
 
         showExaminationAlert(
             error.message ||
-            "Lưu hồ sơ thất bại.",
+            "Lưu hồ sơ thất bại!",
             "danger"
         );
 
@@ -672,7 +672,7 @@ async function savePrescription() {
     if (!medicalRecord) {
 
         showExaminationAlert(
-            "Hãy lưu hồ sơ khám trước khi kê đơn.",
+            "Hãy lưu hồ sơ khám trước khi kê đơn",
             "warning"
         );
 
@@ -732,7 +732,7 @@ async function savePrescription() {
         ) {
 
             showExaminationAlert(
-                "Thông tin thuốc chưa đầy đủ.",
+                "Thông tin thuốc chưa đầy đủ!",
                 "danger"
             );
 
@@ -762,7 +762,7 @@ async function savePrescription() {
     if (!details.length) {
 
         showExaminationAlert(
-            "Đơn thuốc phải có ít nhất một thuốc.",
+            "Đơn thuốc phải có ít nhất một thuốc!",
             "danger"
         );
 
@@ -786,7 +786,7 @@ async function savePrescription() {
     ) {
 
         showExaminationAlert(
-            "Không được kê cùng một thuốc nhiều lần.",
+            "Không được kê cùng một thuốc nhiều lần!",
             "danger"
         );
 
@@ -845,7 +845,7 @@ async function savePrescription() {
 
             throw new Error(
                 data.detail ||
-                "Không thể lưu đơn thuốc."
+                "Không thể lưu đơn thuốc"
             );
 
         }
@@ -856,7 +856,7 @@ async function savePrescription() {
 
 
         showExaminationAlert(
-            "Đã lưu đơn thuốc.",
+            "Đã lưu đơn thuốc",
             "success"
         );
 
@@ -867,7 +867,7 @@ async function savePrescription() {
 
         showExaminationAlert(
             error.message ||
-            "Lưu đơn thuốc thất bại.",
+            "Lưu đơn thuốc thất bại!",
             "danger"
         );
 
@@ -881,7 +881,7 @@ async function completeAppointment() {
     if (!medicalRecord) {
 
         showExaminationAlert(
-            "Hãy lưu hồ sơ khám trước.",
+            "Hãy lưu hồ sơ khám trước",
             "warning"
         );
 
@@ -928,7 +928,7 @@ async function completeAppointment() {
 
             throw new Error(
                 data.detail ||
-                "Không thể hoàn tất lượt khám."
+                "Không thể hoàn tất lượt khám"
             );
 
         }
@@ -952,7 +952,7 @@ async function completeAppointment() {
 
 
         showExaminationAlert(
-            "Lượt khám đã hoàn tất.",
+            "Lượt khám đã hoàn tất",
             "success"
         );
 
@@ -963,7 +963,7 @@ async function completeAppointment() {
 
         showExaminationAlert(
             error.message ||
-            "Không thể hoàn tất lượt khám.",
+            "Không thể hoàn tất lượt khám!",
             "danger"
         );
 
@@ -992,7 +992,7 @@ async function loadMedicalHistory() {
             "medicalHistory"
         ).innerHTML = `
             <div class="text-secondary small">
-                Chưa có lịch sử khám trước đó.
+                Chưa có lịch sử khám trước đó
             </div>
         `;
 
@@ -1027,7 +1027,7 @@ function renderMedicalHistory(
             <div
                 class="text-secondary small">
 
-                Chưa có lần khám trước đó.
+                Chưa có lần khám trước đó
 
             </div>
         `;
@@ -1049,7 +1049,7 @@ function renderMedicalHistory(
                     <div
                         class="text-secondary small">
 
-                        Không có đơn thuốc.
+                        Không có đơn thuốc
 
                     </div>
                 `;
@@ -1096,7 +1096,7 @@ function renderMedicalHistory(
 
 
                                                 <div
-                                                    class="small text-secondary">
+                                                    class="small">
 
                                                     Số lượng:
                                                     ${

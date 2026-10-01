@@ -22,16 +22,12 @@ Check-in | Receptionist | ClinicCare
 
             <div class="mb-4">
 
-                <div class="text-secondary small">
-                    Tiếp nhận
-                </div>
-
                 <h2 class="fw-bold mb-1">
-                    Check-in bệnh nhân
+                    Tiếp nhận bệnh nhân
                 </h2>
 
                 <p class="text-secondary mb-0">
-                    Xác nhận bệnh nhân đã đến khám trong ngày hôm nay.
+                    Xác nhận bệnh nhân đã đến khám trong ngày hôm nay
                 </p>
 
             </div>
@@ -209,10 +205,6 @@ Check-in | Receptionist | ClinicCare
                                 Danh sách bệnh nhân hôm nay
                             </h5>
 
-                            <p class="text-secondary small mb-0">
-                                Chỉ lịch khám của ngày hôm nay được phép tiếp nhận.
-                            </p>
-
                         </div>
 
 
@@ -221,7 +213,7 @@ Check-in | Receptionist | ClinicCare
                             <input
                                     class="form-control"
                                     id="checkinSearch"
-                                    placeholder="Tên, SĐT, mã BN hoặc bác sĩ..."
+                                    placeholder="Nhập tên, SĐT, mã BN hoặc bác sĩ..."
                                     style="min-width: 280px;"
                                     type="text">
 
@@ -308,10 +300,7 @@ Check-in | Receptionist | ClinicCare
 {% block scripts %}
 
 <script
-        src="{{ url_for(
-        'static',
-        path='js/receptionist-checkin.js'
-    ) }}">
+        src="{{ url_for('static', path='js/receptionist-checkin.js') }}">
 </script>
 
 {% endblock %}

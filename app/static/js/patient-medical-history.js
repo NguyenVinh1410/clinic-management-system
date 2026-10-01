@@ -30,7 +30,7 @@ document.addEventListener(
 
                 throw new Error(
                     data.detail ||
-                    "Không thể tải lịch sử khám."
+                    "Không thể tải lịch sử khám"
                 );
 
             }
@@ -47,7 +47,7 @@ document.addEventListener(
 
             showHistoryAlert(
                 error.message ||
-                "Không thể tải lịch sử khám.",
+                "Không thể tải lịch sử khám!",
                 "danger"
             );
 
@@ -81,7 +81,7 @@ function renderMedicalHistory(
                 </h5>
 
                 <p class="text-secondary mb-0">
-                    Bạn chưa có hồ sơ khám nào.
+                    Bạn chưa có hồ sơ khám nào
                 </p>
 
             </div>

@@ -29,7 +29,7 @@ document.addEventListener(
 
             showPatientAlert(
                 error.message ||
-                "Không thể tải danh sách bệnh nhân.",
+                "Không thể tải danh sách bệnh nhân!",
                 "danger"
             );
 
@@ -56,7 +56,7 @@ async function loadPatients() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải danh sách bệnh nhân."
+            "Không thể tải danh sách bệnh nhân"
         );
 
     }
@@ -99,7 +99,7 @@ function renderPatients(
                     colspan="6"
                     class="text-center py-5 text-secondary">
 
-                    Không tìm thấy bệnh nhân.
+                    Không tìm thấy bệnh nhân
 
                 </td>
 
@@ -134,7 +134,7 @@ function renderPatients(
 
                             <span class="text-secondary">
 
-                                @${patient.username}
+                                ${patient.username}
 
                             </span>
 

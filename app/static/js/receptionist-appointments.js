@@ -29,7 +29,7 @@ document.addEventListener(
 
             showAppointmentAlert(
                 error.message ||
-                "Không thể tải lịch khám.",
+                "Không thể tải lịch khám!",
                 "danger"
             );
 
@@ -56,7 +56,7 @@ async function loadAppointments() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải lịch khám."
+            "Không thể tải lịch khám"
         );
 
     }
@@ -93,7 +93,7 @@ function renderAppointments(
                     colspan="6"
                     class="text-center py-5 text-secondary">
 
-                    Không có lịch khám.
+                    Không có lịch khám
 
                 </td>
 
@@ -440,14 +440,14 @@ async function confirmAppointment(
 
             throw new Error(
                 data.detail ||
-                "Không thể xác nhận lịch khám."
+                "Không thể xác nhận lịch khám"
             );
 
         }
 
 
         showAppointmentAlert(
-            "Đã xác nhận lịch khám.",
+            "Đã xác nhận lịch khám",
             "success"
         );
 
@@ -464,7 +464,7 @@ async function confirmAppointment(
 
         showAppointmentAlert(
             error.message ||
-            "Xác nhận lịch khám thất bại.",
+            "Xác nhận lịch khám thất bại!",
             "danger"
         );
 
@@ -503,12 +503,12 @@ async function cancelAppointment(
 
             throw new Error(
                 data.detail ||
-                "Không thể hủy lịch khám."
+                "Không thể hủy lịch khám"
             );
         }
 
         showAppointmentAlert(
-            "Đã hủy lịch khám.",
+            "Đã hủy lịch khám",
             "success"
         );
 
@@ -521,7 +521,7 @@ async function cancelAppointment(
 
         showAppointmentAlert(
             error.message ||
-            "Hủy lịch khám thất bại.",
+            "Hủy lịch khám thất bại!",
             "danger"
         );
     }
@@ -576,14 +576,14 @@ async function createInvoice(
 
             throw new Error(
                 data.detail ||
-                "Không thể tạo hóa đơn."
+                "Không thể tạo hóa đơn"
             );
 
         }
 
 
         showAppointmentAlert(
-            `Đã tạo hóa đơn #${data.invoice_id}.`,
+            `Đã tạo hóa đơn #${data.invoice_id}`,
             "success"
         );
 
@@ -608,7 +608,7 @@ async function createInvoice(
 
         showAppointmentAlert(
             error.message ||
-            "Tạo hóa đơn thất bại.",
+            "Tạo hóa đơn thất bại!",
             "danger"
         );
 

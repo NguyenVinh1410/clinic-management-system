@@ -34,7 +34,7 @@ document.addEventListener(
             );
 
             showPatientAlert(
-                "Không thể tải dữ liệu bệnh nhân.",
+                "Không thể tải dữ liệu!",
                 "danger"
             );
 
@@ -62,11 +62,10 @@ async function loadPatientUser() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải hồ sơ"
+            "Không thể tải hồ sơ!"
         );
 
     }
-
 
     return data;
 
@@ -127,7 +126,7 @@ async function loadUpcomingAppointments() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải lịch khám"
+            "Không thể tải lịch khám!"
         );
 
     }
@@ -142,11 +141,7 @@ async function loadUpcomingAppointments() {
     const upcoming =
         appointments
             .filter(
-                item =>
-                    item.status !==
-                    "Completed" &&
-                    item.status !==
-                    "Cancelled"
+                item => item.status !== "Completed" && item.status !== "Cancelled"
             )
             .sort(
                 (a, b) =>
@@ -298,7 +293,7 @@ async function loadRecentInvoices() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải hóa đơn"
+            "Không thể tải hóa đơn!"
         );
 
     }
@@ -337,7 +332,7 @@ function renderRecentInvoices(
 
                 <i class="bi bi-receipt-cutoff fs-2 d-block mb-2"></i>
 
-                Chưa có hóa đơn.
+                Chưa có hóa đơn
 
             </div>
         `;

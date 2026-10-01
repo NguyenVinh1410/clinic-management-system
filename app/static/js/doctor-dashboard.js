@@ -32,7 +32,7 @@ document.addEventListener(
 
             showDoctorAlert(
                 error.message ||
-                "Không thể tải lịch khám.",
+                "Không thể tải lịch khám!",
                 "danger"
             );
 
@@ -60,7 +60,7 @@ async function loadDoctorAppointments() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải lịch khám."
+            "Không thể tải lịch khám"
         );
 
     }
@@ -207,7 +207,7 @@ function renderDoctorAppointments(
                     colspan="6"
                     class="text-center py-5 text-secondary">
 
-                    Không có lịch phù hợp.
+                    Không có lịch phù hợp
 
                 </td>
             </tr>
@@ -447,7 +447,7 @@ function renderUpcomingAppointments() {
             <div
                 class="text-secondary small py-2">
 
-                Không có lịch khám sắp tới.
+                Không có lịch khám sắp tới
 
             </div>
         `;
@@ -571,7 +571,7 @@ function renderRecentPatients() {
             <div
                 class="text-secondary small">
 
-                Chưa có dữ liệu bệnh nhân.
+                Chưa có dữ liệu bệnh nhân
 
             </div>
         `;

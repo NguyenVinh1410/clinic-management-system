@@ -158,7 +158,7 @@ document.addEventListener(
                 ) {
 
                     showAlert(
-                        "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu."
+                        "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!"
                     );
 
                     return;
@@ -208,8 +208,8 @@ document.addEventListener(
                         showAlert(
                             typeof data === "object"
                                 ? data.detail ||
-                                  "Đăng nhập không thành công."
-                                : "Đăng nhập không thành công."
+                                  "Đăng nhập không thành công"
+                                : "Đăng nhập không thành công"
                         );
 
                         return;
@@ -239,7 +239,7 @@ document.addEventListener(
                         clearAccessToken();
 
                         showAlert(
-                            "Đăng nhập thành công nhưng không lấy được thông tin tài khoản."
+                            "Đăng nhập thành công nhưng không lấy được thông tin tài khoản"
                         );
 
                         return;
@@ -262,7 +262,7 @@ document.addEventListener(
                     );
 
                     showAlert(
-                        "Không thể kết nối tới máy chủ."
+                        "Không thể kết nối tới máy chủ"
                     );
 
                 }

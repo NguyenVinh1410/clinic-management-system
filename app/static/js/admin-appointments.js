@@ -33,7 +33,7 @@ document.addEventListener(
 
             showAppointmentAlert(
                 error.message ||
-                "Không thể tải lịch khám.",
+                "Không thể tải lịch khám!",
                 "danger"
             );
 
@@ -61,7 +61,7 @@ async function loadAppointments() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải lịch khám."
+            "Không thể tải lịch khám"
         );
 
     }
@@ -100,7 +100,7 @@ function renderAppointments(
                            py-5
                            text-secondary">
 
-                    Không có lịch khám phù hợp.
+                    Không có lịch khám phù hợp
 
                 </td>
             </tr>
@@ -386,14 +386,14 @@ async function checkinAppointment(
 
             throw new Error(
                 data.detail ||
-                "Không thể tiếp nhận."
+                "Không thể tiếp nhận"
             );
 
         }
 
 
         showAppointmentAlert(
-            "Đã tiếp nhận bệnh nhân.",
+            "Đã tiếp nhận bệnh nhân",
             "success"
         );
 
@@ -409,7 +409,7 @@ async function checkinAppointment(
 
         showAppointmentAlert(
             error.message ||
-            "Không thể tiếp nhận bệnh nhân.",
+            "Không thể tiếp nhận bệnh nhân!",
             "danger"
         );
 
@@ -454,14 +454,14 @@ async function cancelAppointment(
 
         throw new Error(
             data.detail ||
-            "Không thể hủy lịch."
+            "Không thể hủy lịch"
         );
 
     }
 
 
     showAppointmentAlert(
-        "Đã hủy lịch khám.",
+        "Đã hủy lịch khám",
         "success"
     );
 

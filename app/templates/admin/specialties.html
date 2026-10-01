@@ -20,16 +20,12 @@ Quản lý chuyên khoa | Admin | ClinicCare
 
             <div class="mb-4">
 
-                <div class="text-secondary small">
-                    Quản lý dữ liệu
-                </div>
-
                 <h2 class="fw-bold mb-1">
                     Quản lý chuyên khoa
                 </h2>
 
                 <p class="text-secondary mb-0">
-                    Quản lý các chuyên khoa của phòng khám.
+                    Quản lý các chuyên khoa của phòng khám
                 </p>
 
             </div>
@@ -90,8 +86,7 @@ Quản lý chuyên khoa | Admin | ClinicCare
                                     <textarea
                                             class="form-control"
                                             id="specialtyDescription"
-                                            rows="4">
-                                    </textarea>
+                                            rows="4"></textarea>
 
                                 </div>
 
@@ -215,10 +210,7 @@ Quản lý chuyên khoa | Admin | ClinicCare
 {% block scripts %}
 
 <script
-        src="{{ url_for(
-        'static',
-        path='js/admin-specialties.js'
-    ) }}">
+        src="{{ url_for('static', path='js/admin-specialties.js') }}">
 </script>
 
 {% endblock %}

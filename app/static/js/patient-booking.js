@@ -43,7 +43,7 @@ document.addEventListener(
             if (!selectedDoctor) {
 
                 showBookingAlert(
-                    "Không tìm thấy bác sĩ.",
+                    "Không tìm thấy bác sĩ",
                     "danger"
                 );
 
@@ -77,7 +77,7 @@ document.addEventListener(
                 const exists =
                     schedules.some(
                         schedule =>
-                            schedule.schedule_id ===
+                            Number(schedule.schedule_id) ===
                             scheduleId
                     );
 
@@ -98,7 +98,7 @@ document.addEventListener(
                 else {
 
                     showBookingAlert(
-                        "Ca làm việc không thuộc bác sĩ đã chọn.",
+                        "Ca làm việc không khả dụng để đặt lịch",
                         "warning"
                     );
 
@@ -114,7 +114,7 @@ document.addEventListener(
             );
 
             showBookingAlert(
-                "Không thể tải dữ liệu đặt lịch.",
+                "Không thể tải dữ liệu đặt lịch!",
                 "danger"
             );
 
@@ -412,7 +412,7 @@ async function selectSchedule(
     selectedSchedule =
         schedules.find(
             schedule =>
-                schedule.schedule_id ===
+                Number(schedule.schedule_id) ===
                 scheduleId
         );
 
@@ -449,7 +449,7 @@ async function loadBookedAppointmentsForSchedule(
     if (!response.ok) {
         throw new Error(
             data.detail ||
-            "Không thể tải các khung giờ đã đặt."
+            "Không thể tải các khung giờ đã đặt"
         );
     }
 
@@ -513,7 +513,7 @@ function renderSlots(
 
         container.innerHTML = `
             <div class="text-secondary">
-                Ca làm việc không có slot hợp lệ.
+                Ca làm việc không có slot hợp lệ
             </div>
         `;
 
@@ -641,7 +641,7 @@ async function createAppointment() {
     ) {
 
         showBookingAlert(
-            "Vui lòng chọn đầy đủ bác sĩ, ca làm việc và thời gian.",
+            "Vui lòng chọn đầy đủ bác sĩ, ca làm việc và thời gian khám",
             "warning"
         );
 
@@ -701,8 +701,8 @@ async function createAppointment() {
             showBookingAlert(
                 typeof data === "object"
                     ? data.detail ||
-                      "Không thể đặt lịch."
-                    : "Không thể đặt lịch.",
+                      "Không thể đặt lịch!"
+                    : "Không thể đặt lịch!",
                 "danger"
             );
 
@@ -736,7 +736,7 @@ async function createAppointment() {
 
 
         showBookingAlert(
-            "Không thể kết nối tới máy chủ.",
+            "Không thể kết nối tới máy chủ!",
             "danger"
         );
 
@@ -825,7 +825,7 @@ function resetBookingAfterDoctor() {
         "slotGrid"
     ).innerHTML = `
         <div class="text-secondary small">
-            Vui lòng chọn ca làm việc trước.
+            Vui lòng chọn ca làm việc trước
         </div>
     `;
 

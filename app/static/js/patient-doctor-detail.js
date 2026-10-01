@@ -56,7 +56,7 @@ async function loadDoctorDetail() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải thông tin bác sĩ."
+            "Không thể tải thông tin bác sĩ"
         );
 
     }
@@ -88,7 +88,7 @@ async function loadDoctorSpecialty() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải chuyên khoa."
+            "Không thể tải chuyên khoa"
         );
 
     }
@@ -116,7 +116,7 @@ async function getDoctorData() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải bác sĩ."
+            "Không thể tải bác sĩ"
         );
 
     }
@@ -249,7 +249,7 @@ function renderDoctorDetail(
 
                         ${escapeHtml(
                             doctor.bio ||
-                            "Bác sĩ chưa cập nhật phần giới thiệu."
+                            "Bác sĩ chưa cập nhật phần giới thiệu"
                         )}
 
                     </p>
@@ -275,7 +275,7 @@ function renderDoctorDetail(
                     <p class="text-secondary small">
 
                         Chọn một ca làm việc
-                        phù hợp để đặt lịch.
+                        phù hợp để đặt lịch
 
                     </p>
 
@@ -359,7 +359,7 @@ function renderSchedules(
         container.innerHTML = `
             <div class="text-center py-4 text-secondary">
 
-                Không có ca làm việc.
+                Không có ca làm việc
 
             </div>
         `;
@@ -424,6 +424,14 @@ function renderSchedules(
                                         <span class="badge text-bg-success">
                                             Đang hoạt động
                                         </span>
+
+                                        <a
+                                            href="/patient/book-appointment?doctor_id=${doctorId}&schedule_id=${schedule.schedule_id}"
+                                            class="btn btn-sm btn-primary">
+
+                                            Chọn ca
+
+                                        </a>
                                     `
                                     : `
                                         <span class="badge text-bg-secondary">
@@ -431,15 +439,6 @@ function renderSchedules(
                                         </span>
                                     `
                                 }
-
-
-                                <a
-                                    href="/patient/book-appointment?doctor_id=${doctorId}&schedule_id=${schedule.schedule_id}"
-                                    class="btn btn-sm btn-primary">
-
-                                    Chọn ca
-
-                                </a>
 
                             </div>
 

@@ -33,7 +33,7 @@ document.addEventListener(
 
             showUserAlert(
                 error.message ||
-                "Không thể tải dữ liệu.",
+                "Không thể tải dữ liệu!",
                 "danger"
             );
 
@@ -65,7 +65,7 @@ async function loadUsers() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải danh sách người dùng."
+            "Không thể tải danh sách người dùng"
         );
 
     }
@@ -93,7 +93,7 @@ async function loadSpecialties() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải chuyên khoa."
+            "Không thể tải chuyên khoa"
         );
 
     }
@@ -165,7 +165,7 @@ function renderUsers(items) {
                     colspan="6"
                     class="text-center py-5 text-secondary">
 
-                    Không tìm thấy người dùng.
+                    Không tìm thấy người dùng
 
                 </td>
             </tr>
@@ -503,7 +503,7 @@ async function createUser(event) {
 
         if (!specialtyId) {
             showUserAlert(
-                "Vui lòng chọn chuyên khoa cho bác sĩ.",
+                "Vui lòng chọn chuyên khoa cho bác sĩ",
                 "warning"
             );
             return;
@@ -556,13 +556,13 @@ async function createUser(event) {
 
             throw new Error(
                 data.detail ||
-                "Không thể tạo người dùng."
+                "Không thể tạo người dùng"
             );
 
         }
 
         showUserAlert(
-            "Tạo tài khoản thành công.",
+            "Tạo tài khoản thành công",
             "success"
         );
 
@@ -613,7 +613,7 @@ async function openEditUser(userId) {
 
             throw new Error(
                 user.detail ||
-                "Không thể tải người dùng."
+                "Không thể tải người dùng"
             );
 
         }
@@ -790,7 +790,7 @@ async function updateUser(event) {
 
         if (!specialtyId) {
             showUserAlert(
-                "Vui lòng chọn chuyên khoa cho bác sĩ.",
+                "Vui lòng chọn chuyên khoa cho bác sĩ",
                 "warning"
             );
             return;
@@ -847,13 +847,13 @@ async function updateUser(event) {
 
             throw new Error(
                 data.detail ||
-                "Không thể cập nhật người dùng."
+                "Không thể cập nhật người dùng"
             );
 
         }
 
         showUserAlert(
-            "Cập nhật tài khoản thành công.",
+            "Cập nhật tài khoản thành công",
             "success"
         );
 
@@ -924,15 +924,15 @@ async function toggleUserStatus(
 
             throw new Error(
                 data.detail ||
-                "Không thể thay đổi trạng thái tài khoản."
+                "Không thể thay đổi trạng thái tài khoản"
             );
 
         }
 
         showUserAlert(
             nextStatus === "Locked"
-                ? "Đã khóa tài khoản."
-                : "Đã mở khóa tài khoản.",
+                ? "Đã khóa tài khoản"
+                : "Đã mở khóa tài khoản",
             "success"
         );
 

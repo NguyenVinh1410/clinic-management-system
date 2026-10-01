@@ -245,7 +245,7 @@ document.addEventListener(
                 if (!fullName) {
 
                     showAlert(
-                        "Vui lòng nhập họ và tên."
+                        "Vui lòng nhập họ và tên!"
                     );
 
                     return;
@@ -256,7 +256,7 @@ document.addEventListener(
                 if (username.length < 6) {
 
                     showAlert(
-                        "Tên đăng nhập phải có ít nhất 6 ký tự."
+                        "Tên đăng nhập phải có ít nhất 6 ký tự!"
                     );
 
                     return;
@@ -267,7 +267,7 @@ document.addEventListener(
                 if (!/[A-Za-zÀ-ỹ]/.test(username)) {
 
                     showAlert(
-                        "Tên đăng nhập phải có ít nhất 1 chữ cái."
+                        "Tên đăng nhập phải có ít nhất 1 chữ cái!"
                     );
 
                     return;
@@ -278,7 +278,7 @@ document.addEventListener(
                 if (!/\d/.test(username)) {
 
                     showAlert(
-                        "Tên đăng nhập phải có ít nhất 1 chữ số."
+                        "Tên đăng nhập phải có ít nhất 1 chữ số!"
                     );
 
                     return;
@@ -289,7 +289,7 @@ document.addEventListener(
                 if (password.length < 6) {
 
                     showAlert(
-                        "Mật khẩu phải có ít nhất 6 ký tự."
+                        "Mật khẩu phải có ít nhất 6 ký tự!"
                     );
 
                     return;
@@ -300,7 +300,7 @@ document.addEventListener(
                 if (!/\d/.test(password)) {
 
                     showAlert(
-                        "Mật khẩu phải có ít nhất 1 chữ số."
+                        "Mật khẩu phải có ít nhất 1 chữ số!"
                     );
 
                     return;
@@ -314,7 +314,7 @@ document.addEventListener(
                 ) {
 
                     showAlert(
-                        "Mật khẩu xác nhận không khớp."
+                        "Mật khẩu xác nhận không khớp!"
                     );
 
                     return;
@@ -328,7 +328,7 @@ document.addEventListener(
                 ) {
 
                     showAlert(
-                        "Số điện thoại chỉ được chứa chữ số."
+                        "Số điện thoại chỉ được chứa chữ số!"
                     );
 
                     return;
@@ -342,7 +342,7 @@ document.addEventListener(
                 ) {
 
                     showAlert(
-                        "Email không hợp lệ."
+                        "Email không hợp lệ!"
                     );
 
                     return;
@@ -419,7 +419,7 @@ document.addEventListener(
                     if (!response.ok) {
 
                         let message =
-                            "Đăng ký không thành công.";
+                            "Đăng ký không thành công!";
 
 
                         if (
@@ -466,7 +466,7 @@ document.addEventListener(
 
 
                     showAlert(
-                        "Đăng ký thành công. Đang chuyển tới trang đăng nhập...",
+                        "Đăng ký thành công! Đang chuyển tới trang đăng nhập...",
                         "success"
                     );
 
@@ -492,7 +492,7 @@ document.addEventListener(
                     );
 
                     showAlert(
-                        "Không thể kết nối tới máy chủ."
+                        "Không thể kết nối tới máy chủ"
                     );
 
                 }

@@ -24,7 +24,7 @@ document.addEventListener(
 
             showReceptionistAlert(
                 error.message ||
-                "Không thể tải dữ liệu dashboard.",
+                "Không thể tải dữ liệu dashboard!",
                 "danger"
             );
 
@@ -51,7 +51,7 @@ async function loadReceptionistUser() {
 
         throw new Error(
             data.detail ||
-            "Không thể lấy thông tin tài khoản."
+            "Không thể lấy thông tin tài khoản"
         );
 
     }
@@ -109,7 +109,7 @@ async function loadReceptionistDashboard() {
 
         throw new Error(
             patients.detail ||
-            "Không thể tải danh sách bệnh nhân."
+            "Không thể tải danh sách bệnh nhân"
         );
 
     }
@@ -119,7 +119,7 @@ async function loadReceptionistDashboard() {
 
         throw new Error(
             appointments.detail ||
-            "Không thể tải danh sách lịch khám."
+            "Không thể tải danh sách lịch khám"
         );
 
     }
@@ -129,7 +129,7 @@ async function loadReceptionistDashboard() {
 
         throw new Error(
             invoices.detail ||
-            "Không thể tải danh sách hóa đơn."
+            "Không thể tải danh sách hóa đơn"
         );
 
     }

@@ -171,7 +171,7 @@
 
     line-height: 1.5;
 
-    white-space: pre-wrap;
+    white-space: pre-line;
 
     box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.05);

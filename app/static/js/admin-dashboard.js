@@ -60,7 +60,7 @@ document.addEventListener(
 
 
             showDashboardAlert(
-                "Không thể tải dữ liệu dashboard.",
+                "Không thể tải dữ liệu dashboard!",
                 "danger"
             );
 
@@ -318,7 +318,7 @@ function renderSummary(
     document.getElementById(
         "welcomeMessage"
     ).textContent =
-        "Tổng quan hoạt động của phòng khám theo dữ liệu hiện tại.";
+        "Tổng quan hoạt động của phòng khám";
 
 }
 

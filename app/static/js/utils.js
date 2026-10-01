@@ -121,7 +121,7 @@ async function loadCurrentUser() {
 
         throw new Error(
             data.detail ||
-            "Không thể lấy tài khoản."
+            "Không thể lấy tài khoản"
         );
 
     }

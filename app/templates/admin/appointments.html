@@ -20,16 +20,12 @@ Quản lý lịch khám | Admin | ClinicCare
 
             <div class="mb-4">
 
-                <div class="text-secondary small">
-                    Quản lý vận hành
-                </div>
-
                 <h2 class="fw-bold mb-1">
-                    Lịch khám
+                    Quản lý lịch khám
                 </h2>
 
                 <p class="text-secondary mb-0">
-                    Theo dõi và quản lý toàn bộ lịch khám của phòng khám.
+                    Theo dõi và quản lý lịch khám của phòng khám
                 </p>
 
             </div>
@@ -195,10 +191,7 @@ Quản lý lịch khám | Admin | ClinicCare
 {% block scripts %}
 
 <script
-        src="{{ url_for(
-        'static',
-        path='js/admin-appointments.js'
-    ) }}">
+        src="{{ url_for('static', path='js/admin-appointments.js') }}">
 </script>
 
 {% endblock %}

@@ -20,16 +20,12 @@ Quản lý thuốc | Admin | ClinicCare
 
             <div class="mb-4">
 
-                <div class="text-secondary small">
-                    Quản lý dữ liệu
-                </div>
-
                 <h2 class="fw-bold mb-1">
                     Quản lý thuốc
                 </h2>
 
                 <p class="text-secondary mb-0">
-                    Quản lý danh mục thuốc và số lượng tồn kho.
+                    Quản lý thông tin thuốc và số lượng tồn kho
                 </p>
 
             </div>
@@ -63,7 +59,7 @@ Quản lý thuốc | Admin | ClinicCare
                                        small
                                        mb-0">
 
-                                Nhập thông tin thuốc.
+                                Nhập thông tin thuốc
 
                             </p>
 
@@ -257,7 +253,7 @@ Quản lý thuốc | Admin | ClinicCare
                                            mb-0">
 
                                     Theo dõi thuốc đang sử dụng
-                                    và thuốc đã ngừng.
+                                    và thuốc đã ngưng sử dụng
 
                                 </p>
 
@@ -397,10 +393,7 @@ Quản lý thuốc | Admin | ClinicCare
 {% block scripts %}
 
 <script
-        src="{{ url_for(
-        'static',
-        path='js/admin-medicines.js'
-    ) }}">
+        src="{{ url_for('static', path='js/admin-medicines.js') }}">
 </script>
 
 {% endblock %}

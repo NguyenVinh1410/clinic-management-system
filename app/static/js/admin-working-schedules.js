@@ -37,7 +37,7 @@ document.addEventListener(
 
             showScheduleAlert(
                 error.message ||
-                "Không thể tải dữ liệu.",
+                "Không thể tải dữ liệu!",
                 "danger"
             );
 
@@ -64,7 +64,7 @@ async function loadDoctors() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải danh sách bác sĩ."
+            "Không thể tải danh sách bác sĩ"
         );
 
     }
@@ -149,7 +149,7 @@ async function loadSchedules() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải lịch làm việc."
+            "Không thể tải lịch làm việc"
         );
 
     }
@@ -201,7 +201,7 @@ function renderSchedules() {
                            py-5
                            text-secondary">
 
-                    Chưa có lịch làm việc.
+                    Chưa có lịch làm việc
 
                 </td>
 
@@ -442,7 +442,7 @@ async function createSchedule(
     if (!doctorId) {
 
         showScheduleAlert(
-            "Vui lòng chọn bác sĩ.",
+            "Vui lòng chọn bác sĩ!",
             "danger"
         );
 
@@ -454,7 +454,7 @@ async function createSchedule(
     if (!workDate) {
 
         showScheduleAlert(
-            "Vui lòng chọn ngày làm việc.",
+            "Vui lòng chọn ngày làm việc!",
             "danger"
         );
 
@@ -469,7 +469,7 @@ async function createSchedule(
     ) {
 
         showScheduleAlert(
-            "Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc.",
+            "Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc!",
             "danger"
         );
 
@@ -520,14 +520,14 @@ async function createSchedule(
 
             throw new Error(
                 data.detail ||
-                "Không thể tạo lịch làm việc."
+                "Không thể tạo lịch làm việc"
             );
 
         }
 
 
         showScheduleAlert(
-            "Đã tạo lịch làm việc.",
+            "Đã tạo lịch làm việc",
             "success"
         );
 
@@ -553,7 +553,7 @@ async function createSchedule(
 
         showScheduleAlert(
             error.message ||
-            "Không thể tạo lịch làm việc.",
+            "Không thể tạo lịch làm việc!",
             "danger"
         );
 
@@ -580,7 +580,7 @@ async function editSchedule(
     if (!schedule) {
 
         showScheduleAlert(
-            "Không tìm thấy lịch làm việc.",
+            "Không tìm thấy lịch làm việc!",
             "danger"
         );
 
@@ -657,7 +657,7 @@ async function editSchedule(
     ) {
 
         showScheduleAlert(
-            "Trạng thái chỉ được Active hoặc Off.",
+            "Trạng thái chỉ được Active hoặc Off!",
             "danger"
         );
 
@@ -672,7 +672,7 @@ async function editSchedule(
     ) {
 
         showScheduleAlert(
-            "Giờ bắt đầu phải nhỏ hơn giờ kết thúc.",
+            "Giờ bắt đầu phải nhỏ hơn giờ kết thúc!",
             "danger"
         );
 
@@ -720,14 +720,14 @@ async function editSchedule(
 
             throw new Error(
                 data.detail ||
-                "Không thể cập nhật lịch."
+                "Không thể cập nhật lịch"
             );
 
         }
 
 
         showScheduleAlert(
-            "Đã cập nhật lịch làm việc.",
+            "Đã cập nhật lịch làm việc",
             "success"
         );
 
@@ -744,7 +744,7 @@ async function editSchedule(
 
         showScheduleAlert(
             error.message ||
-            "Không thể cập nhật lịch.",
+            "Không thể cập nhật lịch!",
             "danger"
         );
 
@@ -790,14 +790,14 @@ async function deleteSchedule(
 
             throw new Error(
                 data.detail ||
-                "Không thể xóa lịch làm việc."
+                "Không thể xóa lịch làm việc"
             );
 
         }
 
 
         showScheduleAlert(
-            "Đã xóa lịch làm việc.",
+            "Đã xóa lịch làm việc",
             "success"
         );
 
@@ -814,7 +814,7 @@ async function deleteSchedule(
 
         showScheduleAlert(
             error.message ||
-            "Không thể xóa lịch.",
+            "Không thể xóa lịch!",
             "danger"
         );
 
@@ -853,7 +853,7 @@ function setupEvents() {
 
                     showScheduleAlert(
                         error.message ||
-                        "Không thể làm mới.",
+                        "Không thể làm mới!",
                         "danger"
                     );
 

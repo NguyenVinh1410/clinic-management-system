@@ -22,16 +22,12 @@ Lịch sử khám | ClinicCare
 
             <div class="mb-4">
 
-                <div class="text-secondary small">
-                    Hồ sơ cá nhân
-                </div>
-
                 <h2 class="fw-bold mb-1">
                     Lịch sử khám
                 </h2>
 
                 <p class="text-secondary mb-0">
-                    Xem các lần khám, chẩn đoán và đơn thuốc của bạn.
+                    Xem lại các lần khám và chẩn đoán của bạn
                 </p>
 
             </div>
@@ -67,10 +63,7 @@ Lịch sử khám | ClinicCare
 {% block scripts %}
 
 <script
-        src="{{ url_for(
-        'static',
-        path='js/patient-medical-history.js'
-    ) }}">
+        src="{{ url_for('static', path='js/patient-medical-history.js') }}">
 </script>
 
 {% endblock %}

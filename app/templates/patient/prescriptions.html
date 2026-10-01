@@ -20,16 +20,12 @@
 
             <div class="mb-4">
 
-                <div class="text-secondary small">
-                    Thông tin khám
-                </div>
-
                 <h2 class="fw-bold mb-1">
                     Đơn thuốc của tôi
                 </h2>
 
                 <p class="text-secondary">
-                    Xem các đơn thuốc đã được bác sĩ kê.
+                    Xem các đơn thuốc đã được bác sĩ kê cho bạn
                 </p>
 
             </div>
@@ -71,10 +67,7 @@
 {% block scripts %}
 
 <script
-        src="{{ url_for(
-        'static',
-        path='js/patient-prescriptions.js'
-    ) }}">
+        src="{{ url_for('static', path='js/patient-prescriptions.js') }}">
 </script>
 
 {% endblock %}

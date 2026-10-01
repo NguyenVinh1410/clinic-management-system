@@ -153,7 +153,7 @@ async function createAISession() {
 
         throw new Error(
             data.detail ||
-            "Không thể tạo phiên AI."
+            "Không thể tạo phiên AI"
         );
 
     }
@@ -198,7 +198,7 @@ async function loadAIHistory() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải lịch sử chat."
+            "Không thể tải lịch sử chat"
         );
 
     }
@@ -306,7 +306,7 @@ async function handleAISubmit(
 
             throw new Error(
                 data.detail ||
-                "Không thể gửi tin nhắn."
+                "Không thể gửi tin nhắn"
             );
 
         }
@@ -326,7 +326,7 @@ async function handleAISubmit(
         addAIMessage(
             "assistant",
             error.message ||
-            "Có lỗi xảy ra. Bạn vui lòng thử lại."
+            "Có lỗi xảy ra. Bạn vui lòng thử lại!"
         );
 
     }
@@ -431,5 +431,4 @@ function scrollAIChatToBottom() {
 
     container.scrollTop =
         container.scrollHeight;
-
 }

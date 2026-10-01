@@ -267,7 +267,7 @@ function renderAppointments() {
 
                 <i class="bi bi-calendar-x fs-1 d-block mb-3"></i>
 
-                Không có lịch khám phù hợp.
+                Không có lịch khám phù hợp
 
             </div>
         `;
@@ -457,8 +457,8 @@ async function cancelAppointment(
             showAppointmentAlert(
                 typeof data === "object"
                     ? data.detail ||
-                      "Không thể hủy lịch."
-                    : "Không thể hủy lịch.",
+                      "Không thể hủy lịch!"
+                    : "Không thể hủy lịch!",
                 "danger"
             );
 
@@ -468,7 +468,7 @@ async function cancelAppointment(
 
 
         showAppointmentAlert(
-            "Hủy lịch thành công.",
+            "Hủy lịch thành công",
             "success"
         );
 
@@ -484,7 +484,7 @@ async function cancelAppointment(
 
 
         showAppointmentAlert(
-            "Không thể kết nối tới máy chủ.",
+            "Không thể kết nối tới máy chủ!",
             "danger"
         );
 

@@ -20,16 +20,12 @@ Quản lý người dùng | Admin | ClinicCare
 
             <div class="mb-4">
 
-                <div class="text-secondary small">
-                    Quản lý nhân sự
-                </div>
-
                 <h2 class="fw-bold mb-1">
                     Quản lý người dùng
                 </h2>
 
                 <p class="text-secondary mb-0">
-                    Quản lý tài khoản bác sĩ, lễ tân và bệnh nhân.
+                    Quản lý tài khoản bác sĩ, lễ tân, bệnh nhân
                 </p>
 
             </div>
@@ -58,7 +54,7 @@ Quản lý người dùng | Admin | ClinicCare
                         </h5>
 
                         <p class="text-secondary small mb-0">
-                            Admin có thể tạo, chỉnh sửa và khóa tài khoản.
+                            Admin có thể tạo, chỉnh sửa và khóa tài khoản
                         </p>
 
                     </div>
@@ -240,7 +236,7 @@ Quản lý người dùng | Admin | ClinicCare
                     </h5>
 
                     <div class="text-secondary small">
-                        Tạo tài khoản bác sĩ, lễ tân hoặc bệnh nhân.
+                        Tạo tài khoản bác sĩ, lễ tân hoặc bệnh nhân
                     </div>
 
                 </div>
@@ -273,7 +269,7 @@ Quản lý người dùng | Admin | ClinicCare
                                     required>
 
                             <div class="form-text">
-                                Ít nhất 6 ký tự, có chữ và số.
+                                Ít nhất 6 ký tự, có chữ và số
                             </div>
 
                         </div>
@@ -292,7 +288,7 @@ Quản lý người dùng | Admin | ClinicCare
                                     type="password">
 
                             <div class="form-text">
-                                Ít nhất 6 ký tự và có số.
+                                Ít nhất 6 ký tự và có số
                             </div>
 
                         </div>
@@ -446,8 +442,7 @@ Quản lý người dùng | Admin | ClinicCare
                                     <textarea
                                             class="form-control"
                                             id="createBio"
-                                            rows="3">
-                                    </textarea>
+                                            rows="3"></textarea>
 
                                 </div>
 
@@ -720,8 +715,7 @@ Quản lý người dùng | Admin | ClinicCare
                                     <textarea
                                             class="form-control"
                                             id="editBio"
-                                            rows="3">
-                                    </textarea>
+                                            rows="3"></textarea>
 
                                 </div>
 
@@ -779,7 +773,7 @@ Quản lý người dùng | Admin | ClinicCare
                                     type="password">
 
                             <div class="form-text">
-                                Để trống nếu không đổi mật khẩu.
+                                Để trống nếu không đổi mật khẩu!
                             </div>
 
                         </div>
@@ -826,10 +820,7 @@ Quản lý người dùng | Admin | ClinicCare
 {% block scripts %}
 
 <script
-        src="{{ url_for(
-        'static',
-        path='js/admin-users.js'
-    ) }}">
+        src="{{ url_for('static', path='js/admin-users.js') }}">
 </script>
 
 {% endblock %}

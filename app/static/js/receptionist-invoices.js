@@ -33,7 +33,7 @@ document.addEventListener(
 
             showInvoiceAlert(
                 error.message ||
-                "Không thể tải trang hóa đơn.",
+                "Không thể tải trang hóa đơn!",
                 "danger"
             );
 
@@ -58,7 +58,7 @@ async function loadInvoices() {
 
         throw new Error(
             data.detail ||
-            "Không thể tải danh sách hóa đơn."
+            "Không thể tải danh sách hóa đơn"
         );
 
     }
@@ -98,7 +98,7 @@ function renderInvoices(
                     colspan="7"
                     class="text-center py-5 text-secondary">
 
-                    Chưa có hóa đơn.
+                    Chưa có hóa đơn
 
                 </td>
 
@@ -397,7 +397,7 @@ async function payInvoice(
 
             throw new Error(
                 data.detail ||
-                "Thanh toán thất bại."
+                "Thanh toán thất bại"
             );
         }
 
@@ -452,7 +452,7 @@ async function payInvoice(
 
         showInvoiceAlert(
             error.message ||
-            "Không thể thanh toán hóa đơn.",
+            "Không thể thanh toán hóa đơn!",
             "danger"
         );
     }
@@ -503,7 +503,7 @@ async function loadInvoiceDetail(
 
         throw new Error(
             data.detail ||
-            "Không thể tải chi tiết hóa đơn."
+            "Không thể tải chi tiết hóa đơn"
         );
 
     }
@@ -682,7 +682,7 @@ function renderInvoiceMedicines(
 
         container.innerHTML = `
             <div class="text-secondary py-3">
-                Hóa đơn không có thuốc.
+                Hóa đơn không có thuốc
             </div>
         `;
 
