@@ -26,7 +26,7 @@ class PrescriptionCreate(BaseModel):
 
 
 class PrescriptionUpdate(BaseModel):
-    details: list[PrescriptionDetailCreate] = Field(min_length=1)
+    details: list[PrescriptionDetailCreate]
 
 
 class PrescriptionMedicineResponse(BaseModel):

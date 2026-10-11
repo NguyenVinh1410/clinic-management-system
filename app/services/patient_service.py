@@ -30,7 +30,7 @@ class PatientService:
     def get_all_patients(db: Session) -> list[Patient]:
         stmt = (
             select(Patient)
-            .order_by(Patient.user_id)
+            .order_by(User.username.asc())
         )
 
         return list(db.execute(stmt).scalars().all())

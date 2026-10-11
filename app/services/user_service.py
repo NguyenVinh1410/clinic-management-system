@@ -151,12 +151,8 @@ class UserService:
 
         stmt = (
             select(User)
-            .where(
-                User.role != UserRole.ADMIN
-            )
-            .order_by(
-                User.created_at.desc()
-            )
+            .where(User.role != UserRole.ADMIN)
+            .order_by(User.username.asc())
         )
 
         if role is not None:
@@ -164,9 +160,7 @@ class UserService:
             if role == UserRole.ADMIN:
                 return []
 
-            stmt = stmt.where(
-                User.role == role
-            )
+            stmt = stmt.where(User.role == role)
 
         return db.execute(stmt).scalars().all()
 

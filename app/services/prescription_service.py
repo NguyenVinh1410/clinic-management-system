@@ -290,17 +290,39 @@ class PrescriptionService:
             if detail.quantity > medicine.stock_qty:
                 raise BusinessException(f"Thuoc '{medicine.name}' khong du ton kho")
 
-        prescription.details.clear()
+        existing_details = {
+            detail.medicine_id: detail
+            for detail in prescription.details
+        }
+
+        requested_details = {
+            detail.medicine_id: detail
+            for detail in data.details
+        }
+
+        for existing_detail in list(prescription.details):
+            if existing_detail.medicine_id not in requested_details:
+                prescription.details.remove(existing_detail)
 
         for detail in data.details:
-            prescription.details.append(
-                PrescriptionDetail(
-                    medicine_id=detail.medicine_id,
-                    quantity=detail.quantity,
-                    dosage=detail.dosage,
-                    usage_note=detail.usage_note,
-                )
+            existing_detail = existing_details.get(
+                detail.medicine_id
             )
+
+            if existing_detail is not None:
+                existing_detail.quantity = detail.quantity
+                existing_detail.dosage = detail.dosage
+                existing_detail.usage_note = detail.usage_note
+
+            else:
+                prescription.details.append(
+                    PrescriptionDetail(
+                        medicine_id=detail.medicine_id,
+                        quantity=detail.quantity,
+                        dosage=detail.dosage,
+                        usage_note=detail.usage_note,
+                    )
+                )
 
         db.flush()
 

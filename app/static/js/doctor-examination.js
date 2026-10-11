@@ -689,77 +689,57 @@ async function savePrescription() {
         ];
 
 
-    const details =
-        [];
+    const details = [];
 
+for (const row of rows) {
+    const medicineIdValue =
+        row.querySelector(".medicine-id").value;
 
-    for (
-        const row of rows
-    ) {
+    const quantityValue =
+        row.querySelector(".medicine-quantity").value.trim();
 
-        const medicineId =
-            Number(
-                row.querySelector(
-                    ".medicine-id"
-                ).value
-            );
+    const medicineId = Number(medicineIdValue);
+    const quantity = Number(quantityValue);
 
+    const dosage =
+        row.querySelector(".medicine-dosage").value.trim();
 
-        const quantity =
-            Number(
-                row.querySelector(
-                    ".medicine-quantity"
-                ).value
-            );
+    const usageNote =
+        row.querySelector(".medicine-usage").value.trim();
 
+    const isEmptyRow =
+        !medicineIdValue &&
+        (!quantityValue || quantityValue === "1") &&
+        !dosage &&
+        !usageNote;
 
-        const dosage =
-            row.querySelector(
-                ".medicine-dosage"
-            ).value.trim();
-
-
-        const usageNote =
-            row.querySelector(
-                ".medicine-usage"
-            ).value.trim();
-
-
-        if (
-            !medicineId ||
-            quantity <= 0 ||
-            !dosage
-        ) {
-
-            showExaminationAlert(
-                "Thông tin thuốc chưa đầy đủ!",
-                "danger"
-            );
-
-            return;
-
-        }
-
-
-        details.push({
-
-            medicine_id:
-                medicineId,
-
-            quantity,
-
-            dosage,
-
-            usage_note:
-                usageNote ||
-                null,
-
-        });
-
+    if (isEmptyRow) {
+        continue;
     }
 
+    if (
+        !medicineIdValue ||
+        !Number.isInteger(quantity) ||
+        quantity <= 0 ||
+        !dosage
+    ) {
+        showExaminationAlert(
+            "Thông tin thuốc chưa đầy đủ!",
+            "danger"
+        );
 
-    if (!details.length) {
+        return;
+    }
+
+    details.push({
+        medicine_id: medicineId,
+        quantity: quantity,
+        dosage: dosage,
+        usage_note: usageNote || null,
+    });
+}
+
+    if (!details.length && !prescription) {
 
         showExaminationAlert(
             "Đơn thuốc phải có ít nhất một thuốc!",
@@ -778,7 +758,6 @@ async function savePrescription() {
                     item.medicine_id
             )
         );
-
 
     if (
         uniqueIds.size !==
